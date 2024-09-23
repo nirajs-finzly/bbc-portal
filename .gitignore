@@ -1,0 +1,98 @@
+# --- BACKEND (Spring Boot) ---
+
+# Maven compiled files
+backend/target/
+
+# Maven wrapper jar
+!backend/.mvn/wrapper/maven-wrapper.jar
+
+# Ignore nested target directories (build output)
+backend//target/
+
+### IDE-specific ignores ###
+
+# STS (Spring Tool Suite)
+backend/.apt_generated
+backend/.classpath
+backend/.factorypath
+backend/.project
+backend/.settings
+backend/.springBeans
+backend/.sts4-cache
+
+# IntelliJ IDEA
+backend/.idea/
+backend/*.iws
+backend/*.iml
+backend/*.ipr
+
+# NetBeans
+backend/nbproject/private/
+backend/nbbuild/
+backend/dist/
+backend/nbdist/
+backend/.nb-gradle/
+backend/build/
+
+### VS Code ###
+backend/.vscode/
+
+# --- FRONTEND (Angular) ---
+
+# Compiled output
+frontend/dist/
+frontend/tmp/
+frontend/out-tsc/
+frontend/bazel-out/
+
+# Node modules
+frontend/node_modules/
+
+# Debug logs
+frontend/npm-debug.log
+frontend/yarn-error.log
+
+### IDE-specific ignores ###
+
+# General IDE and editor config
+frontend/.project
+frontend/.classpath
+frontend/.c9/
+frontend/*.launch
+frontend/.settings/
+frontend/*.sublime-workspace
+
+# VS Code settings
+frontend/.vscode/
+!frontend/.vscode/settings.json
+!frontend/.vscode/tasks.json
+!frontend/.vscode/launch.json
+!frontend/.vscode/extensions.json
+frontend/.history/*
+
+### Miscellaneous ###
+
+# Angular cache
+frontend/.angular/cache/
+
+# SASS cache
+frontend/.sass-cache/
+
+# Lock files
+frontend/connect.lock
+
+# Coverage reports
+frontend/coverage/
+
+# Log files
+frontend/libpeerconnection.log
+frontend/testem.log
+
+# Typings
+frontend/typings/
+
+### System Files ###
+
+# OS-specific files
+frontend/.DS_Store
+frontend/Thumbs.db
