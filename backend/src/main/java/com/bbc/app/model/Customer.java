@@ -12,7 +12,7 @@ public class Customer {
     @Column(name = "customer_id", length = 15, unique = true)
     private String customerId;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 

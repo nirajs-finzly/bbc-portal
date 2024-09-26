@@ -4,7 +4,6 @@ import com.bbc.app.service.JwtService;
 import com.bbc.app.service.impl.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.lang.NonNull;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -35,8 +33,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain filterChain)
             throws ServletException, IOException {
 
-        // Extract JWT token from cookies
-        String token = extractTokenFromCookies(request);
+        // Extract JWT token from Authorization header
+        String authHeader = request.getHeader("Authorization");
+        String token = extractTokenFromHeader(authHeader);
 
         // If no token is found, proceed without authentication
         if (token == null) {
@@ -69,19 +68,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     /**
-     * Extracts the JWT token from cookies.
+     * Extracts the JWT token from the Authorization header.
      *
-     * @param request the HttpServletRequest object
-     * @return the token string if found, otherwise null
+     * @param authHeader the Authorization header string
+     * @return the token string if present, otherwise null
      */
-    private String extractTokenFromCookies(HttpServletRequest request) {
-        if (request.getCookies() != null) {
-            // Look for a specific cookie that holds the JWT token, e.g., 'token'
-            return Arrays.stream(request.getCookies())
-                    .filter(cookie -> "jwt-token".equals(cookie.getName()))
-                    .map(Cookie::getValue)
-                    .findFirst()
-                    .orElse(null); // Return the token if present, else null
+    private String extractTokenFromHeader(String authHeader) {
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            // Return the token part after "Bearer "
+            return authHeader.substring(7);
         }
         return null;
     }

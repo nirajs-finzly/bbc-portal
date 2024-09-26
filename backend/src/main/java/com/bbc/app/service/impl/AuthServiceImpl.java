@@ -12,7 +12,6 @@ import com.bbc.app.repository.EmployeeRepository;
 import com.bbc.app.repository.UserRepository;
 import com.bbc.app.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -51,14 +50,12 @@ public class AuthServiceImpl implements AuthService {
         user.setOtpExpiry(null);
         userRepository.save(user);
 
-        // Generate JWT token and build response with cookie
+        // Generate JWT token
         String token = jwtService.generateToken(user);
-        ResponseCookie cookie = createJwtCookie(token);
 
-        // Return successful login response
+        // Return successful login response with the token (no cookie)
         return ResponseEntity.ok()
-                .header("Set-Cookie", cookie.toString())
-                .body(new LoginResponse("Login Successful!", user.getRole().name()));
+                .body(new LoginResponse("Login Successful!", token));
     }
 
     // Method to find the User based on the ID (either Employee or Customer)
@@ -70,7 +67,6 @@ public class AuthServiceImpl implements AuthService {
 
         Optional<Customer> customerOpt = customerRepository.findByCustomerId(id);
         return customerOpt.map(Customer::getUser);
-
     }
 
     // Method to validate OTP and its expiry
@@ -85,16 +81,5 @@ public class AuthServiceImpl implements AuthService {
         }
 
         return true;
-    }
-
-    // Method to create the JWT cookie
-    private ResponseCookie createJwtCookie(String token) {
-        return ResponseCookie.from("jwt_token", token)
-                .httpOnly(true)          // Prevent access to cookie via JavaScript
-                .secure(true)            // Use with HTTPS only
-                .path("/")
-                .maxAge(24 * 60 * 60)    // Token expiration time (in seconds)
-                .sameSite("Strict")      // Prevent cross-site cookie usage
-                .build();
     }
 }

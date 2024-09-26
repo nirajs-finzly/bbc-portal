@@ -6,8 +6,10 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.hibernate.Hibernate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -28,9 +30,23 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
+    @Transactional(readOnly = true) // Ensure this method runs in a transaction
     public boolean isValid(String token, UserDetails user) {
         String customUserId = extractCustomUserId(token);
         boolean isTokenExpired = isTokenExpired(token);
+
+        // Initialize the lazy-loaded properties only if user is an instance of User
+        if (user instanceof User castedUser) {
+
+            // Ensure that lazy-loaded properties are initialized
+            if (castedUser.getEmployee() != null) {
+                Hibernate.initialize(castedUser.getEmployee());
+            }
+            if (castedUser.getCustomer() != null) {
+                Hibernate.initialize(castedUser.getCustomer());
+            }
+        }
+
         return customUserId.equals(user.getUsername()) && !isTokenExpired;
     }
 
@@ -53,9 +69,9 @@ public class JwtServiceImpl implements JwtService {
     public String generateToken(User user) {
         return Jwts
                 .builder()
-                .subject(user.getUsername())
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000))
+                .setSubject(user.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000))
                 .signWith(getSigninKey())
                 .compact();
     }

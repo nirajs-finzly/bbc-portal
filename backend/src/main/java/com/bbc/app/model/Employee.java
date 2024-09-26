@@ -11,7 +11,7 @@ public class Employee {
     @Column(name = "employee_id", length = 15, unique = true)
     private String employeeId;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
