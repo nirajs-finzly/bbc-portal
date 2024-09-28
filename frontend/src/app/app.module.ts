@@ -1,16 +1,33 @@
+import {
+    HTTP_INTERCEPTORS,
+    provideHttpClient,
+    withInterceptorsFromDi,
+} from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
+import { provideHotToastConfig } from '@ngxpert/hot-toast';
 import { AppComponent } from './app.component';
-import { CoreModule } from './core/core.module';
 import { routes } from './app.routes';
+import { CoreModule } from './core/core.module';
+import { ValidationInterceptor } from './core/interceptors/validation.interceptor';
 
 @NgModule({
     declarations: [AppComponent],
-    imports: [
-        BrowserModule,
-        CoreModule,
-        RouterModule.forRoot(routes),
+    imports: [BrowserModule, CoreModule, RouterModule.forRoot(routes)],
+    providers: [
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHotToastConfig({
+            duration: 5000,
+            position: 'bottom-right',
+            autoClose: true,
+            visibleToasts: 1
+        }),
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: ValidationInterceptor,
+            multi: true,
+        },
     ],
     bootstrap: [AppComponent],
 })

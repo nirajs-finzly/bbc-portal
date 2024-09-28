@@ -1,0 +1,61 @@
+<div
+    class="flex flex-col gap-8 w-[300px] md:min-w-[400px] bg-white rounded-md shadow-lg p-8"
+>
+    <div class="flex flex-col justify-center items-center gap-4">
+        <img class="w-14" src="assets/img/logo.png" alt="BBC" />
+        <h3 class="md:text-xl font-bold">Bharat Bijili Corporation</h3>
+        <p class="text-muted text-sm">
+            @if(currentStep === 1) {
+              Please enter your id to send the otp.
+            } @else {
+              Please enter otp sent to your email.
+            }
+        </p>
+    </div>
+
+    <form
+        [formGroup]="loginForm"
+        class="flex flex-col gap-4 md:gap-6"
+        autocomplete="off"
+    >
+        <!-- Step 1: Identifier and Send OTP -->
+        <div *ngIf="currentStep === 1" class="flex flex-col">
+            <app-form-input
+                label="Employee ID / Customer ID"
+                placeholder="'EMP1234567' or 'CRN1234567'"
+                formControlName="identifier"
+                [required]="true"
+            >
+            </app-form-input>
+        </div>
+
+        <!-- Step 2: OTP input and Login button -->
+        <div *ngIf="currentStep === 2" class="flex flex-col">
+            <app-form-input
+                label="OTP"
+                placeholder="123456"
+                formControlName="otp"
+                [required]="true"
+            >
+            </app-form-input>
+        </div>
+
+        <div class="flex justify-between w-full">
+            <button
+                type="button"
+                (click)="currentStep === 1 ? sendOtp() : login()"
+                class="btn-primary w-full max-md:!text-xs self-end uppercase"
+            >
+                @if(currentStep === 1) { 
+                  @if(isLoading){
+                      <i class="fa-solid fa-spinner animate-spin mr-1"></i> Sending OTP 
+                  } @else { 
+                    <i class="fa-solid fa-paper-plane mr-1"></i> Send OTP
+                   }
+                } @else if(currentStep > 1) {
+                  Login
+                }
+            </button>
+        </div>
+    </form>
+</div>

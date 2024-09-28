@@ -35,7 +35,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public ResponseEntity<LoginResponse> login(LoginRequest request) {
         // Find user (either Employee or Customer) and get the associated User entity
-        User user = findUserById(request.getId())
+        User user = findUserById(request.getIdentifier())
                 .orElseThrow(() -> new UserNotFoundException("User not found."));
 
         // Validate OTP and expiry
@@ -55,7 +55,7 @@ public class AuthServiceImpl implements AuthService {
 
         // Return successful login response with the token (no cookie)
         return ResponseEntity.ok()
-                .body(new LoginResponse("Login Successful!", token));
+                .body(new LoginResponse("Login Successful!", token, String.valueOf(user.getRole()), true));
     }
 
     // Method to find the User based on the ID (either Employee or Customer)

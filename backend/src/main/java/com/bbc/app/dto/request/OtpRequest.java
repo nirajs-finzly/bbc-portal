@@ -6,15 +6,15 @@ import jakarta.validation.constraints.Pattern;
 public class OtpRequest {
     @NotBlank(message = "Id is required!")
     @Pattern(regexp = "^(EMP|CRN)\\d{7}$", message = "Invalid Id!")
-    private String id;
+    private String identifier;
 
     public OtpRequest() {}
 
-    public OtpRequest(String id) {
-        this.id = id;
+    public OtpRequest(String identifier) {
+        this.identifier = identifier;
     }
 
-    public String getId() {
-        return id;
+    public @NotBlank(message = "Id is required!") @Pattern(regexp = "^(EMP|CRN)\\d{7}$", message = "Invalid Id!") String getIdentifier() {
+        return identifier;
     }
 }

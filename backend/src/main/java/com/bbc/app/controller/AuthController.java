@@ -26,7 +26,7 @@ public class AuthController {
 
     @PostMapping("/send-otp")
     public ResponseEntity<MessageResponse> sendOtp(@Valid @RequestBody OtpRequest request) {
-        return otpService.sendOtp(request.getId());
+        return otpService.sendOtp(request.getIdentifier());
     }
 
     @PostMapping("/login")

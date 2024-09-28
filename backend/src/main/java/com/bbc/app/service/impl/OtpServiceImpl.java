@@ -78,6 +78,6 @@ public class OtpServiceImpl implements OtpService {
         emailService.sendOtpEmail(user.getEmail(), otp);
 
         // Return success message response
-        return ResponseEntity.ok(new MessageResponse("OTP sent successfully to " + user.getEmail()));
+        return ResponseEntity.ok(new MessageResponse("OTP sent successfully to " + user.getEmail(), true));
     }
 }

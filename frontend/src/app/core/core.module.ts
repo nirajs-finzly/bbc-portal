@@ -1,9 +1,10 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HomeComponent } from './components/home/home.component';
+import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { RouterLink, RouterModule } from '@angular/router';
-import { LoginComponent } from './components/login/login.component';
+import { LoginComponent } from '../features/auth/components/login/login.component';
 import { SharedModule } from "../shared/shared.module";
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
     declarations: [HomeComponent, LoginComponent],
@@ -11,7 +12,8 @@ import { SharedModule } from "../shared/shared.module";
     CommonModule,
     RouterModule,
     RouterLink,
-    SharedModule
+    SharedModule,
+    ReactiveFormsModule,
 ],
     exports: [HomeComponent, LoginComponent]
 })

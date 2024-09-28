@@ -4,7 +4,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 public class RateLimiter {
-    private static final long TIME_LIMIT = TimeUnit.MINUTES.toMillis(1); // 1 minute
+    private static final long TIME_LIMIT = TimeUnit.SECONDS.toMillis(30);
     private static final ConcurrentHashMap<String, Long> requestTimes = new ConcurrentHashMap<>();
 
     public static boolean isAllowed(String userId) {
