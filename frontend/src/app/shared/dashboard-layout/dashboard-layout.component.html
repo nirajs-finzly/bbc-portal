@@ -1,0 +1,76 @@
+<!-- Sidebar -->
+<aside class="w-64 bg-white text-dark flex flex-col h-screen">
+    <div class="flex gap-4 h-[64px] px-6 py-3">
+        <img src="assets/img/logo.png" alt="BBC" class="w-12 h-12" />
+        <div class="flex flex-col justify-center">
+            <h2 class="text-sm font-bold text-tertiary">Bharat Bijili</h2>
+            <h3 class="text-xs font-bold text-dark">Corporation</h3>
+        </div>
+    </div>
+    <!-- Menu -->
+    <nav class="flex-grow">
+        <ul class="flex flex-col gap-2 px-6 py-4 md:text-sm">
+            <li>
+                <a
+                    routerLink="/dashboard"
+                    routerLinkActive="active"
+                    class="text-dark fade"
+                    >Dashboard</a
+                >
+            </li>
+            <li>
+                <a
+                    routerLink="/dashboard/profile"
+                    routerLinkActive="active"
+                    class="text-dark fade"
+                    >Profile</a
+                >
+            </li>
+            <li *ngIf="isEmployee">
+                <a
+                    routerLink="/dashboard/manage"
+                    routerLinkActive="active"
+                    class="text-dark fade"
+                    >Manage</a
+                >
+            </li>
+            <!-- Employee-specific -->
+            <li *ngIf="isCustomer">
+                <a
+                    routerLink="/dashboard/bills"
+                    routerLinkActive="active"
+                    class="text-dark fade"
+                    >My Bills</a
+                >
+            </li>
+            <!-- Customer-specific -->
+        </ul>
+    </nav>
+</aside>
+
+<!-- Main Content -->
+<div class="flex-grow flex flex-col bg-background h-screen overflow-hidden">
+    <!-- Header -->
+    <header class="p-4 flex justify-between items-center h-[64px]">
+        <h2 class="text-sm text-dark font-mulish">
+            Welcome,
+            <span class="text-lg font-bold text-tertiary">{{ userName }}</span>
+        </h2>
+        <div
+            class="flex items-center gap-3 shadow-xs rounded-md py-2"
+        >
+            <div class="bg-dark px-[13px] py-[7px] rounded-full">
+                <i class="fa-solid fa-user text-sm text-white"></i>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-sm text-tertiary">{{ userName }}</span>
+                <span class="text-xs text-dark lowercase">{{ email }}</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Routed Content -->
+    <main id="routed-content" class="p-4 flex-grow mr-1">
+        <router-outlet></router-outlet>
+    </main>
+</div>

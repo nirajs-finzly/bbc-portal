@@ -1,0 +1,11 @@
+<label [for]="identifier" class="!text-xs md:text-sm"
+    >{{ label }} @if(required){<span class="text-danger">*</span>}</label
+>
+<input
+    type="text"
+    [name]="identifier"
+    [id]="identifier"
+    [placeholder]="placeholder"
+    class="w-full my-2 p-2 rounded-md text-xs md:text-sm border-[1.5px] outline-none border-solid border-slate-400 focus:ring-1 focus:ring-tertiary"
+/>
+<!-- <p class="text-red-400">Id is required!</p> -->

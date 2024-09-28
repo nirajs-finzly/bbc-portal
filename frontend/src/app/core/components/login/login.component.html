@@ -1,0 +1,35 @@
+<div
+    class="flex flex-col gap-8 min-w-[350px] md:min-w-[400px] bg-white rounded-md shadow-lg p-8"
+>
+    <div class="flex flex-col justify-center items-center gap-4">
+        <img class="w-14" src="assets/img/logo.png" alt="BBC" />
+        <h3 class="md:text-xl font-bold">Bharat Bijili Corporation</h3>
+        <p class="text-muted text-sm">
+            Please enter your credentials to access your account.
+        </p>
+    </div>
+    <form class="flex flex-col gap-4 md:gap-6" autocomplete="off">
+        <div class="flex flex-col">
+            <app-form-input
+                label="Employee ID / Customer ID"
+                placeholder="'EMP1234567' or 'CRN1234567'"
+                identifier="identifier"
+                [required]="true"
+            >
+            </app-form-input>
+            <button
+                class="!text-xs w-fit self-end bg-outline border border-tertiary text-tertiary font-semibold hover:bg-tertiary hover:text-white"
+            >
+                Send OTP
+            </button>
+        </div>
+        <app-form-input
+            label="OTP"
+            placeholder="123456"
+            identifier="otp"
+            [required]="true"
+        >
+        </app-form-input>
+        <button routerLink="/dashboard" class="btn-primary">LOGIN</button>
+    </form>
+</div>
