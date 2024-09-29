@@ -44,7 +44,7 @@
     <!-- Header -->
     <header class="p-4 flex justify-between items-center h-[64px]">
         <h2 class="text-sm text-dark font-mulish">
-            Welcome,?
+            Welcome,
             <span class="text-lg font-bold text-primary">{{ user?.name }}</span>
         </h2>
         <div class="flex items-center gap-3 shadow-xs rounded-md py-2">
@@ -52,11 +52,12 @@
                 <i class="fa-solid fa-user text-sm text-white"></i>
             </div>
             <div class="flex flex-col">
-                <span class="text-sm text-primary">{{ user?.name + " - " }} <span>{{ user?.role | titlecase }}</span></span>
-                <span class="text-xs text-tertiary lowercase">{{ user?.email }}</span>
+                <span class="text-sm text-primary font-bold">{{ user?.name + " - " }} <span class="text-secondary font-medium">{{ user?.role | titlecase }}</span></span>
+                <span class="text-xs text-dark lowercase">{{ user?.email }}</span>
             </div>
         </div>
     </header>
+    <div class="h-[1px] bg-violet-300 mx-4"></div>
 
     <!-- Routed Content -->
     <main id="routed-content" class="p-4 flex-grow">
