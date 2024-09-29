@@ -4,5 +4,5 @@ import com.bbc.app.dto.response.InvoicesResponse;
 import org.springframework.http.ResponseEntity;
 
 public interface InvoiceService {
-    ResponseEntity<InvoicesResponse> getInvoicesByMeterNo(String meterNo);
+    ResponseEntity<InvoicesResponse> getInvoicesByMeterNo(String meterNo, int page, int size);
 }

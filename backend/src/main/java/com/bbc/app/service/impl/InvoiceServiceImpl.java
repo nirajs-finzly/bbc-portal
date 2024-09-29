@@ -5,6 +5,8 @@ import com.bbc.app.dto.response.InvoicesResponse;
 import com.bbc.app.repository.InvoiceRepository;
 import com.bbc.app.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -17,14 +19,16 @@ public class InvoiceServiceImpl implements InvoiceService {
     private InvoiceRepository invoiceRepository;
 
     @Override
-    public ResponseEntity<InvoicesResponse> getInvoicesByMeterNo(String meterNo) {
-        List<InvoiceData> invoices = invoiceRepository.findByCustomerMeterNo(meterNo);
+    public ResponseEntity<InvoicesResponse> getInvoicesByMeterNo(String meterNo, int page, int size) {
+        PageRequest pageable = PageRequest.of(page, size);
 
-        if (invoices == null || invoices.isEmpty()) {
+        Page<InvoiceData> invoicesPage = invoiceRepository.findByCustomerMeterNo(meterNo, pageable);
+
+        if (invoicesPage.isEmpty()) {
             return ResponseEntity.ok(new InvoicesResponse("No invoices found for the customer", List.of(), false));
         }
 
-        InvoicesResponse response = new InvoicesResponse("Invoices retrieved successfully", invoices, true);
+        InvoicesResponse response = new InvoicesResponse("Invoices retrieved successfully", invoicesPage.getContent(), true);
         return ResponseEntity.ok(response);
     }
 }

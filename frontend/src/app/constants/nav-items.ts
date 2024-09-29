@@ -28,5 +28,10 @@ export const navItems = {
             icon: 'fa-solid fa-file-invoice-dollar',
             link: '/dashboard/u/invoices'
         },
+        {
+            label: 'Transactions',
+            icon: 'fa-solid fa-credit-card',
+            link: '/dashboard/u/transactions'
+        },
     ]
 };
