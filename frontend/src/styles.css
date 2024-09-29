@@ -66,12 +66,12 @@ button {
 }
 
 /* list stylings */
-ul li a {
+ul li {
     @apply px-3 py-2 block rounded-md;
 }
 
-ul li a:hover {
-    @apply bg-tertiary text-white;
+ul li:hover {
+    @apply bg-tertiary text-white cursor-pointer;
 }
 
 /* scrollbar stylings */

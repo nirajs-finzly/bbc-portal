@@ -1,5 +1,6 @@
 package com.bbc.app.filter;
 
+import com.bbc.app.model.User;
 import com.bbc.app.service.JwtService;
 import com.bbc.app.service.impl.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
@@ -60,6 +61,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 // Set authentication in the context
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+
+                attachUserToSecurityContext(userDetails);
             }
         }
 
@@ -79,5 +82,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return authHeader.substring(7);
         }
         return null;
+    }
+
+    private void attachUserToSecurityContext(UserDetails userDetails) {
+        if (userDetails instanceof User user) {
+            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
+                    user, null, userDetails.getAuthorities()
+            ));
+        }
     }
 }

@@ -11,10 +11,13 @@ import { AppComponent } from './app.component';
 import { routes } from './app.routes';
 import { CoreModule } from './core/core.module';
 import { ValidationInterceptor } from './core/interceptors/validation.interceptor';
+import { FeaturesModule } from './features/features.module';
+import { SharedModule } from './shared/shared.module';
+import { TokenInterceptor } from './core/interceptors/token.interceptor';
 
 @NgModule({
     declarations: [AppComponent],
-    imports: [BrowserModule, CoreModule, RouterModule.forRoot(routes)],
+    imports: [BrowserModule, SharedModule, CoreModule, FeaturesModule, RouterModule.forRoot(routes)],
     providers: [
         provideHttpClient(withInterceptorsFromDi()),
         provideHotToastConfig({
@@ -26,6 +29,11 @@ import { ValidationInterceptor } from './core/interceptors/validation.intercepto
         {
             provide: HTTP_INTERCEPTORS,
             useClass: ValidationInterceptor,
+            multi: true,
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: TokenInterceptor,
             multi: true,
         },
     ],
