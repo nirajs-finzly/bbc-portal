@@ -1,6 +1,6 @@
 package com.bbc.app.service.impl;
 
-import com.bbc.app.dto.response.UserData;
+import com.bbc.app.dto.data.UserData;
 import com.bbc.app.dto.response.UserResponse;
 import com.bbc.app.model.Customer;
 import com.bbc.app.model.Employee;
@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
 
         if (currentUser == null) {
             return ResponseEntity.status(403).body(new UserResponse(
-                    "Unauthorized request!", null));
+                    "Unauthorized request!", null, false));
         }
 
         // Determine if the user is an Employee or Customer
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
             );
 
             return ResponseEntity.ok(
-                    new UserResponse("User data found!", userData)
+                    new UserResponse("User data found!", userData, true)
             );
         } else if (role.equals("CUSTOMER") && currentUser.getCustomer() != null) {
             Customer customer = currentUser.getCustomer();
@@ -52,11 +52,12 @@ public class UserServiceImpl implements UserService {
             );
 
             return ResponseEntity.ok(
-                    new UserResponse("User data found", userData)
+                    new UserResponse("User data found", userData, true)
             );
         }
 
         // If neither employee nor customer record is found
-        return ResponseEntity.status(404).body(new UserResponse("User details not found!", null));
+        return ResponseEntity.status(404).body(new UserResponse("User details not found!",
+                null, false));
     }
 }

@@ -1,4 +1,4 @@
-package com.bbc.app.dto.response;
+package com.bbc.app.dto.data;
 
 public class UserData {
     private String name;

@@ -1,15 +1,17 @@
 package com.bbc.app.dto.response;
 
-import com.bbc.app.dto.data.UserData;
+import com.bbc.app.dto.data.InvoiceData;
 
-public class UserResponse {
+import java.util.List;
+
+public class InvoicesResponse {
     private String message;
-    private UserData user;
+    private List<InvoiceData> invoices;
     private boolean success;
 
-    public UserResponse(String message, UserData user, boolean success) {
+    public InvoicesResponse(String message, List<InvoiceData> invoices, boolean success) {
         this.message = message;
-        this.user = user;
+        this.invoices = invoices;
         this.success = success;
     }
 
@@ -21,12 +23,12 @@ public class UserResponse {
         this.message = message;
     }
 
-    public UserData getUser() {
-        return user;
+    public List<InvoiceData> getInvoices() {
+        return invoices;
     }
 
-    public void setUser(UserData user) {
-        this.user = user;
+    public void setInvoices(List<InvoiceData> invoices) {
+        this.invoices = invoices;
     }
 
     public boolean isSuccess() {
