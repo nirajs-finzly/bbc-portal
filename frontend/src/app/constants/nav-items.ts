@@ -24,12 +24,12 @@ export const navItems = {
             link: '/dashboard/u'
         },
         {
-            label: 'Invoices',
+            label: 'My Invoices',
             icon: 'fa-solid fa-file-invoice-dollar',
             link: '/dashboard/u/invoices'
         },
         {
-            label: 'Transactions',
+            label: 'My Transactions',
             icon: 'fa-solid fa-credit-card',
             link: '/dashboard/u/transactions'
         },
