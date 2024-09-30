@@ -1,15 +1,17 @@
 package com.bbc.app.dto.response;
 
-import com.bbc.app.model.Customer;
+import com.bbc.app.dto.data.CustomerData;
 
-public class CustomerResponse {
+import java.util.List;
+
+public class CustomersResponse {
     private String message;
-    private Customer customer;
+    private List<CustomerData> customers;
     private boolean success;
 
-    public CustomerResponse(String message, Customer customer, boolean success) {
+    public CustomersResponse(String message, List<CustomerData> customers, boolean success) {
         this.message = message;
-        this.customer = customer;
+        this.customers = customers;
         this.success = success;
     }
 
@@ -21,12 +23,12 @@ public class CustomerResponse {
         this.message = message;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public List<CustomerData> getCustomers() {
+        return customers;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setCustomers(List<CustomerData> customers) {
+        this.customers = customers;
     }
 
     public boolean isSuccess() {

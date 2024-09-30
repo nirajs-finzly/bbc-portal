@@ -1,7 +1,9 @@
 package com.bbc.app.service.impl;
 
-import com.bbc.app.dto.response.CustomerResponse;
+import com.bbc.app.dto.data.CustomerData;
+import com.bbc.app.dto.response.CustomersResponse;
 import com.bbc.app.dto.response.MessageResponse;
+import com.bbc.app.dto.response.SingleCustomerResponse;
 import com.bbc.app.model.Customer;
 import com.bbc.app.model.User;
 import com.bbc.app.model.UserRole;
@@ -13,7 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -28,19 +31,35 @@ public class CustomerServiceImpl implements CustomerService {
     private UserRepository userRepository;
 
     @Override
-    public List<Customer> getAllCustomers() {
-        return customerRepository.findAll();
+    public ResponseEntity<CustomersResponse> getAllCustomers() {
+        List<Customer> customers = customerRepository.findAll();
+
+        if (customers.isEmpty()) {
+            return ResponseEntity.ok(new CustomersResponse("No customers found!", List.of(), false));
+        }
+
+        List<CustomerData> customerDataList = customers.stream()
+                .map(customer -> new CustomerData(
+                        customer.getUser().getName(),
+                        customer.getUser().getEmail(),
+                        customer.getUser().getPhone(),
+                        customer.getAddress(),
+                        customer.getMeterNo()
+                ))
+                .toList();
+
+        return ResponseEntity.ok(new CustomersResponse("Customers data found!", customerDataList, true));
     }
 
     @Override
-    public ResponseEntity<CustomerResponse> getCustomerByMeterno(String meterNo) {
+    public ResponseEntity<SingleCustomerResponse> getCustomerByMeterno(String meterNo) {
         Optional<Customer> customer = customerRepository.findByMeterNo(meterNo);
 
         return customer.map(value ->
-                        ResponseEntity.ok(new CustomerResponse(
+                        ResponseEntity.ok(new SingleCustomerResponse(
                                 "Customer found", value, true)))
                 .orElseGet(() -> ResponseEntity.ok(
-                        new CustomerResponse(
+                        new SingleCustomerResponse(
                                 "Customer not found", null, false)));
 
     }
@@ -61,39 +80,40 @@ public class CustomerServiceImpl implements CustomerService {
             customer.setAddress(address);
             customerRepository.save(customer);
 
-            return ResponseEntity.ok(new MessageResponse("Customer created successfully."));
+            return ResponseEntity.ok(new MessageResponse("Customer created successfully.", true));
         }
 
-        return ResponseEntity.ok(new MessageResponse("Customer already exists!"));
+        return ResponseEntity.ok(new MessageResponse("Customer already exists!", false));
     }
 
     @Override
-    public ResponseEntity<MessageResponse> updateCustomer(String meterno, String name, String email, String phone, String address) {
+    public ResponseEntity<MessageResponse> updateCustomer(String meterno, String name, String phone, String address) {
         Optional<Customer> existingCustomer = customerRepository.findByMeterNo(meterno);
 
         if (existingCustomer.isEmpty()) {
-            return ResponseEntity.ok(new MessageResponse("Customer not found!"));
+            return ResponseEntity.ok(new MessageResponse("Customer not found!", false));
         }
 
         Customer customer = existingCustomer.get();
 
-        customer.setAddress(address);
         customer.getUser().setName(name);
-        customer.getUser().setEmail(email);
         customer.getUser().setPhone(phone);
-        // Update other fields as necessary
-        return ResponseEntity.ok(new MessageResponse("Customer updated successfully."));
+        customer.setAddress(address);
+        customerRepository.save(customer);
+
+        return ResponseEntity.ok(new MessageResponse("Customer updated successfully.", true));
     }
 
     @Override
-    public ResponseEntity<MessageResponse> deleteCustomer(String meterno) {
-        Optional<Customer> customer = customerRepository.findByMeterNo(meterno);
+    public ResponseEntity<MessageResponse> deleteCustomer(String meterNo) {
+        Optional<Customer> customer = customerRepository.findByMeterNo(meterNo);
         if (customer.isEmpty()) {
-            return ResponseEntity.ok(new MessageResponse("Customer not found!"));
+            return ResponseEntity.ok(new MessageResponse("Customer not found!", false));
         }
 
-        customerRepository.deleteById(customer.get().getCustomerId());
-        return ResponseEntity.ok(new MessageResponse("Customer deleted successfully."));
+        customerRepository.deleteById(meterNo);
+        userRepository.deleteById(customer.get().getUser().getId());
+        return ResponseEntity.ok(new MessageResponse("Customer deleted successfully.", true));
     }
 
 //    @Override

@@ -1,6 +1,7 @@
 package com.bbc.app.service;
 
-import com.bbc.app.dto.response.CustomerResponse;
+import com.bbc.app.dto.response.CustomersResponse;
+import com.bbc.app.dto.response.SingleCustomerResponse;
 import com.bbc.app.dto.response.MessageResponse;
 import com.bbc.app.model.Customer;
 import org.springframework.http.ResponseEntity;
@@ -12,16 +13,16 @@ import java.util.List;
 public interface CustomerService {
 
     // Retrieve all customers
-    List<Customer> getAllCustomers();
+    ResponseEntity<CustomersResponse> getAllCustomers();
 
     // Retrieve a customer by meter number
-    ResponseEntity<CustomerResponse> getCustomerByMeterno(String meterno);
+    ResponseEntity<SingleCustomerResponse> getCustomerByMeterno(String meterno);
 
     // Create a new customer
     ResponseEntity<MessageResponse> createCustomer(String name, String email, String phone, String address);
 
     // Update an existing customer
-    ResponseEntity<MessageResponse> updateCustomer(String meterno, String name, String email, String phone, String address);
+    ResponseEntity<MessageResponse> updateCustomer(String meterno, String name, String phone, String address);
 
     // Delete a customer
     ResponseEntity<MessageResponse> deleteCustomer(String meterno);
