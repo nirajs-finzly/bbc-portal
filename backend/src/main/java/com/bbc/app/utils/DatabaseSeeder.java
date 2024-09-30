@@ -66,6 +66,7 @@ public class DatabaseSeeder implements CommandLineRunner {
             invoice1.setBillDuration("January 2024");
             invoice1.setBillDueDate(LocalDate.of(2024, 2, 10));
             invoice1.setAmountDue(new BigDecimal("1250.50"));
+            invoice1.setPaymentStatus(PaymentStatus.PAID);
             invoiceRepository.save(invoice1);
 
             Invoice invoice2 = new Invoice();
