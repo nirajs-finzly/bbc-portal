@@ -19,7 +19,7 @@ public class InvoiceController {
     private InvoiceService invoiceService;
 
     @GetMapping("/{meterNo}")
-    public ResponseEntity<InvoicesResponse> getInvoicesByCustomerId(
+    public ResponseEntity<InvoicesResponse> getInvoicesByCustomerMeterNo(
             @PathVariable @Pattern(regexp = "^(MTR)\\d{7}$", message = "Invalid meter number format") String meterNo,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
