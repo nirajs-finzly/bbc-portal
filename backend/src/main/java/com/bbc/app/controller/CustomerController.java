@@ -6,18 +6,11 @@ import com.bbc.app.dto.response.ErrorResponse;
 import com.bbc.app.dto.response.MessageResponse;
 import com.bbc.app.model.Customer;
 import com.bbc.app.service.CustomerService;
-import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -28,20 +21,8 @@ public class CustomerController {
     private CustomerService customerService;
 
     @PostMapping("/create")
-    public Object createCustomer(@RequestBody List<CreateCustomerRequest> reqList)
-    {
-        Map<String,Object> response = new HashMap<String, Object>();
-        try {
-            customerService.createCustomer(reqList);
-            response.put("statusCode", 200);
-            response.put("message","Success");
-        }catch (Exception e)
-        {e.printStackTrace();
-            ErrorResponse errorResponse = new ErrorResponse(e.getLocalizedMessage());
-            return errorResponse;
-
-        }
-        return  response;
+    public Object createCustomer(@RequestBody CreateCustomerRequest request) {
+        return customerService.createCustomer(request.getName(), request.getEmail(), request.getPhone(), request.getAddress());
     }
 
     @GetMapping("/get-all")
@@ -59,30 +40,20 @@ public class CustomerController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Object> updateCustomer(@RequestHeader String meterNo, @RequestBody UpdateCustomerRequest updateRequest) {
-        try {
-            Customer updatedCustomer = customerService.updateCustomer(meterNo, updateRequest);
-            return ResponseEntity.ok(updatedCustomer);
-        } catch (Exception e) {
-            return ResponseEntity.status(404).body(new ErrorResponse(e.getMessage()));
-        }
+    public ResponseEntity<MessageResponse> updateCustomer(@RequestHeader String meterNo, @RequestBody UpdateCustomerRequest request) {
+        return customerService.updateCustomer(meterNo, request.getName(), request.getEmail(), request.getPhone(), request.getAddress());
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<Object> deleteCustomer(@RequestHeader String meterNo) {
-        try {
-            customerService.deleteCustomer(meterNo);
-            return ResponseEntity.ok(Map.of("message", "Customer deleted successfully"));
-        } catch (Exception e) {
-            return ResponseEntity.status(404).body(new ErrorResponse(e.getMessage()));
-        }
+    public ResponseEntity<MessageResponse> deleteCustomer(@RequestHeader String meterNo) {
+        return customerService.deleteCustomer(meterNo);
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<MessageResponse> bulkUploadCustomer(@RequestParam("file") MultipartFile dataFile) throws IOException {
-
-        return customerService.bulkUploadCustomer(dataFile);
-
-    }
+//    @PostMapping("/upload")
+//    public ResponseEntity<MessageResponse> bulkUploadCustomer(@RequestParam("file") MultipartFile dataFile) throws IOException {
+//
+//        return customerService.bulkUploadCustomer(dataFile);
+//
+//    }
 
 }

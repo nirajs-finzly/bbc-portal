@@ -1,24 +1,19 @@
 package com.bbc.app.dto.request;
 
-import com.bbc.app.model.User;
-import com.bbc.app.model.UserRole;
-import jakarta.annotation.Nullable;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-
-import java.util.UUID;
 
 public class CreateCustomerRequest {
 
-
+    @NotBlank(message = "name is required!")
     private String name;
 
     @NotBlank(message = "email is required!")
-    @NotNull
     private String email;
+
+    @NotBlank(message = "phone is required!")
     private String phone;
+
+    @NotBlank(message = "address is required!")
     private String address;
 
     public CreateCustomerRequest() {
