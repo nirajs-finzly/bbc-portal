@@ -75,6 +75,18 @@ public class DatabaseSeeder implements CommandLineRunner {
             invoice2.setBillDueDate(LocalDate.of(2024, 3, 10));
             invoice2.setAmountDue(new BigDecimal("1500.75"));
             invoiceRepository.save(invoice2);
+            User user3 = new User();
+            user3.setName("Sushmita Bennisur");
+            user3.setEmail("sushmitabennisur11@gmail.com");
+            user3.setPhone("7744920605");
+            user3.setRole(UserRole.EMPLOYEE);
+            userRepository.save(user3);
+
+            Employee employee2 = new Employee();
+            employee2.setUser(user3);
+            employee2.setDepartment("Operations");
+            employee2.setPosition("Sub-Officer");
+            employeeRepository.save(employee2);
 
             System.out.println("Data seeding completed.");
         } else {

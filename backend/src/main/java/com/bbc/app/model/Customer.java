@@ -1,5 +1,6 @@
 package com.bbc.app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Random;
@@ -10,6 +11,7 @@ import java.util.Set;
 public class Customer {
     @Id
     @Column(name = "customer_id", length = 15, unique = true)
+    @JsonIgnore(value = true)
     private String customerId;
 
     @OneToOne(fetch = FetchType.EAGER)
@@ -17,6 +19,7 @@ public class Customer {
     private User user;
 
     @Column(name = "meter_no", unique = true, length = 50)
+    @JsonIgnore(value = true)
     private String meterNo;
 
     @Column(length = 255)
@@ -103,4 +106,7 @@ public class Customer {
     public void setPaymentTransactions(Set<PaymentTransaction> paymentTransactions) {
         this.paymentTransactions = paymentTransactions;
     }
+
+
+
 }
