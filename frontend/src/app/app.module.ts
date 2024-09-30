@@ -5,6 +5,7 @@ import {
 } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { provideHotToastConfig } from '@ngxpert/hot-toast';
 import { AppComponent } from './app.component';
@@ -17,7 +18,7 @@ import { TokenInterceptor } from './core/interceptors/token.interceptor';
 
 @NgModule({
     declarations: [AppComponent],
-    imports: [BrowserModule, SharedModule, CoreModule, FeaturesModule, RouterModule.forRoot(routes)],
+    imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, FeaturesModule, RouterModule.forRoot(routes)],
     providers: [
         provideHttpClient(withInterceptorsFromDi()),
         provideHotToastConfig({

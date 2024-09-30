@@ -11,7 +11,7 @@ import java.util.UUID;
 @Table(name = "invoices")
 public class Invoice {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID invoiceId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -133,5 +133,20 @@ public class Invoice {
 
     public void setPaymentTransaction(PaymentTransaction paymentTransaction) {
         this.paymentTransaction = paymentTransaction;
+    }
+
+    @Override
+    public String toString() {
+        return "Invoice{" +
+                "invoiceId=" + invoiceId +
+                ", customer=" + customer +
+                ", unitConsumption=" + unitConsumption +
+                ", billDuration='" + billDuration + '\'' +
+                ", billDueDate=" + billDueDate +
+                ", amountDue=" + amountDue +
+                ", paymentStatus=" + paymentStatus +
+                ", generatedAt=" + generatedAt +
+                ", paymentTransaction=" + paymentTransaction +
+                '}';
     }
 }

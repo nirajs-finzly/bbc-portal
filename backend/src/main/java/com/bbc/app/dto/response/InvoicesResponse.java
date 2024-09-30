@@ -7,11 +7,13 @@ import java.util.List;
 public class InvoicesResponse {
     private String message;
     private List<InvoiceData> invoices;
+    private Long totalInvoices;
     private boolean success;
 
-    public InvoicesResponse(String message, List<InvoiceData> invoices, boolean success) {
+    public InvoicesResponse(String message, List<InvoiceData> invoices, Long totalInvoices, boolean success) {
         this.message = message;
         this.invoices = invoices;
+        this.totalInvoices = totalInvoices;
         this.success = success;
     }
 
@@ -37,5 +39,13 @@ public class InvoicesResponse {
 
     public void setSuccess(boolean success) {
         this.success = success;
+    }
+
+    public Long getTotalInvoices() {
+        return totalInvoices;
+    }
+
+    public void setTotalInvoices(Long totalInvoices) {
+        this.totalInvoices = totalInvoices;
     }
 }

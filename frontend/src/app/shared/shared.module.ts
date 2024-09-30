@@ -5,18 +5,21 @@ import { RouterModule } from '@angular/router';
 import { FormInputComponent } from './components/form-input/form-input.component';
 import { DashboardLayoutComponent } from './layouts/dashboard-layout/dashboard-layout.component';
 import { TitleCasePipe } from './pipes/titlecase.pipe';
+import { FormatIdPipe } from './pipes/format-id.pipe';
 
 @NgModule({
     declarations: [
         FormInputComponent,
         DashboardLayoutComponent,
-        TitleCasePipe 
+        TitleCasePipe,
+        FormatIdPipe
     ],
     imports: [CommonModule, RouterModule, FormsModule],
     exports: [
         FormInputComponent,
         DashboardLayoutComponent,
-        TitleCasePipe
+        TitleCasePipe,
+        FormatIdPipe
     ],
 })
 export class SharedModule {}

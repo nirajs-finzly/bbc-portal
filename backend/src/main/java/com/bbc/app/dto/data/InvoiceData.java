@@ -4,6 +4,7 @@ import com.bbc.app.model.PaymentStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class InvoiceData {
@@ -13,14 +14,16 @@ public class InvoiceData {
     private LocalDate billDueDate;
     private BigDecimal amountDue;
     private PaymentStatus paymentStatus;
+    private LocalDateTime generatedAt;
 
-    public InvoiceData(UUID invoiceId, BigDecimal unitConsumption, String billDuration, LocalDate billDueDate, BigDecimal amountDue, PaymentStatus paymentStatus) {
+    public InvoiceData(UUID invoiceId, BigDecimal unitConsumption, String billDuration, LocalDate billDueDate, BigDecimal amountDue, PaymentStatus paymentStatus, LocalDateTime generatedAt) {
         this.invoiceId = invoiceId;
         this.unitConsumption = unitConsumption;
         this.billDuration = billDuration;
         this.billDueDate = billDueDate;
         this.amountDue = amountDue;
         this.paymentStatus = paymentStatus;
+        this.generatedAt = generatedAt;
     }
 
     public UUID getInvoiceId() {
@@ -69,5 +72,13 @@ public class InvoiceData {
 
     public void setPaymentStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
+    }
+
+    public LocalDateTime getGeneratedAt() {
+        return generatedAt;
+    }
+
+    public void setGeneratedAt(LocalDateTime generatedAt) {
+        this.generatedAt = generatedAt;
     }
 }

@@ -43,8 +43,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/auth/**").permitAll()  // Auth routes don't need to be protected by JWT
-                        .requestMatchers("/api/ops/**").hasAuthority("EMPLOYEE")  // Protect Ops routes
-                        .requestMatchers("/api/ubp/**").hasAuthority("CUSTOMER")  // Protect UBP routes
+                        .requestMatchers("/api/**").hasAnyAuthority("EMPLOYEE", "CUSTOMER")  // Protect Ops routes
                         .anyRequest().authenticated()  // Other requests should be authenticated
                 )
                 .userDetailsService(userDetailsService)  // Use custom UserDetailsService

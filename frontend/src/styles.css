@@ -5,6 +5,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer primeng;
+
 * {
     margin: 0;
     padding: 0;
@@ -89,4 +91,13 @@ ul li:hover {
 
 #routed-content::-webkit-scrollbar-thumb {
     @apply bg-tertiary rounded-full;
+}
+
+/* Table stylings */
+table{
+    @apply text-center
+}
+
+table th, table td{
+    @apply p-4;
 }
