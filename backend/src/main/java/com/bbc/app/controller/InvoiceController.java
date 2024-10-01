@@ -27,7 +27,7 @@ public class InvoiceController {
         return invoiceService.getInvoicesByMeterNo(meterNo, page, size);
     }
 
-    @PostMapping("/create")
+    @PostMapping("")
     public ResponseEntity<MessageResponse> createInvoice(@Valid @RequestBody CreateInvoiceRequest request) {
         return invoiceService.createInvoice(request.getMeterNo(), request.getUnitsConsumed(), request.getBillDuration(), request.getBillDueDate());
     }

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.UUID;
 
 @Entity
@@ -27,8 +28,11 @@ public class Invoice {
     @Column(name = "bill_due_date", nullable = false)
     private LocalDate billDueDate;
 
-    @Column(name = "amount_due", nullable = false, precision = 10, scale = 2)
-    private BigDecimal amountDue;
+    @Column(name = "current_amount_due", nullable = false, precision = 10, scale = 2)
+    private BigDecimal currentAmountDue;
+
+    @Column(name = "total_amount_due", nullable = false, precision = 10, scale = 2)
+    private BigDecimal totalAmountDue;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_status", nullable = false, length = 10)
@@ -36,6 +40,9 @@ public class Invoice {
 
     @Column(name = "generated_at", nullable = false, updatable = false)
     private LocalDateTime generatedAt;
+
+    @Column(name = "invoice_pdf", columnDefinition = "LONGBLOB")
+    private byte[] invoicePdf;
 
     @PrePersist
     protected void onCreate() {
@@ -48,18 +55,17 @@ public class Invoice {
     public Invoice() {
     }
 
-    public Invoice(UUID invoiceId, Customer customer, BigDecimal unitConsumption,
-                   String billDuration, LocalDate billDueDate, BigDecimal amountDue,
-                   PaymentStatus paymentStatus, LocalDateTime generatedAt,
-                   PaymentTransaction paymentTransaction) {
+    public Invoice(UUID invoiceId, Customer customer, BigDecimal unitConsumption, String billDuration, LocalDate billDueDate, BigDecimal currentAmountDue, BigDecimal totalAmountDue, PaymentStatus paymentStatus, LocalDateTime generatedAt, byte[] invoicePdf, PaymentTransaction paymentTransaction) {
         this.invoiceId = invoiceId;
         this.customer = customer;
         this.unitConsumption = unitConsumption;
         this.billDuration = billDuration;
         this.billDueDate = billDueDate;
-        this.amountDue = amountDue;
+        this.currentAmountDue = currentAmountDue;
+        this.totalAmountDue = totalAmountDue;
         this.paymentStatus = paymentStatus;
         this.generatedAt = generatedAt;
+        this.invoicePdf = invoicePdf;
         this.paymentTransaction = paymentTransaction;
     }
 
@@ -103,12 +109,20 @@ public class Invoice {
         this.billDueDate = billDueDate;
     }
 
-    public BigDecimal getAmountDue() {
-        return amountDue;
+    public BigDecimal getCurrentAmountDue() {
+        return currentAmountDue;
     }
 
-    public void setAmountDue(BigDecimal amountDue) {
-        this.amountDue = amountDue;
+    public void setCurrentAmountDue(BigDecimal currentAmountDue) {
+        this.currentAmountDue = currentAmountDue;
+    }
+
+    public BigDecimal getTotalAmountDue() {
+        return totalAmountDue;
+    }
+
+    public void setTotalAmountDue(BigDecimal totalAmountDue) {
+        this.totalAmountDue = totalAmountDue;
     }
 
     public PaymentStatus getPaymentStatus() {
@@ -131,6 +145,14 @@ public class Invoice {
         return paymentTransaction;
     }
 
+    public byte[] getInvoicePdf() {
+        return invoicePdf;
+    }
+
+    public void setInvoicePdf(byte[] invoicePdf) {
+        this.invoicePdf = invoicePdf;
+    }
+
     public void setPaymentTransaction(PaymentTransaction paymentTransaction) {
         this.paymentTransaction = paymentTransaction;
     }
@@ -143,9 +165,11 @@ public class Invoice {
                 ", unitConsumption=" + unitConsumption +
                 ", billDuration='" + billDuration + '\'' +
                 ", billDueDate=" + billDueDate +
-                ", amountDue=" + amountDue +
+                ", currentAmountDue=" + currentAmountDue +
+                ", totalAmountDue=" + totalAmountDue +
                 ", paymentStatus=" + paymentStatus +
                 ", generatedAt=" + generatedAt +
+                ", invoicePdf=" + Arrays.toString(invoicePdf) +
                 ", paymentTransaction=" + paymentTransaction +
                 '}';
     }

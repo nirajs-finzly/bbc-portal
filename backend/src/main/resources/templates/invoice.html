@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Invoice</title>
+    <style>
+        @font-face {
+            font-family: 'NotoSans';
+            src: url('fonts/mulish.ttf') format('truetype');
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 0 1rem;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .header img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            color: #7f75ec;
+        }
+
+        .header h2 {
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 32px;
+        }
+
+        .section {
+            padding: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .section div p {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .section div span {
+            font-weight: normal;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .paid-status {
+            color: green;
+        }
+
+        .unpaid-status {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div>
+        <div style="text-align: center;"><img src="img/logo.png" alt="logo"/></div>
+        <h1>Bharat Bijili Corporation</h1>
+    </div>
+</div>
+<div class="title">Invoice - <span th:text="${invoice.billDuration}"></span></div>
+<div class="section">
+    <div>
+        <p>Customer: <span th:text="${invoice.customer.user.name}"></span></p>
+        <p>Meter No: <span th:text="${invoice.customer.meterNo}"></span></p>
+    </div>
+</div>
+<div class="section">
+    <div>
+        <p>Invoice ID: <span th:text="${invoice.invoiceId}"></span></p>
+        <p>Bill Due Date: <span th:text="${#temporals.format(invoice.billDueDate, 'dd-MM-yyyy')}"></span></p>
+        <p>Unit Consumption: <span th:text="${invoice.unitConsumption}"></span></p>
+    </div>
+    <div>
+        <p>Bill Duration: <span th:text="${invoice.billDuration}"></span></p>
+        <p>Generated At: <span th:text="${#temporals.format(invoice.generatedAt, 'dd-MM-yyyy HH:mm')}"></span></p>
+        <p>Current Amount Due: ₹<span th:text="${'₹' + invoice.currentAmountDue}"></span></p>
+    </div>
+    <div>
+        <p>Payment Status: <span th:text="${invoice.paymentStatus}"
+                                 th:class="${invoice.paymentStatus == 'PAID' ? 'paid-status' : 'unpaid-status'}">
+        </span></p>
+    </div>
+</div>
+<div class="section" th:if="${unpaidInvoices != null and unpaidInvoices.size() > 0}">
+    <p>Unpaid Invoices:</p>
+    <table>
+        <thead>
+        <tr>
+            <th>Invoice ID</th>
+            <th>Duration</th>
+            <th>Due Date</th>
+            <th>Amount Due</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="unpaidInvoice : ${unpaidInvoices}">
+            <td th:text="${unpaidInvoice.invoiceId}"></td>
+            <td th:text="${unpaidInvoice.billDuration}"></td>
+            <td th:text="${#temporals.format(unpaidInvoice.billDueDate, 'dd-MM-yyyy')}"></td>
+            <td th:text="${'₹' + unpaidInvoice.currentAmountDue}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="section">
+    <p>Total Amount Due: ₹<span th:text="${'₹' + invoice.totalAmountDue}"></span></p>
+</div>
+</body>
+</html>

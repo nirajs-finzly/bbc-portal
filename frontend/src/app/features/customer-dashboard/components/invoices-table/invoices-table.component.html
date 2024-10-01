@@ -6,6 +6,7 @@
         <div class="flex-1 font-bold">Bill Due Date</div>
         <div class="flex-1 font-bold">Amount Due</div>
         <div class="flex-1 font-bold">Payment Status</div>
+        <div class="flex-none font-bold w-11"></div> <!-- Change flex-1 to flex-none -->
     </div>
 
     <div class="text-sm min-h-[300px] font-light text-gray-700">
@@ -13,7 +14,7 @@
         <ng-container *ngIf="invoices.length !== 0; else noInvoices">
             <div
                 *ngFor="let invoice of invoices"
-                class="border-b border-gray-200 hover:bg-gray-100 transition duration-200 flex p-4"
+                class="border-b last:border-none border-gray-200 hover:bg-gray-100 transition duration-200 flex p-4"
             >
                 <div class="flex-1 flex items-center justify-center">{{ invoice.invoiceId | formatId }}</div>
                 <div class="flex-1 flex items-center justify-center">{{ invoice.unitConsumption }} Kw</div>
@@ -22,9 +23,9 @@
                     {{ invoice.billDueDate | date : "longDate" }}
                 </div>
                 <div class="flex-1 flex items-center justify-center">
-                    {{ invoice.amountDue | currency : "INR" }}
+                    {{ invoice.totalAmountDue | currency : "INR" }}
                 </div>
-                <div class="flex-1 flex items-center justify-center"> <!-- Center payment status -->
+                <div class="flex-1 flex items-center justify-center">
                     <span
                         [class]="{
                             'bg-primary': invoice.paymentStatus === 'UNPAID',
@@ -34,6 +35,11 @@
                     >
                         {{ invoice.paymentStatus | titlecase }}
                     </span>
+                </div>
+                <div class="flex-none flex items-center justify-center"> 
+                    <button class="btn-primary text-white !text-xs" (click)="downloadInvoicePdf(invoice.invoicePdf, invoice.invoiceId)">
+                        <i class="fa-solid fa-download p-1"></i>
+                    </button>
                 </div>
             </div>
         </ng-container>

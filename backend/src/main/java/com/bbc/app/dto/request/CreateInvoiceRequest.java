@@ -1,7 +1,6 @@
 package com.bbc.app.dto.request;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -11,14 +10,16 @@ public class CreateInvoiceRequest {
     @Pattern(regexp = "^(MTR)\\d{7}$", message = "Invalid Meter No!")
     private String meterNo;
 
-    @NotBlank(message = "Units Consumed is required!")
+    @NotNull(message = "Units consumed must not be null")
+    @DecimalMin(value = "0.0", inclusive = false, message = "Units consumed must be greater than zero")
     private BigDecimal unitsConsumed;
 
     @NotBlank(message = "Bill Duration is required!")
     String billDuration;
 
-    @NotBlank(message = "Bill Due Date is required!")
-    LocalDate billDueDate;
+    @NotNull(message = "Bill due date must not be null")
+    @Future(message = "Bill due date must be in the future")
+    private LocalDate billDueDate;
 
     public CreateInvoiceRequest(String meterNo, BigDecimal unitsConsumed, String billDuration, LocalDate billDueDate) {
         this.meterNo = meterNo;

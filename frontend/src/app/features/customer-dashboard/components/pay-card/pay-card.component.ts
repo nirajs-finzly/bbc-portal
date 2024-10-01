@@ -39,4 +39,8 @@ export class PayCardComponent {
           console.error('Meter number not available for user!');
       }
   }
+
+  downloadInvoicePdf(pdfData: string, invoiceId: string): void{
+    this.invoiceService.downloadInvoicePDF(pdfData, invoiceId);
+}
 }

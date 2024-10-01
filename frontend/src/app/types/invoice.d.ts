@@ -3,7 +3,9 @@ export interface Invoice {
     unitConsumption: number;
     billDuration: string;
     billDueDate: string;
-    amountDue: number;
+    currentAmountDue: number;
+    totalAmountDue: number;
     paymentStatus: 'PAID' | 'UNPAID';
-    generatedAt: Date
+    generatedAt: Date;
+    invoicePdf: string;
 }

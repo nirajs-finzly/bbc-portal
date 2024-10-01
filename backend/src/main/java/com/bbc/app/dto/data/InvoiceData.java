@@ -12,18 +12,22 @@ public class InvoiceData {
     private BigDecimal unitConsumption;
     private String billDuration;
     private LocalDate billDueDate;
-    private BigDecimal amountDue;
+    private BigDecimal currentAmountDue;
+    private BigDecimal totalAmountDue;
     private PaymentStatus paymentStatus;
     private LocalDateTime generatedAt;
+    private byte[] invoicePdf;
 
-    public InvoiceData(UUID invoiceId, BigDecimal unitConsumption, String billDuration, LocalDate billDueDate, BigDecimal amountDue, PaymentStatus paymentStatus, LocalDateTime generatedAt) {
+    public InvoiceData(UUID invoiceId, BigDecimal unitConsumption, String billDuration, LocalDate billDueDate, BigDecimal currentAmountDue, BigDecimal totalAmountDue, PaymentStatus paymentStatus, LocalDateTime generatedAt, byte[] invoicePdf) {
         this.invoiceId = invoiceId;
         this.unitConsumption = unitConsumption;
         this.billDuration = billDuration;
         this.billDueDate = billDueDate;
-        this.amountDue = amountDue;
+        this.currentAmountDue = currentAmountDue;
+        this.totalAmountDue = totalAmountDue;
         this.paymentStatus = paymentStatus;
         this.generatedAt = generatedAt;
+        this.invoicePdf = invoicePdf;
     }
 
     public UUID getInvoiceId() {
@@ -58,12 +62,20 @@ public class InvoiceData {
         this.billDueDate = billDueDate;
     }
 
-    public BigDecimal getAmountDue() {
-        return amountDue;
+    public BigDecimal getCurrentAmountDue() {
+        return currentAmountDue;
     }
 
-    public void setAmountDue(BigDecimal amountDue) {
-        this.amountDue = amountDue;
+    public void setCurrentAmountDue(BigDecimal currentAmountDue) {
+        this.currentAmountDue = currentAmountDue;
+    }
+
+    public BigDecimal getTotalAmountDue() {
+        return totalAmountDue;
+    }
+
+    public void setTotalAmountDue(BigDecimal totalAmountDue) {
+        this.totalAmountDue = totalAmountDue;
     }
 
     public PaymentStatus getPaymentStatus() {
@@ -80,5 +92,13 @@ public class InvoiceData {
 
     public void setGeneratedAt(LocalDateTime generatedAt) {
         this.generatedAt = generatedAt;
+    }
+
+    public byte[] getInvoicePdf() {
+        return invoicePdf;
+    }
+
+    public void setInvoicePdf(byte[] invoicePdf) {
+        this.invoicePdf = invoicePdf;
     }
 }

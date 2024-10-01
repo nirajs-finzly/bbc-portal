@@ -6,7 +6,7 @@
             <p>
                 Amount:
                 <span class="font-light text-xs">{{
-                    latestInvoice.amountDue | currency : "INR"
+                    latestInvoice.totalAmountDue | currency : "INR"
                 }}</span>
             </p>
             <p>
@@ -17,10 +17,13 @@
             </p>
         </div>
     </div>
-    <div>
-        <button class="btn-danger w-20 !text-xs">
+    <div class="flex flex-col gap-4">
+        <button class="bg-primary hover:bg-[#fa644c] text-white w-28 h-10 !text-xs">
             <i class="fa-solid fa-money-check-dollar mr-2"></i>
             Pay Now
+        </button>
+        <button class="btn-primary text-white w-28 h-10 !text-xs" (click)="downloadInvoicePdf(latestInvoice.invoicePdf, latestInvoice.invoiceId)">
+            <i class="fa-solid fa-download p-1"></i> Download
         </button>
     </div>
 </div>

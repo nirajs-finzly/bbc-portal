@@ -24,3 +24,7 @@ spring:
           auth: true
           starttls:
             enable: true
+  thymeleaf:
+    mode: LEGACYHTML5
+
+public_domain: http://localhost:8080

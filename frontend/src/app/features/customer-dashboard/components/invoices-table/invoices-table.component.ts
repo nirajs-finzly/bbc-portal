@@ -47,6 +47,10 @@ export class InvoicesTableComponent {
         }
     }
 
+    downloadInvoicePdf(pdfData: string, invoiceId: string): void{
+        this.invoiceService.downloadInvoicePDF(pdfData, invoiceId);
+    }
+
     sortInvoicesByGeneratedAt(): void {
         this.invoices.sort((a: Invoice, b: Invoice) => {
             const dateA = new Date(a.generatedAt).getTime();

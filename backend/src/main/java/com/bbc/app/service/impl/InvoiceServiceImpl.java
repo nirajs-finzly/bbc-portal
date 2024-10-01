@@ -10,12 +10,15 @@ import com.bbc.app.model.PaymentStatus;
 import com.bbc.app.repository.CustomerRepository;
 import com.bbc.app.repository.InvoiceRepository;
 import com.bbc.app.service.InvoiceService;
+import com.bbc.app.service.PdfService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -29,6 +32,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private PdfService pdfService;
 
     private static final BigDecimal RATE_PER_KW = BigDecimal.valueOf(41.50);
 
@@ -56,7 +62,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
 
         // Calculate the amount for the current invoice based on the units consumed
-        BigDecimal newInvoiceAmount = RATE_PER_KW.multiply(unitsConsumed);
+        BigDecimal invoiceAmount = RATE_PER_KW.multiply(unitsConsumed);
 
         // Fetch unpaid invoices for the given customer
         List<Invoice> unpaidInvoices =
@@ -64,11 +70,11 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         // Calculate total unpaid amount by summing up unpaid invoices
         BigDecimal totalUnpaidAmount = unpaidInvoices.stream()
-                .map(Invoice::getAmountDue)  // Only considering unpaid invoices
+                .map(Invoice::getCurrentAmountDue)  // Only considering unpaid invoices
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         // Add the total unpaid amount to the current invoice amount
-        newInvoiceAmount = newInvoiceAmount.add(totalUnpaidAmount);
+        BigDecimal newInvoiceAmount = invoiceAmount.add(totalUnpaidAmount);
 
         // Find the customer by meter number
         Optional<Customer> customer = customerRepository.findByMeterNo(meterNo);
@@ -83,10 +89,20 @@ public class InvoiceServiceImpl implements InvoiceService {
         newInvoice.setUnitConsumption(unitsConsumed);
         newInvoice.setBillDuration(billDuration);
         newInvoice.setBillDueDate(billDueDate);
-        newInvoice.setAmountDue(newInvoiceAmount);
+        newInvoice.setCurrentAmountDue(invoiceAmount);
+        newInvoice.setTotalAmountDue(newInvoiceAmount);
         newInvoice.setPaymentStatus(PaymentStatus.UNPAID);
 
         invoiceRepository.save(newInvoice);
+
+        try {
+            byte[] invoicePdf = pdfService.createInvoicePdf(newInvoice, unpaidInvoices);
+            newInvoice.setInvoicePdf(invoicePdf);
+            invoiceRepository.save(newInvoice);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MessageResponse("Error generating invoice PDF!", false));
+        }
 
         return ResponseEntity.ok(new MessageResponse("New invoice created successfully!", true));
     }
@@ -115,9 +131,11 @@ public class InvoiceServiceImpl implements InvoiceService {
                 invoice.getUnitConsumption(),
                 invoice.getBillDuration(),
                 invoice.getBillDueDate(),
-                invoice.getAmountDue(),
+                invoice.getCurrentAmountDue(),
+                invoice.getTotalAmountDue(),
                 invoice.getPaymentStatus(),
-                invoice.getGeneratedAt()
+                invoice.getGeneratedAt(),
+                invoice.getInvoicePdf()
         );
     }
 }
