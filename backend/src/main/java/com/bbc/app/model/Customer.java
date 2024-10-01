@@ -25,6 +25,7 @@ public class Customer {
     @Column(length = 255)
     private String address;
 
+
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Invoice> invoices;
 
@@ -105,6 +106,18 @@ public class Customer {
 
     public void setPaymentTransactions(Set<PaymentTransaction> paymentTransactions) {
         this.paymentTransactions = paymentTransactions;
+    }
+
+
+    // Method to check if the customer is valid
+    public boolean isValid() {
+        // Check if user is valid and address is valid
+        return user != null && user.isValid() && isValidAddress();
+    }
+
+    // Validate address (you can adjust logic if necessary)
+    private boolean isValidAddress() {
+        return address != null && !address.trim().isEmpty();
     }
 
 

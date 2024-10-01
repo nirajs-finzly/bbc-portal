@@ -10,7 +10,9 @@ import com.bbc.app.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -45,11 +47,11 @@ public class CustomerController {
         return customerService.deleteCustomer(meterNo);
     }
 
-//    @PostMapping("/upload")
-//    public ResponseEntity<MessageResponse> bulkUploadCustomer(@RequestParam("file") MultipartFile dataFile) throws IOException {
-//
-//        return customerService.bulkUploadCustomer(dataFile);
-//
-//    }
+    @PostMapping("/upload")
+    public ResponseEntity<MessageResponse> bulkUploadCustomer(@RequestParam("file") MultipartFile dataFile) throws IOException {
+
+        return customerService.bulkUploadCustomer(dataFile);
+
+    }
 
 }
