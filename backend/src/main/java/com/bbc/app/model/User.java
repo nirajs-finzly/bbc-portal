@@ -183,4 +183,24 @@ public class User implements UserDetails {
         return true;
     }
 
+    public boolean isValid() {
+        // Validate all user fields
+        return isValidName() && isValidEmail() && isValidPhone();
+    }
+
+    // Validate the name
+    private boolean isValidName() {
+        return name != null && !name.trim().isEmpty();
+    }
+
+    // Validate the email with a regex pattern
+    private boolean isValidEmail() {
+        return email != null && email.matches("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
+    }
+
+    // Validate the phone (must be 10 digits)
+    private boolean isValidPhone() {
+        return phone != null && phone.matches("\\d{10}");
+    }
+
 }

@@ -6,7 +6,9 @@ import com.bbc.app.dto.response.MessageResponse;
 import com.bbc.app.model.Customer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -28,5 +30,5 @@ public interface CustomerService {
     ResponseEntity<MessageResponse> deleteCustomer(String meterno);
 
     // Bulk upload customers
-//    ResponseEntity<MessageResponse> bulkUploadCustomer(MultipartFile dataFile) throws IOException;
+    ResponseEntity<MessageResponse> bulkUploadCustomer(MultipartFile dataFile) throws IOException;
 }
