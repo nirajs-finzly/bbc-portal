@@ -1,5 +1,6 @@
 package com.bbc.app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -13,6 +14,7 @@ import java.util.UUID;
 public class Invoice {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @JsonIgnore(value = true)
     private UUID invoiceId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -155,6 +157,16 @@ public class Invoice {
 
     public void setPaymentTransaction(PaymentTransaction paymentTransaction) {
         this.paymentTransaction = paymentTransaction;
+    }
+
+    public boolean isValid() {
+        return customer != null && customer.getUser().isValid()
+                && unitConsumption != null && unitConsumption.compareTo(BigDecimal.ZERO) > 0
+                && billDuration != null && !billDuration.trim().isEmpty()
+                && billDueDate != null
+                && currentAmountDue != null && currentAmountDue.compareTo(BigDecimal.ZERO) >= 0
+                && totalAmountDue != null && totalAmountDue.compareTo(BigDecimal.ZERO) >= 0
+                && paymentStatus != null;
     }
 
     @Override

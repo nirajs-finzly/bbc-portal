@@ -41,12 +41,26 @@ public class DatabaseSeeder implements CommandLineRunner {
             user1.setRole(UserRole.EMPLOYEE);
             userRepository.save(user1);
 
-            // Create and save the employee associated with the user
+            // Create and save the employee2 associated with the user
             Employee employee = new Employee();
             employee.setUser(user1);
             employee.setDepartment("Operations");
             employee.setPosition("Sub-Officer");
             employeeRepository.save(employee);
+
+            User user3 = new User();
+            user3.setName("Sushmita Bennisur");
+            user3.setEmail("sushmitabennisur11@gmail.com");
+            user3.setPhone("7744920605");
+            user3.setRole(UserRole.EMPLOYEE);
+            userRepository.save(user3);
+
+            // Create and save the employee2 associated with the user
+            Employee employee2 = new Employee();
+            employee2.setUser(user3);
+            employee2.setDepartment("Operations");
+            employee2.setPosition("Sub-Officer");
+            employeeRepository.save(employee2);
 
             User user2 = new User();
             user2.setName("Sujal Surve");

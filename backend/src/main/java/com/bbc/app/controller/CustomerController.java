@@ -5,7 +5,6 @@ import com.bbc.app.dto.request.UpdateCustomerRequest;
 import com.bbc.app.dto.response.CustomersResponse;
 import com.bbc.app.dto.response.MessageResponse;
 import com.bbc.app.dto.response.SingleCustomerResponse;
-import com.bbc.app.model.Customer;
 import com.bbc.app.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/customer")
@@ -49,9 +47,7 @@ public class CustomerController {
 
     @PostMapping("/upload")
     public ResponseEntity<MessageResponse> bulkUploadCustomer(@RequestParam("file") MultipartFile dataFile) throws IOException {
-
         return customerService.bulkUploadCustomer(dataFile);
-
     }
 
 }
