@@ -1,30 +1,44 @@
 @if(latestInvoice !== null){
-<div class="p-4 bg-white w-fit shadow-md rounded-md flex gap-4">
+<p-card>
+  <div class="inner">
+    <div class="flex flex-col font-semibold">
+      <span class="text-lg text-primary">Pay Invoice</span>
+      <span class="text-xs text-muted">{{ latestInvoice.billDuration }}</span>
+    </div>
     <div>
-        <h2 class="font-bold text-primary mb-2">Pay Invoice</h2>
-        <div class="text-sm font-semibold flex flex-col gap-2">
-            <p>
-                Amount:
-                <span class="font-light text-xs">{{
-                    latestInvoice.totalAmountDue | currency : "INR"
-                }}</span>
-            </p>
-            <p>
-                Due Date:
-                <span class="font-light text-xs">{{
-                    latestInvoice.billDueDate | date : "longDate"
-                }}</span>
-            </p>
-        </div>
+      <p class="text-sm font-semibold">
+        Amount:
+        <span class="font-light text-xs text-primary">{{
+          latestInvoice.totalAmountDue | currency : "INR"
+        }}</span>
+      </p>
+      <p class="text-sm font-semibold">
+        Due Date:
+        <span class="font-light text-xs">{{
+          latestInvoice.billDueDate | date : "longDate"
+        }}</span>
+      </p>
     </div>
-    <div class="flex flex-col gap-4">
-        <button class="bg-primary hover:bg-[#fa644c] text-white w-28 h-10 !text-xs">
-            <i class="fa-solid fa-money-check-dollar mr-2"></i>
-            Pay Now
-        </button>
-        <button class="btn-primary text-white w-28 h-10 !text-xs" (click)="downloadInvoicePdf(latestInvoice.invoicePdf, latestInvoice.invoiceId)">
-            <i class="fa-solid fa-download p-1"></i> Download
-        </button>
-    </div>
-</div>
+  </div>
+  <div class="flex flex-col justify-between">
+    <button
+      pButton
+      size="small"
+      icon="pi pi-credit-card"
+      label="Pay Now"
+      severity="danger"
+    ></button>
+    <button
+      (click)="
+        downloadInvoicePdf(latestInvoice.invoicePdf, latestInvoice.invoiceId)
+      "
+      pButton
+      size="small"
+      icon="pi pi-download"
+      label="Download"
+      severity="success"
+      [outlined]="true"
+    ></button>
+  </div>
+</p-card>
 }

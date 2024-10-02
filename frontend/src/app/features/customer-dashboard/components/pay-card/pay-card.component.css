@@ -1,0 +1,11 @@
+:host{
+    @apply w-fit block
+}
+
+:host ::ng-deep .p-card-content {
+    @apply p-0 flex gap-4
+}
+
+:host ::ng-deep .p-card-content .inner {
+    @apply flex flex-col gap-2
+}

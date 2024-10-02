@@ -1,13 +1,12 @@
-// src/app/app.routes.ts
 import { Routes } from '@angular/router';
 import { HomeComponent } from './core/components/home/home.component';
 import { LoginComponent } from './features/auth/components/login/login.component';
-import { EmployeeDashboardComponent } from './features/employee-dashboard/components/employee-dashboard/employee-dashboard.component';
 import { CustomerDashboardComponent } from './features/customer-dashboard/components/customer-dashboard/customer-dashboard.component';
-import { InvoicesComponent } from './features/customer-dashboard/components/invoices/invoices.component';
 import { AuthGuard } from './guards/auth.guard';
 import { RedirectGuard } from './guards/redirect.guard';
 import { DashboardLayoutComponent } from './shared/layouts/dashboard-layout/dashboard-layout.component';
+import { EmployeeDashboardComponent } from './features/employee/components/employee-dashboard/employee-dashboard.component';
+import { InvoicesComponent } from './features/customer-dashboard/components/invoices/invoices.component';
 
 export const routes: Routes = [
   {

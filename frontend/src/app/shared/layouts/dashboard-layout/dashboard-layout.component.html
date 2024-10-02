@@ -1,67 +1,47 @@
-<!-- Sidebar -->
-<aside class="w-56 bg-white text-dark flex flex-col h-screen">
-    <div class="flex gap-4 h-[64px] px-6 py-3">
-        <img src="assets/img/logo.png" alt="BBC" class="h-full" />
-        <div class="flex flex-col justify-center">
-            <h2 class="text-sm font-bold text-tertiary">Bharat Bijili</h2>
-            <h3 class="text-xs font-bold text-dark">Corporation</h3>
-        </div>
+<p-menubar [model]="navItems">
+  <ng-template pTemplate="start">
+    <p-avatar image="assets/img/logo.png" shape="circle" />
+    <span class="ml-2 font-bold">Bharat Bijili</span>
+  </ng-template>
+  <ng-template pTemplate="item" let-item let-root="root">
+    <a
+      pRipple
+      [routerLink]="item.link"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="flex items-center p-menuitem-link mr-auto text-dark"
+    >
+      <span [class]="item.icon"></span>
+      <span class="ml-2">{{ item.label }}</span>
+    </a>
+  </ng-template>
+  <ng-template pTemplate="end" style="margin-left: 0">
+    <div
+      (click)="menu.toggle($event)"
+      class="flex items-center gap-2 cursor-pointer"
+    >
+      <div class="bg-tertiary rounded-full text-white">
+        <i class="fa-solid fa-user mx-3 my-[0.7rem]"></i>
+      </div>
     </div>
-    <!-- Menu -->
-    <nav class="flex-grow">
-        <ul class="h-full flex flex-col justify-between px-6 py-4 md:text-sm">
-            <div class="flex flex-col gap-2">
-                <ng-container *ngFor="let item of navItems">
-                    <li
-                        class="text-dark fade flex gap-2 p-2"
-                        [routerLink]="item.link"
-                        routerLinkActive="active"
-                        [routerLinkActiveOptions]="{ exact: true }"
-                    >
-                        <div class="text-center mx-2 w-4">
-                            <i [class]="item.icon"></i>
-                        </div>
-                        <a>{{ item.label }}</a>
-                    </li>
-                </ng-container>
-            </div>
-            <div>
-                <li
-                    class="text-dark fade flex gap-2 p-2"
-                    (click)="logoutUser()"
-                >
-                    <div class="text-center mx-2 w-4">
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                    </div>
-                    <a>Logout</a>
-                </li>
-            </div>
-        </ul>
-    </nav>
-</aside>
-
-<!-- Main Content -->
-<div class="flex-grow flex flex-col bg-background h-screen overflow-hidden">
-    <!-- Header -->
-    <header class="px-4 mx-4 my-2 rounded-md shadow-md bg-white flex justify-between items-center h-[56px]">
-        <h2 class="text-sm text-dark font-mulish">
-            Welcome,
-            <span class="text-lg font-bold text-tertiary">{{ user?.name }}</span>
-        </h2>
-        <div class="flex items-center gap-3">
-            <div class="bg-tertiary px-[13px] py-[7px] rounded-full">
-                <i class="fa-solid fa-user text-sm text-white"></i>
-            </div>
-            <div class="flex flex-col">
-                <span class="text-sm text-tertiary font-bold">{{ user?.name + " - " }} <span class="text-secondary font-medium">{{ user?.role | titlecase }}</span></span>
-                <span class="text-xs text-dark lowercase">{{ user?.email }}</span>
-            </div>
+    <p-menu #menu [model]="menuItems" [popup]="true">
+      <ng-template pTemplate="start" style="width: fit-content">
+        <div class="p-4 flex gap-4 text-xs">
+          <div class="bg-tertiary rounded-full text-white">
+            <i class="fa-solid fa-user mx-3 my-[0.7rem]"></i>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-sm text-tertiary">{{
+              user?.name + " - " + user?.role | titlecase
+            }}</span>
+            <span class="text-xs text-dark">{{ user?.email }}</span>
+          </div>
         </div>
-    </header>
-    <div class="h-[1px] bg-violet-300 mx-4"></div>
+      </ng-template>    
+    </p-menu>
+  </ng-template>
+</p-menubar>
 
-    <!-- Routed Content -->
-    <main id="routed-content" class="p-4 flex-grow">
-        <router-outlet></router-outlet>
-    </main>
-</div>
+<main class="p-6">
+  <router-outlet />
+</main>

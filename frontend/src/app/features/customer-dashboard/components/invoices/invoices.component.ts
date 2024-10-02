@@ -1,21 +1,22 @@
-import { Component, OnInit } from '@angular/core';
-import { Invoice } from '../../../../types/invoice';
-import { InvoiceService } from '../../services/invoice.service';
-import { AuthService } from '../../../auth/services/auth.service';
+import { Component } from '@angular/core';
+import { AuthService } from '../../../../shared/services/auth.service';
 import { User } from '../../../../types/user';
+import { InvoicesTableComponent } from "../invoices-table/invoices-table.component";
+import { PayCardComponent } from "../pay-card/pay-card.component";
 
 @Component({
   selector: 'app-invoices',
+  standalone: true,
+  imports: [PayCardComponent, InvoicesTableComponent],
   templateUrl: './invoices.component.html',
-  styleUrls: ['./invoices.component.css']
+  styleUrl: './invoices.component.css'
 })
-export class InvoicesComponent implements OnInit {
+export class InvoicesComponent {
   user: User | null = null; 
 
-  constructor(private invoiceService: InvoiceService, private authService: AuthService) {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
     this.user = this.authService.getUserData();
   }
-
 }

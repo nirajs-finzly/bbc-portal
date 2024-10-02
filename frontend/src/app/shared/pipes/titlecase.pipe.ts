@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({ name: 'titlecase' })
+@Pipe({ name: 'titlecase', standalone: true })
 export class TitleCasePipe implements PipeTransform {
   transform(value: string | undefined | null): string {
     if (value === undefined || value === null) return ''; // Change to 'N/A' if you prefer that

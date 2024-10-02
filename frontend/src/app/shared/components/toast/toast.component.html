@@ -1,0 +1,11 @@
+@if(toast){
+  <div class="custom-toast-container">
+    <div
+      class="custom-toast custom-toast-{{ toast.type }}"
+      (click)="removeToast()"
+    >
+      <i class="{{ getIcon(toast.type) }}"></i>
+      <span>{{ toast.message }}</span>
+    </div>
+  </div>
+}

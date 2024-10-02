@@ -1,84 +1,89 @@
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { TableLazyLoadEvent, TableModule } from 'primeng/table';
+import { AuthService } from '../../../../shared/services/auth.service';
+import { InvoiceService } from '../../../../shared/services/invoice.service';
 import { Invoice } from '../../../../types/invoice';
 import { User } from '../../../../types/user';
-import { InvoiceService } from '../../services/invoice.service';
-import { AuthService } from '../../../auth/services/auth.service';
+import { CardModule } from 'primeng/card';
+import { CommonModule } from '@angular/common';
+import { FormatIdPipe } from '../../../../shared/pipes/format-id.pipe';
+import { TitleCasePipe } from '../../../../shared/pipes/titlecase.pipe';
 
 @Component({
-    selector: 'app-invoices-table',
-    templateUrl: './invoices-table.component.html',
-    styleUrl: './invoices-table.component.css',
+  selector: 'app-invoices-table',
+  standalone: true,
+  imports: [CardModule, TableModule, ButtonModule, FormsModule, CommonModule, FormatIdPipe, TitleCasePipe],
+  templateUrl: './invoices-table.component.html',
+  styleUrl: './invoices-table.component.css',
 })
 export class InvoicesTableComponent {
-    invoices: Invoice[] = []; // Initialize invoices as an empty array
-    totalInvoices: number = 0;
-    pageSize: number = 10;
-    currentPage: number = 1;
-    user: User | null = null;
+  invoices: Invoice[] = [];
+  totalInvoices: number = 0;
 
-    constructor(
-        private invoiceService: InvoiceService,
-        private authService: AuthService
-    ) {}
+  pageSize: number = 5;
+  currentPage: number = 0;
 
-    ngOnInit(): void {
-        this.user = this.authService.getUserData();
+  user: User | null = null;
 
-        if (this.user) {
-            this.getInvoices(this.currentPage, this.pageSize);
-        } else {
-            console.error('User not found');
-        }
+  loading: boolean = true;
+
+  constructor(
+    private invoiceService: InvoiceService,
+    private authService: AuthService
+  ) {}
+
+  ngOnInit(): void {
+    this.user = this.authService.getUserData();
+
+    if (this.user) {
+      this.getInvoices(this.currentPage, this.pageSize);
+    } else {
+      console.error('User not found');
     }
 
-    // Fetch invoices with server-side pagination
-    getInvoices(page: number, size: number): void {
-        if (this.user && this.user.meterNo) {
-            this.invoiceService
-                .getInvoicesByMeterNo(this.user.meterNo, page - 1, size)
-                .subscribe((response: any) => {
-                    this.invoices = response.invoices || [];
-                    this.totalInvoices = response.totalInvoices || 0;
+    this.loadInvoices({ first: 0, rows: this.pageSize });
+  }
 
-                    this.sortInvoicesByGeneratedAt();
-                });
-        } else {
-            console.error('Meter number not available for user');
-        }
-    }
-
-    downloadInvoicePdf(pdfData: string, invoiceId: string): void{
-        this.invoiceService.downloadInvoicePDF(pdfData, invoiceId);
-    }
-
-    sortInvoicesByGeneratedAt(): void {
-        this.invoices.sort((a: Invoice, b: Invoice) => {
-            const dateA = new Date(a.generatedAt).getTime();
-            const dateB = new Date(b.generatedAt).getTime();
-            return dateB - dateA;
+  // Fetch invoices with server-side pagination
+  getInvoices(page: number, size: number): void {
+    if (this.user && this.user.meterNo) {
+      this.loading = true;
+      this.invoiceService
+        .getInvoicesByMeterNo(this.user.meterNo, page, size)
+        .subscribe({
+          next: (response: any) => {
+            this.invoices = response.invoices || [];
+            this.totalInvoices = response.totalInvoices || 0;
+            this.sortInvoicesByGeneratedAt();
+            this.loading = false;
+          },
+          error: (error) => {
+            console.error('Failed to fetch invoices:', error);
+            this.loading = false;
+          },
         });
+    } else {
+      console.error('Meter number not available for user');
     }
+  }
 
-    // Method to calculate total pages based on totalInvoices and pageSize
-    getTotalPages(): number {
-        return Math.ceil(this.totalInvoices / this.pageSize);
-    }
+  loadInvoices(event: TableLazyLoadEvent): void {
+    this.currentPage = event.first! / event.rows!;
+    this.pageSize = event.rows!;
+    this.getInvoices(this.currentPage, this.pageSize);
+  }
 
-    // Method to generate page numbers for the pagination component
-    getPageNumbers(): number[] {
-        const totalPages = this.getTotalPages();
-        const pageNumbers: number[] = [];
+  sortInvoicesByGeneratedAt(): void {
+    this.invoices.sort((a: Invoice, b: Invoice) => {
+      const dateA = new Date(a.generatedAt).getTime();
+      const dateB = new Date(b.generatedAt).getTime();
+      return dateB - dateA;
+    });
+  }
 
-        for (let i = 1; i <= totalPages; i++) {
-            pageNumbers.push(i);
-        }
-
-        return pageNumbers;
-    }
-
-    // Method to handle page change
-    onPageChange(page: number): void {
-        this.currentPage = page;
-        this.getInvoices(this.currentPage, this.pageSize);
-    }
+  downloadInvoicePdf(pdfData: string, invoiceId: string): void {
+    this.invoiceService.downloadInvoicePDF(pdfData, invoiceId);
+  }
 }

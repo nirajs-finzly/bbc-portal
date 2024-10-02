@@ -1,3 +1,7 @@
-:host{
-    @apply flex flex-col h-[calc(100vh-64px)] md:h-screen justify-center items-center;
+:host {
+  @apply flex flex-col h-[calc(100vh-64px)] md:h-screen justify-center items-center;
+}
+
+::ng-deep .p-button-label {
+  flex: 0 0 auto !important;
 }

@@ -1,92 +1,55 @@
-<div class="min-w-full bg-white shadow-md rounded-md text-center">
-    <div class="bg-gray-200 text-sm leading-normal rounded-t-md p-4 flex">
-        <div class="flex-1 font-bold">Invoice ID</div>
-        <div class="flex-1 font-bold">Unit Consumption</div>
-        <div class="flex-1 font-bold">Bill Duration</div>
-        <div class="flex-1 font-bold">Bill Due Date</div>
-        <div class="flex-1 font-bold">Amount Due</div>
-        <div class="flex-1 font-bold">Payment Status</div>
-        <div class="flex-none font-bold w-11"></div> <!-- Change flex-1 to flex-none -->
-    </div>
+<p-card>
+  <p-table
+    [value]="invoices"
+    [paginator]="true"
+    [rows]="pageSize"
+    [totalRecords]="totalInvoices"
+    [lazy]="true"
+    [loading]="loading"
+    (onLazyLoad)="loadInvoices($event)"
+    [rowsPerPageOptions]="[5, 10, 20]"
+    styleClass="p-datatable-striped"
+    [tableStyle]="{ 'min-width': '50rem' }"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Invoice ID</th>
+        <th>Unit Consumption</th>
+        <th>Bill Duration</th>
+        <th>Bill Due Date</th>
+        <th>Amount Due</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </ng-template>
 
-    <div class="text-sm min-h-[300px] font-light text-gray-700">
-        <!-- Loop through invoices -->
-        <ng-container *ngIf="invoices.length !== 0; else noInvoices">
-            <div
-                *ngFor="let invoice of invoices"
-                class="border-b last:border-none border-gray-200 hover:bg-gray-100 transition duration-200 flex p-4"
-            >
-                <div class="flex-1 flex items-center justify-center">{{ invoice.invoiceId | formatId }}</div>
-                <div class="flex-1 flex items-center justify-center">{{ invoice.unitConsumption }} Kw</div>
-                <div class="flex-1 flex items-center justify-center">{{ invoice.billDuration }}</div>
-                <div class="flex-1 flex items-center justify-center">
-                    {{ invoice.billDueDate | date : "longDate" }}
-                </div>
-                <div class="flex-1 flex items-center justify-center">
-                    {{ invoice.totalAmountDue | currency : "INR" }}
-                </div>
-                <div class="flex-1 flex items-center justify-center">
-                    <span
-                        [class]="{
-                            'bg-primary': invoice.paymentStatus === 'UNPAID',
-                            'bg-success': invoice.paymentStatus === 'PAID'
-                        }"
-                        class="block w-3/4 self-center p-2 text-white rounded-full text-center text-xs"
-                    >
-                        {{ invoice.paymentStatus | titlecase }}
-                    </span>
-                </div>
-                <div class="flex-none flex items-center justify-center"> 
-                    <button class="btn-primary text-white !text-xs" (click)="downloadInvoicePdf(invoice.invoicePdf, invoice.invoiceId)">
-                        <i class="fa-solid fa-download p-1"></i>
-                    </button>
-                </div>
-            </div>
-        </ng-container>
-        <ng-template #noInvoices>
-            <div class="border-b border-gray-200 p-4">
-                <div class="text-center text-gray-500">No invoices found</div>
-            </div>
-        </ng-template>
-    </div>
-</div>
-
-<!-- Pagination Controls -->
-<nav aria-label="Page navigation" class="mt-4 flex justify-center">
-    <ul class="flex justify-center items-center bg-tertiary rounded-full">
-        <li class="!bg-transparent">
-            <button
-                class="bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-full !text-xs"
-                [disabled]="currentPage === 1"
-                (click)="onPageChange(currentPage - 1)"
-            >
-                <i class="fa-solid fa-chevron-left px-2 py-[6px]"></i>
-            </button>
-        </li>
-        <!-- Generate page numbers dynamically -->
-        <li
-            class="!bg-transparent h-full text-dark"
-            *ngFor="let page of getPageNumbers()"
-        >
-            <button
-                class="rounded-full h-full !text-xs"
-                [class.bg-white]="currentPage === page"
-                [class.text-dark]="currentPage === page"
-                [class.bg-gray-200]="currentPage !== page"
-                [class.text-gray-700]="currentPage !== page"
-                (click)="onPageChange(page)"
-            >
-                <span class="!px-2 !py-[6px]">{{ page }}</span>
-            </button>
-        </li>
-        <li class="!bg-transparent">
-            <button
-                class="bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-full !text-xs"
-                [disabled]="currentPage === getTotalPages()"
-                (click)="onPageChange(currentPage + 1)"
-            >
-                <i class="fa-solid fa-chevron-right px-2 py-[6px]"></i>
-            </button>
-        </li>
-    </ul>
-</nav>
+    <ng-template pTemplate="body" let-invoice>
+      <tr>
+        <td>{{ invoice.invoiceId | formatId }}</td>
+        <td>{{ invoice.unitConsumption }} Kw</td>
+        <td>{{ invoice.billDuration }}</td>
+        <td>{{ invoice.billDueDate | date : "longDate" }}</td>
+        <td>{{ invoice.totalAmountDue | currency : "INR" }}</td>
+        <td>
+          <button
+            [class]="
+              invoice.paymentStatus === 'UNPAID' ? 'bg-primary' : 'bg-success'
+            "
+            class="px-4 py-2 text-white cursor-pointer rounded-full border-transparent"
+          >
+            {{ invoice.paymentStatus | titlecase }}
+          </button>
+        </td>
+        <td>
+          <button
+            pButton
+            icon="pi pi-download"
+            severity="success"
+            size="small"
+            (click)="downloadInvoicePdf(invoice.invoicePdf, invoice.invoiceId)"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-card>

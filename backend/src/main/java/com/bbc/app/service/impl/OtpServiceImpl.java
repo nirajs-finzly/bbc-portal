@@ -30,7 +30,7 @@ public class OtpServiceImpl implements OtpService {
     @Autowired
     private EmailService emailService;
 
-    private static final int OTP_EXPIRY_MINUTES = 10;  // OTP expiry time in minutes
+    private static final int OTP_EXPIRY_MINUTES = 5;  // OTP expiry time in minutes
 
     @Override
     public ResponseEntity<MessageResponse> sendOtp(String userId) {
@@ -63,7 +63,7 @@ public class OtpServiceImpl implements OtpService {
             throw new UserNotFoundException("Invalid user ID format");
         }
 
-        // Set OTP and OTP expiry time (current time + 10 minutes)
+        // Set OTP and OTP expiry time (current time + 5 minutes)
         user.setOtp(otp);
         user.setOtpExpiry(LocalDateTime.now().plusMinutes(OTP_EXPIRY_MINUTES));
 

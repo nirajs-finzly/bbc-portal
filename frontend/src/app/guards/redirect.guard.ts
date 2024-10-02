@@ -1,7 +1,7 @@
 // src/app/guards/redirect.guard.ts
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { AuthService } from '../features/auth/services/auth.service';
+import { AuthService } from '../shared/services/auth.service';
 
 @Injectable({
     providedIn: 'root',

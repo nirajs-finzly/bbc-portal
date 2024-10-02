@@ -1,3 +1,27 @@
-:host{
-  @apply flex h-screen;
+:host ::ng-deep .p-menubar {
+  @apply flex justify-between md:justify-between px-6;
+}
+
+:host ::ng-deep .p-menubar-start {
+  @apply flex items-center w-56;
+}
+
+:host ::ng-deep .p-menubar-root-list {
+  @apply flex gap-4;
+}
+
+:host ::ng-deep .p-menuitem-content a {
+  @apply rounded-lg text-sm;
+}
+
+:host ::ng-deep .p-menubar-end {
+  @apply ml-0 w-56 flex justify-end;
+}
+
+:host ::ng-deep .p-menubar-button {
+  @apply hidden;
+}
+
+:host ::ng-deep .p-menu-overlay {
+  @apply w-fit;
 }
