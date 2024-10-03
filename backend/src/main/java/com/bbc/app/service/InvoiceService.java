@@ -17,6 +17,6 @@ public interface InvoiceService {
 
     ResponseEntity<SingleInvoiceResponse> getLatestInvoiceByMeterNo(String meterNo);
 
-    ResponseEntity<MessageResponse> bulkUploadInvoice(MultipartFile dataFile) throws IOException;
+    ResponseEntity<MessageResponse> bulkUploadInvoice(MultipartFile dataFile,String billDuration,LocalDate billDueDate) throws IOException;
 
 }

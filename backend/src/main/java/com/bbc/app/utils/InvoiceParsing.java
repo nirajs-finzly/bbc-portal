@@ -38,7 +38,7 @@ public class InvoiceParsing {
 
     private static final BigDecimal RATE_PER_KW = BigDecimal.valueOf(41.50);
 
-    public List<Invoice> parseCSV(InputStream inputStream, AtomicInteger invalidRecords) throws IOException {
+    public List<Invoice> parseCSV(InputStream inputStream, AtomicInteger invalidRecords,String billDuration,LocalDate billDueDate) throws IOException {
         List<Invoice> invoiceList = new ArrayList<>();
 
 
@@ -47,10 +47,6 @@ public class InvoiceParsing {
 
             for (CSVRecord csvRecord : csvParser) {
 
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-
-                LocalDate billDueDate = LocalDate.parse(csvRecord.get("bill_due_date"),formatter);
-                String billDuration = csvRecord.get("bill_duration");
                 BigDecimal unitsConsumed = new BigDecimal(csvRecord.get("unit_consumption"));
                 String meterNo = csvRecord.get("meter_no");
 
@@ -68,7 +64,7 @@ public class InvoiceParsing {
                 }
 
                 // Validate billDuration number
-                if (billDuration == null ||billDuration.isEmpty()|| !billDuration.matches("^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-\\d{2}$")) {
+                if (billDuration == null ||billDuration.isEmpty()|| !billDuration.matches("^(January|February|March|April|May|June|July|August|September|October|November|December) \\d{4}$")) {
                     invalidRecords.incrementAndGet();
                     continue; // Skip this record and continue with the next one
                 }
@@ -81,7 +77,6 @@ public class InvoiceParsing {
 
                 Optional<Invoice> invoice = invoiceRepository.findByBillDuration(billDuration);
                 if(invoice.isPresent()){
-//                    return ResponseEntity.badRequest().body(new MessageResponse("Invoice already exists!", false));
                     invalidRecords.incrementAndGet();
                     continue;
                 }
@@ -123,12 +118,13 @@ public class InvoiceParsing {
                 try {
                     byte[] invoicePdf = pdfService.createInvoicePdf(newInvoice, unpaidInvoices);
                     newInvoice.setInvoicePdf(invoicePdf);
-                    invoiceRepository.save(newInvoice);
+                    invoiceList.add(newInvoice);
                 } catch (IOException e) {
 //                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 //                            .body(new MessageResponse("Error generating invoice PDF!", false));
                     invalidRecords.incrementAndGet();
                 }
+                invoiceList.add(newInvoice);
             }
         }
 

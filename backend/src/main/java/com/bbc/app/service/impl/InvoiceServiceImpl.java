@@ -147,7 +147,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public ResponseEntity<MessageResponse> bulkUploadInvoice(MultipartFile dataFile) throws IOException {
+    public ResponseEntity<MessageResponse> bulkUploadInvoice(MultipartFile dataFile,String billDuration,LocalDate billDueDate) throws IOException {
 
         if (!Objects.requireNonNull(dataFile.getOriginalFilename()).endsWith(".csv")) {
 
@@ -156,10 +156,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         AtomicInteger invalidRecords = new AtomicInteger(0); // To keep track of invalid records
 
-        List<Invoice> invoices = invoiceParsing.parseCSV(dataFile.getInputStream(),invalidRecords);
-
-        int validRecords = invoices.size();;
-
+        List<Invoice> invoices = invoiceParsing.parseCSV(dataFile.getInputStream(),invalidRecords,billDuration,billDueDate);
         // Save each customer to the repository
         for (Invoice invoice : invoices) {
             if (invoice.isValid()) {
@@ -167,6 +164,8 @@ public class InvoiceServiceImpl implements InvoiceService {
                 invoiceRepository.save(invoice);
             }
         }
+
+        int validRecords = invoices.size();
 
         String message = String.format("Data upload complete. Successfully uploaded: %d, Failed: %d", validRecords, invalidRecords.get());
         return ResponseEntity.ok(new MessageResponse(message, true));

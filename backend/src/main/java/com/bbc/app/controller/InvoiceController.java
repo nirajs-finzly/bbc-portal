@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/invoices")
@@ -41,7 +42,7 @@ public class InvoiceController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<MessageResponse> bulkUploadInvoice(@RequestParam("file") MultipartFile dataFile) throws IOException {
-        return invoiceService.bulkUploadInvoice(dataFile);
+    public ResponseEntity<MessageResponse> bulkUploadInvoice(@RequestParam("file") MultipartFile dataFile, String billDuration, LocalDate billDueDate) throws IOException {
+        return invoiceService.bulkUploadInvoice(dataFile,billDuration,billDueDate);
     }
 }

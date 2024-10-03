@@ -74,6 +74,18 @@ public class DatabaseSeeder implements CommandLineRunner {
             customer.setAddress("Mumbai");
             customerRepository.save(customer);
 
+            User user4 = new User();
+            user4.setName("Sakshi Dhumal");
+            user4.setEmail("sakshi@gmail.com");
+            user4.setPhone("1234567890");
+            user4.setRole(UserRole.CUSTOMER);
+            userRepository.save(user4);
+
+            Customer customer2 = new Customer();
+            customer2.setUser(user4);
+            customer2.setAddress("Bhor");
+            customerRepository.save(customer2);
+
             System.out.println("Data seeding completed.");
         } else {
             System.out.println("User data already exist. Skipping seeding.");

@@ -28,4 +28,5 @@ public interface InvoiceRepository extends JpaRepository<Invoice, UUID> {
     Optional<Invoice> findTopByCustomerMeterNoOrderByGeneratedAtDesc(String meterNo);
 
     Optional<Invoice> findByBillDuration(String billDuration);
+
 }
