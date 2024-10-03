@@ -42,7 +42,12 @@ public class InvoiceController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<MessageResponse> bulkUploadInvoice(@RequestParam("file") MultipartFile dataFile, String billDuration, LocalDate billDueDate) throws IOException {
-        return invoiceService.bulkUploadInvoice(dataFile,billDuration,billDueDate);
+    public ResponseEntity<MessageResponse> bulkUploadInvoice(
+            @RequestParam("file") MultipartFile dataFile,
+            @RequestPart("billDuration") String billDuration,
+            @RequestPart("billDueDate") String billDueDate
+    ) throws IOException {
+        return invoiceService.bulkUploadInvoice(dataFile, billDuration, LocalDate.parse(billDueDate));
     }
+
 }

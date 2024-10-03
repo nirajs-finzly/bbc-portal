@@ -1,6 +1,7 @@
 package com.bbc.app.repository;
 
 import com.bbc.app.dto.data.InvoiceData;
+import com.bbc.app.model.Customer;
 import com.bbc.app.model.Invoice;
 import com.bbc.app.model.PaymentStatus;
 import org.springframework.data.domain.Page;
@@ -29,4 +30,5 @@ public interface InvoiceRepository extends JpaRepository<Invoice, UUID> {
 
     Optional<Invoice> findByBillDuration(String billDuration);
 
+    Optional<Invoice> findByCustomerAndBillDuration(Customer customer, String billDuration);
 }
