@@ -11,11 +11,12 @@ import com.bbc.app.repository.CustomerRepository;
 import com.bbc.app.repository.EmployeeRepository;
 import com.bbc.app.repository.UserRepository;
 import com.bbc.app.service.AuthService;
+import com.bbc.app.service.JwtService;
+import com.bbc.app.service.OtpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -30,7 +31,11 @@ public class AuthServiceImpl implements AuthService {
     private UserRepository userRepository;
 
     @Autowired
-    private JwtServiceImpl jwtService;
+    private JwtService jwtService;
+
+    @Autowired
+    private OtpService otpService;
+
 
     @Override
     public ResponseEntity<LoginResponse> login(LoginRequest request) {
@@ -39,7 +44,7 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow(() -> new UserNotFoundException("User not found."));
 
         // Validate OTP and expiry
-        boolean isValid = validateOtp(request.getOtp(), user);
+        boolean isValid = otpService.validateOtp(request.getOtp(), user);
 
         if (!isValid) {
             throw new InvalidOtpException("Invalid OTP!");
@@ -67,19 +72,5 @@ public class AuthServiceImpl implements AuthService {
 
         Optional<Customer> customerOpt = customerRepository.findByCustomerId(id);
         return customerOpt.map(Customer::getUser);
-    }
-
-    // Method to validate OTP and its expiry
-    private boolean validateOtp(String inputOtp, User user) {
-        if (user.getOtp() == null || !user.getOtp().equals(inputOtp)) {
-            throw new InvalidOtpException("Invalid OTP!");
-        }
-
-        // Check if OTP is expired
-        if (user.getOtpExpiry() == null || user.getOtpExpiry().isBefore(LocalDateTime.now())) {
-            throw new InvalidOtpException("OTP has expired!");
-        }
-
-        return true;
     }
 }

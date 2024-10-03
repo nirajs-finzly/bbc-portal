@@ -57,7 +57,7 @@ public class OtpServiceImpl implements OtpService {
             Customer customer = customerRepository.findByCustomerId(userId)
                     .orElseThrow(() -> new UserNotFoundException("Customer not found"));
 
-            user = customer.getUser();  // Assume Customer has a relationship with the User entity
+            user = customer.getUser();
 
         } else {
             throw new UserNotFoundException("Invalid user ID format");
@@ -79,5 +79,19 @@ public class OtpServiceImpl implements OtpService {
 
         // Return success message response
         return ResponseEntity.ok(new MessageResponse("OTP sent successfully to " + user.getEmail(), true));
+    }
+
+    @Override
+    public boolean validateOtp(String inputOtp, User user) {
+        if (user.getOtp() == null || !user.getOtp().equals(inputOtp)) {
+            throw new InvalidOtpException("Invalid OTP!");
+        }
+
+        // Check if OTP is expired
+        if (user.getOtpExpiry() == null || user.getOtpExpiry().isBefore(LocalDateTime.now())) {
+            throw new InvalidOtpException("OTP has expired!");
+        }
+
+        return true;
     }
 }

@@ -1,6 +1,7 @@
 package com.bbc.app.repository;
 
 import com.bbc.app.dto.data.InvoiceData;
+import com.bbc.app.model.Customer;
 import com.bbc.app.model.Invoice;
 import com.bbc.app.model.PaymentStatus;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,8 @@ public interface InvoiceRepository extends JpaRepository<Invoice, UUID> {
 
     // Find unpaid Invoices for a Customer
     List<Invoice> findByCustomerMeterNoAndPaymentStatus(String meterNo, PaymentStatus paymentStatus);
+
+    List<Invoice> findByCustomerAndPaymentStatus(Customer customer, PaymentStatus paymentStatus);
 
     Optional<Invoice> findTopByCustomerMeterNoOrderByGeneratedAtDesc(String meterNo);
 
