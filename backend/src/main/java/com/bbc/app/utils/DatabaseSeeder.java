@@ -1,28 +1,13 @@
 package com.bbc.app.utils;
 
 import com.bbc.app.model.Customer;
-import com.bbc.app.model.CreditCard;
-import com.bbc.app.model.DebitCard;
 import com.bbc.app.model.Employee;
-import com.bbc.app.model.Invoice;
-import com.bbc.app.model.NetBanking;
-import com.bbc.app.model.UPI;
 import com.bbc.app.model.User;
 import com.bbc.app.model.UserRole;
-import com.bbc.app.repository.CustomerRepository;
-import com.bbc.app.repository.CreditCardRepository;
-import com.bbc.app.repository.DebitCardRepository;
-import com.bbc.app.repository.EmployeeRepository;
-import com.bbc.app.repository.InvoiceRepository;
-import com.bbc.app.repository.NetBankingRepository;
-import com.bbc.app.repository.UPIRepository;
-import com.bbc.app.repository.UserRepository;
+import com.bbc.app.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @Component
 public class DatabaseSeeder implements CommandLineRunner {
