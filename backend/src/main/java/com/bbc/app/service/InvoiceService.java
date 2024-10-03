@@ -11,6 +11,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public interface InvoiceService {
+    ResponseEntity<InvoicesResponse> getAllInvoices(int page, int size);
+
     ResponseEntity<InvoicesResponse> getInvoicesByMeterNo(String meterNo, int page, int size);
 
     ResponseEntity<MessageResponse> createInvoice(String meterNo, BigDecimal unitsConsumed, String billDuration, LocalDate billDueDate);

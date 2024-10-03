@@ -8,7 +8,5 @@ import java.util.UUID;
 
 @Repository
 public interface PaymentTransactionRepsitory extends JpaRepository<PaymentTransaction, UUID> {
-    PaymentTransaction findByCustomer_CustomerId(String customerId);
 
-    PaymentTransaction findByInvoice_InvoiceId(UUID invoiceId);
 }

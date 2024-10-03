@@ -1,5 +1,6 @@
 package com.bbc.app.dto.data;
 
+import com.bbc.app.model.Invoice;
 import com.bbc.app.model.PaymentStatus;
 
 import java.math.BigDecimal;
@@ -17,6 +18,18 @@ public class InvoiceData {
     private PaymentStatus paymentStatus;
     private LocalDateTime generatedAt;
     private byte[] invoicePdf;
+
+    public InvoiceData(Invoice invoice) {
+        this.invoiceId = invoice.getInvoiceId();
+        this.unitConsumption = invoice.getUnitConsumption();
+        this.billDuration = invoice.getBillDuration();
+        this.billDueDate = invoice.getBillDueDate();
+        this.currentAmountDue = invoice.getCurrentAmountDue();
+        this.totalAmountDue = invoice.getTotalAmountDue();
+        this.paymentStatus = invoice.getPaymentStatus();
+        this.generatedAt = invoice.getGeneratedAt();
+        this.invoicePdf = invoice.getInvoicePdf();
+    }
 
     public InvoiceData(UUID invoiceId, BigDecimal unitConsumption, String billDuration, LocalDate billDueDate, BigDecimal currentAmountDue, BigDecimal totalAmountDue, PaymentStatus paymentStatus, LocalDateTime generatedAt, byte[] invoicePdf) {
         this.invoiceId = invoiceId;
@@ -100,5 +113,19 @@ public class InvoiceData {
 
     public void setInvoicePdf(byte[] invoicePdf) {
         this.invoicePdf = invoicePdf;
+    }
+
+    @Override
+    public String toString() {
+        return "InvoiceData{" +
+                "invoiceId=" + invoiceId +
+                ", unitConsumption=" + unitConsumption +
+                ", billDuration='" + billDuration + '\'' +
+                ", billDueDate=" + billDueDate +
+                ", currentAmountDue=" + currentAmountDue +
+                ", totalAmountDue=" + totalAmountDue +
+                ", paymentStatus=" + paymentStatus +
+                ", generatedAt=" + generatedAt +
+                '}';
     }
 }

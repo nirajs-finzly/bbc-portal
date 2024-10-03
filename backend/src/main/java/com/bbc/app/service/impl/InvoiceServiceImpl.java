@@ -46,6 +46,30 @@ public class InvoiceServiceImpl implements InvoiceService {
     private static final BigDecimal RATE_PER_KW = BigDecimal.valueOf(41.50);
 
     @Override
+    public ResponseEntity<InvoicesResponse> getAllInvoices(int page, int size) {
+        PageRequest pageable = PageRequest.of(page, size);
+        System.out.println(page + " " + size);
+
+        // Fetching all invoices with pagination
+        Page<InvoiceData> invoicesPage = invoiceRepository.findAll(pageable)
+                .map(this::convertToInvoiceData);
+
+        invoicesPage.stream().forEach(invoiceData -> {
+            System.out.println(invoiceData.getBillDuration());
+        });
+
+        Long totalInvoicesCount = invoiceRepository.count();
+
+        if (invoicesPage.isEmpty()) {
+            return ResponseEntity.ok(new InvoicesResponse("No invoices found!", List.of(), totalInvoicesCount, false));
+        }
+
+        InvoicesResponse response = new InvoicesResponse("Invoices retrieved successfully!", invoicesPage.getContent(), totalInvoicesCount, true);
+        return ResponseEntity.ok(response);
+    }
+
+
+    @Override
     public ResponseEntity<InvoicesResponse> getInvoicesByMeterNo(String meterNo, int page, int size) {
         PageRequest pageable = PageRequest.of(page, size);
 

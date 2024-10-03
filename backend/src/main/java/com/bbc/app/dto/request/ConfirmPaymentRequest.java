@@ -9,13 +9,15 @@ public class ConfirmPaymentRequest {
     private String customerId;
     private UUID invoiceId;
     private PaymentMethod paymentMethod;
+    private String paymentDetails;
     private String otp;
     private BigDecimal amount;
 
-    public ConfirmPaymentRequest(String customerId, UUID invoiceId, PaymentMethod paymentMethod, String otp, BigDecimal amount) {
+    public ConfirmPaymentRequest(String customerId, UUID invoiceId, PaymentMethod paymentMethod, String paymentDetails, String otp, BigDecimal amount) {
         this.customerId = customerId;
         this.invoiceId = invoiceId;
         this.paymentMethod = paymentMethod;
+        this.paymentDetails = paymentDetails;
         this.otp = otp;
         this.amount = amount;
     }
@@ -58,5 +60,13 @@ public class ConfirmPaymentRequest {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    public String getPaymentDetails() {
+        return paymentDetails;
+    }
+
+    public void setPaymentDetails(String paymentDetails) {
+        this.paymentDetails = paymentDetails;
     }
 }

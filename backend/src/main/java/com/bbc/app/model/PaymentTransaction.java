@@ -31,6 +31,12 @@ public class PaymentTransaction {
     @Column(name = "payment_method", nullable = false, length = 20)
     private PaymentMethod paymentMethod;
 
+    @Column(name = "payment_identifier", nullable = false, length = 50)
+    private String paymentIdentifier;
+
+    @Column(name = "card_type", length = 50)
+    private String cardType;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "transaction_status", nullable = false, length = 20)
     private TransactionStatus transactionStatus;
@@ -43,13 +49,15 @@ public class PaymentTransaction {
     public PaymentTransaction() {
     }
 
-    public PaymentTransaction(UUID transactionId, Customer customer, Invoice invoice, LocalDateTime paymentDate, BigDecimal amount, PaymentMethod paymentMethod, TransactionStatus transactionStatus) {
+    public PaymentTransaction(UUID transactionId, Invoice invoice, Customer customer, LocalDateTime paymentDate, BigDecimal amount, PaymentMethod paymentMethod, String paymentIdentifier, String cardType, TransactionStatus transactionStatus) {
         this.transactionId = transactionId;
-        this.customer = customer;
         this.invoice = invoice;
+        this.customer = customer;
         this.paymentDate = paymentDate;
         this.amount = amount;
         this.paymentMethod = paymentMethod;
+        this.paymentIdentifier = paymentIdentifier;
+        this.cardType = cardType;
         this.transactionStatus = transactionStatus;
     }
 
@@ -107,5 +115,21 @@ public class PaymentTransaction {
 
     public void setTransactionStatus(TransactionStatus transactionStatus) {
         this.transactionStatus = transactionStatus;
+    }
+
+    public String getPaymentIdentifier() {
+        return paymentIdentifier;
+    }
+
+    public void setPaymentIdentifier(String paymentIdentifier) {
+        this.paymentIdentifier = paymentIdentifier;
+    }
+
+    public String getCardType() {
+        return cardType;
+    }
+
+    public void setCardType(String cardType) {
+        this.cardType = cardType;
     }
 }

@@ -1,6 +1,8 @@
 package com.bbc.app.service.impl;
 
+import com.bbc.app.dto.data.TransactionData;
 import com.bbc.app.dto.response.MessageResponse;
+import com.bbc.app.dto.response.TransactionsResponse;
 import com.bbc.app.exception.InvalidOtpException;
 import com.bbc.app.model.*;
 import com.bbc.app.repository.CustomerRepository;
@@ -12,6 +14,9 @@ import com.bbc.app.service.PaymentService;
 import com.bbc.app.service.PdfService;
 import com.bbc.app.utils.PaymentValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -47,6 +52,31 @@ public class PaymentServiceImpl implements PaymentService {
     private PaymentValidator paymentValidator;
 
     @Override
+    public ResponseEntity<TransactionsResponse> getAllTransactions(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<PaymentTransaction> transactionPage = paymentTransactionRepository.findAll(pageable);
+
+        List<TransactionData> transactionDataList = transactionPage.getContent().stream()
+                .map(transaction -> new TransactionData(
+                        transaction.getAmount(),
+                        transaction.getCustomer().getUser().getName(),
+                        transaction.getInvoice().getInvoiceId().toString(),
+                        transaction.getPaymentMethod(),
+                        transaction.getTransactionStatus(),
+                        transaction.getPaymentDate(),
+                        transaction.getPaymentIdentifier(),
+                        transaction.getCardType()
+                ))
+                .toList();
+
+        String message = transactionDataList.isEmpty() ? "No transactions found!" : "Transactions retrieved successfully!";
+        boolean success = !transactionDataList.isEmpty();
+
+        TransactionsResponse response = new TransactionsResponse(message, transactionDataList, success);
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
     public ResponseEntity<MessageResponse> initiatePayment(String customerId, UUID invoiceId, PaymentMethod paymentMethod, String paymentDetails) {
         Optional<Customer> customerOpt = customerRepository.findByCustomerId(customerId);
         Optional<Invoice> invoiceOpt = invoiceRepository.findById(invoiceId);
@@ -78,7 +108,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public ResponseEntity<MessageResponse> confirmPayment(String customerId, UUID invoiceId, PaymentMethod paymentMethod, String otp, BigDecimal amount) {
+    public ResponseEntity<MessageResponse> confirmPayment(String customerId, UUID invoiceId, PaymentMethod paymentMethod, String paymentDetails, String otp, BigDecimal amount) {
         Optional<Customer> customerOpt = customerRepository.findByCustomerId(customerId);
         Optional<Invoice> invoiceOpt = invoiceRepository.findById(invoiceId);
 
@@ -103,6 +133,18 @@ public class PaymentServiceImpl implements PaymentService {
             transaction.setCustomer(customer);
             transaction.setInvoice(invoice);
             transaction.setPaymentMethod(paymentMethod);
+
+            if (paymentMethod == PaymentMethod.UPI) {
+                transaction.setPaymentIdentifier(paymentDetails);
+            } else if (paymentMethod == PaymentMethod.NET_BANKING || paymentMethod == PaymentMethod.DEBIT_CARD || paymentMethod == PaymentMethod.CREDIT_CARD) {
+                String[] details = paymentDetails.split("\\|");
+                transaction.setPaymentIdentifier(details[0]);
+                if(paymentMethod == PaymentMethod.CREDIT_CARD) {
+                    transaction.setCardType("Credit Card");
+                } else if (paymentMethod == PaymentMethod.DEBIT_CARD) {
+                    transaction.setCardType("Debit Card");
+                }
+            }
 
             if (!isValidOtp) {
                 transaction.setTransactionStatus(TransactionStatus.FAILED);

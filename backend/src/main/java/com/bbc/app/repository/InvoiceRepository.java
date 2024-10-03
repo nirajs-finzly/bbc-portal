@@ -17,13 +17,11 @@ import java.util.UUID;
 @Repository
 public interface InvoiceRepository extends JpaRepository<Invoice, UUID> {
 
-    // Fetching invoices based on the meter number of the customer
     Page<InvoiceData> findByCustomerMeterNo(String meterNo, Pageable pageable);
 
     @Query("SELECT COUNT(i) FROM Invoice i WHERE i.customer.meterNo = ?1")
     long countByCustomerMeterNo(String meterNo);
 
-    // Find unpaid Invoices for a Customer
     List<Invoice> findByCustomerMeterNoAndPaymentStatus(String meterNo, PaymentStatus paymentStatus);
 
     List<Invoice> findByCustomerAndPaymentStatus(Customer customer, PaymentStatus paymentStatus);

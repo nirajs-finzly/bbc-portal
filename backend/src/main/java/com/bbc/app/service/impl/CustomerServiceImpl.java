@@ -8,19 +8,21 @@ import com.bbc.app.model.Customer;
 import com.bbc.app.model.User;
 import com.bbc.app.model.UserRole;
 import com.bbc.app.repository.CustomerRepository;
-import com.bbc.app.repository.PaymentTransactionRepsitory;
 import com.bbc.app.repository.UserRepository;
 import com.bbc.app.service.CustomerService;
 import com.bbc.app.utils.Parsing;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Stream;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -29,23 +31,21 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerRepository customerRepository;
 
     @Autowired
-    private PaymentTransactionRepsitory paymentTransactionRepository;
-
-    @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private Parsing parsing;
 
     @Override
-    public ResponseEntity<CustomersResponse> getAllCustomers() {
-        List<Customer> customers = customerRepository.findAll();
+    public ResponseEntity<CustomersResponse> getAllCustomers(int page, int size) {
+        PageRequest pageable = PageRequest.of(page, size);
+        Page<Customer> customerPage = customerRepository.findAll(pageable);
 
-        if (customers.isEmpty()) {
+        if (customerPage.isEmpty()) {
             return ResponseEntity.ok(new CustomersResponse("No customers found!", List.of(), false));
         }
 
-        List<CustomerData> customerDataList = customers.stream()
+        List<CustomerData> customerDataList = customerPage.getContent().stream()
                 .map(customer -> new CustomerData(
                         customer.getUser().getName(),
                         customer.getUser().getEmail(),

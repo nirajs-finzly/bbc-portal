@@ -20,14 +20,16 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
+    @GetMapping("")
+    public ResponseEntity<CustomersResponse> getAllCustomers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+        return customerService.getAllCustomers(page, size);
+    }
+
     @PostMapping("")
     public ResponseEntity<MessageResponse> createCustomer(@RequestBody CreateCustomerRequest request) {
         return customerService.createCustomer(request.getName(), request.getEmail(), request.getPhone(), request.getAddress());
-    }
-
-    @GetMapping("")
-    public ResponseEntity<CustomersResponse> getAllCustomers() {
-        return customerService.getAllCustomers();
     }
 
     @GetMapping("/{meterNo}")

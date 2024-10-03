@@ -22,11 +22,19 @@ public class InvoiceController {
     @Autowired
     private InvoiceService invoiceService;
 
+    @GetMapping("")
+    public ResponseEntity<InvoicesResponse> getAllInvoices(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+        System.out.println(page + " " + size);
+        return invoiceService.getAllInvoices(page, size);
+    }
+
     @GetMapping("/{meterNo}")
     public ResponseEntity<InvoicesResponse> getInvoicesByCustomerMeterNo(
             @PathVariable @Pattern(regexp = "^(MTR)\\d{7}$", message = "Invalid meter number format") String meterNo,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "5") int size
     ) {
         return invoiceService.getInvoicesByMeterNo(meterNo, page, size);
     }

@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
 
@@ -182,7 +181,6 @@ public class Invoice {
                 ", totalAmountDue=" + totalAmountDue +
                 ", paymentStatus=" + paymentStatus +
                 ", generatedAt=" + generatedAt +
-                ", invoicePdf=" + Arrays.toString(invoicePdf) +
                 ", paymentTransaction=" + paymentTransactions +
                 '}';
     }
