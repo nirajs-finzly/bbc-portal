@@ -14,12 +14,12 @@ public class PaymentTransaction {
     private UUID transactionId;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "invoice_id", nullable = false)
+    private Invoice invoice;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "invoice_id", nullable = false, unique = true) // Unique constraint for one-to-one
-    private Invoice invoice;
 
     @Column(name = "payment_date", nullable = false, updatable = false)
     private LocalDateTime paymentDate;
@@ -31,6 +31,10 @@ public class PaymentTransaction {
     @Column(name = "payment_method", nullable = false, length = 20)
     private PaymentMethod paymentMethod;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "transaction_status", nullable = false, length = 20)
+    private TransactionStatus transactionStatus;
+
     @PrePersist
     protected void onCreate() {
         this.paymentDate = LocalDateTime.now();
@@ -39,13 +43,14 @@ public class PaymentTransaction {
     public PaymentTransaction() {
     }
 
-    public PaymentTransaction(UUID transactionId, Customer customer, Invoice invoice, LocalDateTime paymentDate, BigDecimal amount, PaymentMethod paymentMethod) {
+    public PaymentTransaction(UUID transactionId, Customer customer, Invoice invoice, LocalDateTime paymentDate, BigDecimal amount, PaymentMethod paymentMethod, TransactionStatus transactionStatus) {
         this.transactionId = transactionId;
         this.customer = customer;
         this.invoice = invoice;
         this.paymentDate = paymentDate;
         this.amount = amount;
         this.paymentMethod = paymentMethod;
+        this.transactionStatus = transactionStatus;
     }
 
     public UUID getTransactionId() {
@@ -94,5 +99,13 @@ public class PaymentTransaction {
 
     public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
+    }
+
+    public TransactionStatus getTransactionStatus() {
+        return transactionStatus;
+    }
+
+    public void setTransactionStatus(TransactionStatus transactionStatus) {
+        this.transactionStatus = transactionStatus;
     }
 }

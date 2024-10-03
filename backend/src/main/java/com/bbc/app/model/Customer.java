@@ -25,7 +25,6 @@ public class Customer {
     @Column(length = 255)
     private String address;
 
-
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Invoice> invoices;
 

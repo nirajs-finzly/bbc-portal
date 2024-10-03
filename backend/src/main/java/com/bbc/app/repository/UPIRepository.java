@@ -6,4 +6,6 @@ import java.util.UUID;
 
 public interface UPIRepository extends JpaRepository<UPI, UUID> {
     boolean existsByUpiIdValue(String upiId);
+
+    UPI findTopByOrderByUpiIdDesc();
 }

@@ -1,6 +1,8 @@
 package com.bbc.app.model;
 
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -18,6 +20,9 @@ public class CreditCard {
 
     @Column(name = "cvv", nullable = false, length = 3)
     private String cvv;
+
+    @Column(name = "balance", nullable = false)
+    private BigDecimal balance;
 
     public CreditCard() {}
 
@@ -51,5 +56,13 @@ public class CreditCard {
 
     public void setCvv(String cvv) {
         this.cvv = cvv;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 }

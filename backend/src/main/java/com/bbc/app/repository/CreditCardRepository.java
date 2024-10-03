@@ -6,4 +6,6 @@ import java.util.UUID;
 
 public interface CreditCardRepository extends JpaRepository<CreditCard, UUID> {
     boolean existsByCardNumber(String cardNumber);
+
+    CreditCard findTopByOrderByCardIdDesc();
 }

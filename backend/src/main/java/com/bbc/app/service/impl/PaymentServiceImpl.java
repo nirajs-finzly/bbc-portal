@@ -52,7 +52,7 @@ public class PaymentServiceImpl implements PaymentService {
         Optional<Invoice> invoiceOpt = invoiceRepository.findById(invoiceId);
 
         Invoice invoice = null;
-        if(invoiceOpt.isPresent()){
+        if (invoiceOpt.isPresent()) {
             invoice = invoiceOpt.get();
         }
 
@@ -83,7 +83,7 @@ public class PaymentServiceImpl implements PaymentService {
         Optional<Invoice> invoiceOpt = invoiceRepository.findById(invoiceId);
 
         Invoice invoice = null;
-        if(invoiceOpt.isPresent()){
+        if (invoiceOpt.isPresent()) {
             invoice = invoiceOpt.get();
         }
 
@@ -97,12 +97,37 @@ public class PaymentServiceImpl implements PaymentService {
 
             boolean isValidOtp = otpService.validateOtp(otp, customer.getUser());
 
+            // Prepare a new transaction object for logging
+            PaymentTransaction transaction = new PaymentTransaction();
+            transaction.setAmount(amount);
+            transaction.setCustomer(customer);
+            transaction.setInvoice(invoice);
+            transaction.setPaymentMethod(paymentMethod);
+
             if (!isValidOtp) {
+                transaction.setTransactionStatus(TransactionStatus.FAILED);
+                paymentTransactionRepository.save(transaction);
                 throw new InvalidOtpException("Invalid OTP.");
             }
 
-            if(!Objects.equals(amount, invoice.getTotalAmountDue())) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Incorrect amount.", false));
+            if (!Objects.equals(amount, invoice.getTotalAmountDue())) {
+                transaction.setTransactionStatus(TransactionStatus.FAILED);
+                paymentTransactionRepository.save(transaction);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Incorrect amount!", false));
+            }
+
+            boolean hasSufficientBalance = paymentValidator.checkPaymentMethodBalance(paymentMethod, amount);
+            if (!hasSufficientBalance) {
+                transaction.setTransactionStatus(TransactionStatus.FAILED);
+                paymentTransactionRepository.save(transaction);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Insufficient balance!", false));
+            }
+
+            boolean isBalanceDeducted = paymentValidator.deductPaymentBalance(paymentMethod, amount);
+            if (!isBalanceDeducted) {
+                transaction.setTransactionStatus(TransactionStatus.FAILED);
+                paymentTransactionRepository.save(transaction);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Failed to deduct payment amount!", false));
             }
 
             // Reset OTP and OTP expiry after successful validation
@@ -110,15 +135,11 @@ public class PaymentServiceImpl implements PaymentService {
             customer.getUser().setOtpExpiry(null);
             userRepository.save(customer.getUser());
 
-            // Process payment and save transaction
-            PaymentTransaction transaction = new PaymentTransaction();
-            transaction.setAmount(amount);
-            transaction.setCustomer(customer);
-            transaction.setInvoice(invoice);
-            transaction.setPaymentMethod(paymentMethod);
-
+            // Process payment as successful and save the transaction with success status
+            transaction.setTransactionStatus(TransactionStatus.SUCCESS);
             paymentTransactionRepository.save(transaction);
 
+            // Mark all unpaid invoices as paid
             List<Invoice> unpaidInvoices = invoiceRepository.findByCustomerAndPaymentStatus(customer, PaymentStatus.UNPAID);
 
             for (Invoice unpaidInvoice : unpaidInvoices) {
@@ -129,8 +150,7 @@ public class PaymentServiceImpl implements PaymentService {
                     unpaidInvoice.setInvoicePdf(invoicePdf);
                     invoiceRepository.save(unpaidInvoice);
                 } catch (IOException e) {
-                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                            .body(new MessageResponse("Error generating invoice PDF!", false));
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Error generating invoice PDF!", false));
                 }
             }
 
@@ -139,6 +159,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("Customer or Invoice not found.", false));
     }
+
 
     @Override
     public ResponseEntity<MessageResponse> markInvoiceAsPaid(UUID invoiceId, PaymentMethod paymentMethod) {
@@ -176,8 +197,7 @@ public class PaymentServiceImpl implements PaymentService {
             byte[] updatedInvoicePdf = pdfService.createInvoicePdf(invoice, null);
             invoice.setInvoicePdf(updatedInvoicePdf);
         } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new MessageResponse("Error generating updated invoice PDF!", false));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Error generating updated invoice PDF!", false));
         }
 
         // Save the updated invoice back to the repository

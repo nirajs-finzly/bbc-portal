@@ -1,6 +1,6 @@
 package com.bbc.app.utils;
 
-import com.bbc.app.model.PaymentMethod;
+import com.bbc.app.model.*;
 import com.bbc.app.repository.CreditCardRepository;
 import com.bbc.app.repository.DebitCardRepository;
 import com.bbc.app.repository.NetBankingRepository;
@@ -8,6 +8,7 @@ import com.bbc.app.repository.UPIRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 
@@ -128,4 +129,73 @@ public class PaymentValidator {
     private boolean isValidUPIId(String upiId) {
         return upiId != null && upiId.matches("^[\\w.-]+@[\\w.-]+$");
     }
+
+    public boolean checkPaymentMethodBalance(PaymentMethod paymentMethod, BigDecimal amount) {
+        switch (paymentMethod) {
+            case CREDIT_CARD:
+                // Fetch the credit card from the repository (assuming you have a method for this)
+                CreditCard creditCard = creditCardRepository.findTopByOrderByCardIdDesc(); // Modify this according to your needs
+                return creditCard != null && creditCard.getBalance().compareTo(amount) >= 0;
+
+            case DEBIT_CARD:
+                DebitCard debitCard = debitCardRepository.findTopByOrderByCardIdDesc(); // Modify this according to your needs
+                return debitCard != null && debitCard.getBalance().compareTo(amount) >= 0;
+
+            case NET_BANKING:
+                NetBanking netBanking = netBankingRepository.findTopByOrderByNetBankingIdDesc(); // Modify this according to your needs
+                return netBanking != null && netBanking.getBalance().compareTo(amount) >= 0;
+
+            case UPI:
+                UPI upi = upiRepository.findTopByOrderByUpiIdDesc(); // Modify this according to your needs
+                return upi != null && upi.getBalance().compareTo(amount) >= 0;
+
+            default:
+                return false; // Handle any other payment methods
+        }
+    }
+
+    public boolean deductPaymentBalance(PaymentMethod paymentMethod, BigDecimal amount) {
+        switch (paymentMethod) {
+            case CREDIT_CARD:
+                CreditCard creditCard = creditCardRepository.findTopByOrderByCardIdDesc(); // Fetch appropriate card
+                if (creditCard != null && creditCard.getBalance().compareTo(amount) >= 0) {
+                    creditCard.setBalance(creditCard.getBalance().subtract(amount)); // Deduct balance
+                    creditCardRepository.save(creditCard); // Save updated balance
+                    return true;
+                }
+                break;
+
+            case DEBIT_CARD:
+                DebitCard debitCard = debitCardRepository.findTopByOrderByCardIdDesc(); // Fetch appropriate card
+                if (debitCard != null && debitCard.getBalance().compareTo(amount) >= 0) {
+                    debitCard.setBalance(debitCard.getBalance().subtract(amount)); // Deduct balance
+                    debitCardRepository.save(debitCard); // Save updated balance
+                    return true;
+                }
+                break;
+
+            case NET_BANKING:
+                NetBanking netBanking = netBankingRepository.findTopByOrderByNetBankingIdDesc(); // Fetch appropriate account
+                if (netBanking != null && netBanking.getBalance().compareTo(amount) >= 0) {
+                    netBanking.setBalance(netBanking.getBalance().subtract(amount)); // Deduct balance
+                    netBankingRepository.save(netBanking); // Save updated balance
+                    return true;
+                }
+                break;
+
+            case UPI:
+                UPI upi = upiRepository.findTopByOrderByUpiIdDesc(); // Fetch appropriate UPI account
+                if (upi != null && upi.getBalance().compareTo(amount) >= 0) {
+                    upi.setBalance(upi.getBalance().subtract(amount)); // Deduct balance
+                    upiRepository.save(upi); // Save updated balance
+                    return true;
+                }
+                break;
+
+            default:
+                return false;
+        }
+        return false;
+    }
+
 }

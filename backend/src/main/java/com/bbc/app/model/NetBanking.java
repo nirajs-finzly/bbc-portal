@@ -1,6 +1,8 @@
 package com.bbc.app.model;
 
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -18,6 +20,9 @@ public class NetBanking {
 
     @Column(name = "ifsc_code", nullable = false, length = 11)
     private String ifscCode;
+
+    @Column(name = "balance", nullable = false)
+    private BigDecimal balance;
 
     public NetBanking() {}
 
@@ -51,5 +56,13 @@ public class NetBanking {
 
     public void setIfscCode(String ifscCode) {
         this.ifscCode = ifscCode;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 }

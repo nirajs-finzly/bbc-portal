@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -46,18 +47,18 @@ public class Invoice {
     @Column(name = "invoice_pdf", columnDefinition = "LONGBLOB")
     private byte[] invoicePdf;
 
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<PaymentTransaction> paymentTransactions;
+
     @PrePersist
     protected void onCreate() {
         this.generatedAt = LocalDateTime.now();
     }
 
-    @OneToOne(mappedBy = "invoice", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private PaymentTransaction paymentTransaction;
-
     public Invoice() {
     }
 
-    public Invoice(UUID invoiceId, Customer customer, BigDecimal unitConsumption, String billDuration, LocalDate billDueDate, BigDecimal currentAmountDue, BigDecimal totalAmountDue, PaymentStatus paymentStatus, LocalDateTime generatedAt, byte[] invoicePdf, PaymentTransaction paymentTransaction) {
+    public Invoice(UUID invoiceId, Customer customer, BigDecimal unitConsumption, String billDuration, LocalDate billDueDate, BigDecimal currentAmountDue, BigDecimal totalAmountDue, PaymentStatus paymentStatus, LocalDateTime generatedAt, byte[] invoicePdf, Set<PaymentTransaction> paymentTransactions) {
         this.invoiceId = invoiceId;
         this.customer = customer;
         this.unitConsumption = unitConsumption;
@@ -68,7 +69,7 @@ public class Invoice {
         this.paymentStatus = paymentStatus;
         this.generatedAt = generatedAt;
         this.invoicePdf = invoicePdf;
-        this.paymentTransaction = paymentTransaction;
+        this.paymentTransactions = paymentTransactions;
     }
 
     public UUID getInvoiceId() {
@@ -143,10 +144,6 @@ public class Invoice {
         this.generatedAt = generatedAt;
     }
 
-    public PaymentTransaction getPaymentTransaction() {
-        return paymentTransaction;
-    }
-
     public byte[] getInvoicePdf() {
         return invoicePdf;
     }
@@ -155,8 +152,12 @@ public class Invoice {
         this.invoicePdf = invoicePdf;
     }
 
-    public void setPaymentTransaction(PaymentTransaction paymentTransaction) {
-        this.paymentTransaction = paymentTransaction;
+    public Set<PaymentTransaction> getPaymentTransactions() {
+        return paymentTransactions;
+    }
+
+    public void setPaymentTransactions(Set<PaymentTransaction> paymentTransactions) {
+        this.paymentTransactions = paymentTransactions;
     }
 
     public boolean isValid() {
@@ -182,7 +183,7 @@ public class Invoice {
                 ", paymentStatus=" + paymentStatus +
                 ", generatedAt=" + generatedAt +
                 ", invoicePdf=" + Arrays.toString(invoicePdf) +
-                ", paymentTransaction=" + paymentTransaction +
+                ", paymentTransaction=" + paymentTransactions +
                 '}';
     }
 }
