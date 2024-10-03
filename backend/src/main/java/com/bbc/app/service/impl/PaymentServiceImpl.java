@@ -9,12 +9,14 @@ import com.bbc.app.repository.PaymentTransactionRepsitory;
 import com.bbc.app.repository.UserRepository;
 import com.bbc.app.service.OtpService;
 import com.bbc.app.service.PaymentService;
+import com.bbc.app.service.PdfService;
 import com.bbc.app.utils.PaymentValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
@@ -37,6 +39,9 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Autowired
     private OtpService otpService;
+
+    @Autowired
+    private PdfService pdfService;
 
     @Autowired
     private PaymentValidator paymentValidator;
@@ -99,7 +104,15 @@ public class PaymentServiceImpl implements PaymentService {
 
             for (Invoice unpaidInvoice : unpaidInvoices) {
                 unpaidInvoice.setPaymentStatus(PaymentStatus.PAID);
-                invoiceRepository.save(unpaidInvoice);
+
+                try {
+                    byte[] invoicePdf = pdfService.createInvoicePdf(unpaidInvoice, null);
+                    unpaidInvoice.setInvoicePdf(invoicePdf);
+                    invoiceRepository.save(unpaidInvoice);
+                } catch (IOException e) {
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                            .body(new MessageResponse("Error generating invoice PDF!", false));
+                }
             }
 
             return ResponseEntity.ok(new MessageResponse("Payment successful.", true));

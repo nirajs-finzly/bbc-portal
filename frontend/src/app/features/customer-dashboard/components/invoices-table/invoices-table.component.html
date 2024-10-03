@@ -1,55 +1,61 @@
-<p-card>
-  <p-table
-    [value]="invoices"
-    [paginator]="true"
-    [rows]="pageSize"
-    [totalRecords]="totalInvoices"
-    [lazy]="true"
-    [loading]="loading"
-    (onLazyLoad)="loadInvoices($event)"
-    [rowsPerPageOptions]="[5, 10, 20]"
-    styleClass="p-datatable-striped"
-    [tableStyle]="{ 'min-width': '50rem' }"
-  >
-    <ng-template pTemplate="header">
-      <tr>
-        <th>Invoice ID</th>
-        <th>Unit Consumption</th>
-        <th>Bill Duration</th>
-        <th>Bill Due Date</th>
-        <th>Amount Due</th>
-        <th>Status</th>
-        <th></th>
-      </tr>
-    </ng-template>
-
-    <ng-template pTemplate="body" let-invoice>
-      <tr>
-        <td>{{ invoice.invoiceId | formatId }}</td>
-        <td>{{ invoice.unitConsumption }} Kw</td>
-        <td>{{ invoice.billDuration }}</td>
-        <td>{{ invoice.billDueDate | date : "longDate" }}</td>
-        <td>{{ invoice.totalAmountDue | currency : "INR" }}</td>
-        <td>
-          <button
-            [class]="
-              invoice.paymentStatus === 'UNPAID' ? 'bg-primary' : 'bg-success'
-            "
-            class="px-4 py-2 text-white cursor-pointer rounded-full border-transparent"
-          >
-            {{ invoice.paymentStatus | titlecase }}
-          </button>
-        </td>
-        <td>
-          <button
-            pButton
-            icon="pi pi-download"
-            severity="success"
-            size="small"
-            (click)="downloadInvoicePdf(invoice.invoicePdf, invoice.invoiceId)"
-          ></button>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-</p-card>
+@if(invoices.length !== 0){
+  <p-card>
+    <p-table
+      [value]="invoices"
+      [paginator]="true"
+      [rows]="pageSize"
+      [totalRecords]="totalInvoices"
+      [lazy]="true"
+      [loading]="loading"
+      (onLazyLoad)="loadInvoices($event)"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      styleClass="p-datatable-striped"
+      [tableStyle]="{ 'min-width': '50rem' }"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Invoice ID</th>
+          <th>Unit Consumption</th>
+          <th>Bill Duration</th>
+          <th>Bill Due Date</th>
+          <th>Amount Due</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </ng-template>
+  
+      <ng-template pTemplate="body" let-invoice>
+        <tr>
+          <td>{{ invoice.invoiceId | formatId }}</td>
+          <td>{{ invoice.unitConsumption }} Kw</td>
+          <td>{{ invoice.billDuration }}</td>
+          <td>{{ invoice.billDueDate | date : "longDate" }}</td>
+          <td>{{ invoice.totalAmountDue | currency : "INR" }}</td>
+          <td>
+            <button
+              [class]="
+                invoice.paymentStatus === 'UNPAID' ? 'bg-primary' : 'bg-success'
+              "
+              class="px-4 py-2 text-white cursor-pointer rounded-full border-transparent"
+            >
+              {{ invoice.paymentStatus | titlecase }}
+            </button>
+          </td>
+          <td>
+            <button
+              pButton
+              icon="pi pi-download"
+              severity="success"
+              size="small"
+              (click)="downloadInvoicePdf(invoice.invoicePdf, invoice.invoiceId)"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+} @else {  
+  <div class="flex flex-col justify-center items-center h-[calc(100vh-200px)]">
+    <p>No invoices available</p>
+  </div>
+}

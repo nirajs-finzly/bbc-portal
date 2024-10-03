@@ -113,8 +113,7 @@
         <p>Current Amount Due: ₹<span th:text="${'₹' + invoice.currentAmountDue}"></span></p>
     </div>
     <div>
-        <p>Payment Status: <span th:text="${invoice.paymentStatus}"
-                                 th:class="${invoice.paymentStatus == 'PAID' ? 'paid-status' : 'unpaid-status'}">
+        <p>Payment Status: <span th:text="${invoice.paymentStatus}">
         </span></p>
     </div>
 </div>
