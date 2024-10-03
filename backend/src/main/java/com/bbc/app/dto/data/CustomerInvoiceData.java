@@ -7,10 +7,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class InvoiceData {
+public class CustomerInvoiceData {
     private UUID invoiceId;
-    private String meterNo;
-    private String name;
     private BigDecimal unitConsumption;
     private String billDuration;
     private LocalDate billDueDate;
@@ -20,21 +18,7 @@ public class InvoiceData {
     private LocalDateTime generatedAt;
     private byte[] invoicePdf;
 
-    public InvoiceData(UUID invoiceId, String meterNo, String name, BigDecimal unitConsumption, String billDuration, LocalDate billDueDate, BigDecimal currentAmountDue, BigDecimal totalAmountDue, PaymentStatus paymentStatus, LocalDateTime generatedAt, byte[] invoicePdf) {
-        this.invoiceId = invoiceId;
-        this.meterNo = meterNo;
-        this.name = name;
-        this.unitConsumption = unitConsumption;
-        this.billDuration = billDuration;
-        this.billDueDate = billDueDate;
-        this.currentAmountDue = currentAmountDue;
-        this.totalAmountDue = totalAmountDue;
-        this.paymentStatus = paymentStatus;
-        this.generatedAt = generatedAt;
-        this.invoicePdf = invoicePdf;
-    }
-
-    public InvoiceData(UUID invoiceId, BigDecimal unitConsumption, String billDuration, LocalDate billDueDate, BigDecimal currentAmountDue, BigDecimal totalAmountDue, PaymentStatus paymentStatus, LocalDateTime generatedAt, byte[] invoicePdf) {
+    public CustomerInvoiceData(UUID invoiceId, BigDecimal unitConsumption, String billDuration, LocalDate billDueDate, BigDecimal currentAmountDue, BigDecimal totalAmountDue, PaymentStatus paymentStatus, LocalDateTime generatedAt, byte[] invoicePdf) {
         this.invoiceId = invoiceId;
         this.unitConsumption = unitConsumption;
         this.billDuration = billDuration;
@@ -52,22 +36,6 @@ public class InvoiceData {
 
     public void setInvoiceId(UUID invoiceId) {
         this.invoiceId = invoiceId;
-    }
-
-    public String getMeterNo() {
-        return meterNo;
-    }
-
-    public void setMeterNo(String meterNo) {
-        this.meterNo = meterNo;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public BigDecimal getUnitConsumption() {

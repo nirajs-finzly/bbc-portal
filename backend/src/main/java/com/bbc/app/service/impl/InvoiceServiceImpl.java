@@ -1,6 +1,8 @@
 package com.bbc.app.service.impl;
 
+import com.bbc.app.dto.data.CustomerInvoiceData;
 import com.bbc.app.dto.data.InvoiceData;
+import com.bbc.app.dto.response.CustomerInvoicesResponse;
 import com.bbc.app.dto.response.InvoicesResponse;
 import com.bbc.app.dto.response.MessageResponse;
 import com.bbc.app.dto.response.SingleInvoiceResponse;
@@ -70,17 +72,17 @@ public class InvoiceServiceImpl implements InvoiceService {
 
 
     @Override
-    public ResponseEntity<InvoicesResponse> getInvoicesByMeterNo(String meterNo, int page, int size) {
+    public ResponseEntity<CustomerInvoicesResponse> getInvoicesByMeterNo(String meterNo, int page, int size) {
         PageRequest pageable = PageRequest.of(page, size);
 
-        Page<InvoiceData> invoicesPage = invoiceRepository.findByCustomerMeterNo(meterNo, pageable);
+        Page<CustomerInvoiceData> invoicesPage = invoiceRepository.findByCustomerMeterNo(meterNo, pageable);
         Long totalInvoicesCount = invoiceRepository.countByCustomerMeterNo(meterNo);
 
         if (invoicesPage.isEmpty()) {
-            return ResponseEntity.ok(new InvoicesResponse("No invoices found!", List.of(), 0L, false));
+            return ResponseEntity.ok(new CustomerInvoicesResponse("No invoices found!", List.of(), 0L, false));
         }
 
-        InvoicesResponse response = new InvoicesResponse("Invoices retrieved successfully!", invoicesPage.getContent(), totalInvoicesCount, true);
+        CustomerInvoicesResponse response = new CustomerInvoicesResponse("Invoices retrieved successfully!", invoicesPage.getContent(), totalInvoicesCount, true);
         return ResponseEntity.ok(response);
     }
 
@@ -159,6 +161,8 @@ public class InvoiceServiceImpl implements InvoiceService {
     private InvoiceData convertToInvoiceData(Invoice invoice) {
         return new InvoiceData(
                 invoice.getInvoiceId(),
+                invoice.getCustomer().getMeterNo(),
+                invoice.getCustomer().getUser().getName(),
                 invoice.getUnitConsumption(),
                 invoice.getBillDuration(),
                 invoice.getBillDueDate(),

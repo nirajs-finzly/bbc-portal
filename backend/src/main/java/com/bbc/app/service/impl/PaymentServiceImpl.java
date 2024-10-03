@@ -231,6 +231,7 @@ public class PaymentServiceImpl implements PaymentService {
         transaction.setCustomer(invoice.getCustomer());
         transaction.setInvoice(invoice);
         transaction.setPaymentMethod(paymentMethod);
+        transaction.setTransactionStatus(TransactionStatus.SUCCESS);
 
         paymentTransactionRepository.save(transaction);
 

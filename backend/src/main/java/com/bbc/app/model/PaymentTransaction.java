@@ -31,7 +31,7 @@ public class PaymentTransaction {
     @Column(name = "payment_method", nullable = false, length = 20)
     private PaymentMethod paymentMethod;
 
-    @Column(name = "payment_identifier", nullable = false, length = 50)
+    @Column(name = "payment_identifier", length = 50)
     private String paymentIdentifier;
 
     @Column(name = "card_type", length = 50)

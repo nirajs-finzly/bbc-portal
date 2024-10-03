@@ -1,6 +1,6 @@
 package com.bbc.app.repository;
 
-import com.bbc.app.dto.data.InvoiceData;
+import com.bbc.app.dto.data.CustomerInvoiceData;
 import com.bbc.app.model.Customer;
 import com.bbc.app.model.Invoice;
 import com.bbc.app.model.PaymentStatus;
@@ -17,7 +17,7 @@ import java.util.UUID;
 @Repository
 public interface InvoiceRepository extends JpaRepository<Invoice, UUID> {
 
-    Page<InvoiceData> findByCustomerMeterNo(String meterNo, Pageable pageable);
+    Page<CustomerInvoiceData> findByCustomerMeterNo(String meterNo, Pageable pageable);
 
     @Query("SELECT COUNT(i) FROM Invoice i WHERE i.customer.meterNo = ?1")
     long countByCustomerMeterNo(String meterNo);

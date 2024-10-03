@@ -1,6 +1,7 @@
 package com.bbc.app.controller;
 
 import com.bbc.app.dto.request.CreateInvoiceRequest;
+import com.bbc.app.dto.response.CustomerInvoicesResponse;
 import com.bbc.app.dto.response.InvoicesResponse;
 import com.bbc.app.dto.response.MessageResponse;
 import com.bbc.app.dto.response.SingleInvoiceResponse;
@@ -31,7 +32,7 @@ public class InvoiceController {
     }
 
     @GetMapping("/{meterNo}")
-    public ResponseEntity<InvoicesResponse> getInvoicesByCustomerMeterNo(
+    public ResponseEntity<CustomerInvoicesResponse> getInvoicesByCustomerMeterNo(
             @PathVariable @Pattern(regexp = "^(MTR)\\d{7}$", message = "Invalid meter number format") String meterNo,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size

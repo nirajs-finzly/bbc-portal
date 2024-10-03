@@ -1,5 +1,6 @@
 package com.bbc.app.service;
 
+import com.bbc.app.dto.response.CustomerInvoicesResponse;
 import com.bbc.app.dto.response.InvoicesResponse;
 import com.bbc.app.dto.response.MessageResponse;
 import com.bbc.app.dto.response.SingleInvoiceResponse;
@@ -13,7 +14,7 @@ import java.time.LocalDate;
 public interface InvoiceService {
     ResponseEntity<InvoicesResponse> getAllInvoices(int page, int size);
 
-    ResponseEntity<InvoicesResponse> getInvoicesByMeterNo(String meterNo, int page, int size);
+    ResponseEntity<CustomerInvoicesResponse> getInvoicesByMeterNo(String meterNo, int page, int size);
 
     ResponseEntity<MessageResponse> createInvoice(String meterNo, BigDecimal unitsConsumed, String billDuration, LocalDate billDueDate);
 
