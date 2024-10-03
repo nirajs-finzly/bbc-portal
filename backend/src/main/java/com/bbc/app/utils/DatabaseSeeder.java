@@ -67,14 +67,27 @@ public class DatabaseSeeder implements CommandLineRunner {
             user1.setRole(UserRole.EMPLOYEE);
             userRepository.save(user1);
 
-            // Create and save the employee associated with the user
+            // Create and save the employee2 associated with the user
             Employee employee = new Employee();
             employee.setUser(user1);
             employee.setDepartment("Operations");
             employee.setPosition("Sub-Officer");
             employeeRepository.save(employee);
 
-            // Create and save a customer
+            User user3 = new User();
+            user3.setName("Sushmita Bennisur");
+            user3.setEmail("sushmitabennisur11@gmail.com");
+            user3.setPhone("7744920605");
+            user3.setRole(UserRole.EMPLOYEE);
+            userRepository.save(user3);
+
+            // Create and save the employee2 associated with the user
+            Employee employee2 = new Employee();
+            employee2.setUser(user3);
+            employee2.setDepartment("Operations");
+            employee2.setPosition("Sub-Officer");
+            employeeRepository.save(employee2);
+
             User user2 = new User();
             user2.setName("Sujal Surve");
             user2.setEmail("webdeveloper.nirajs@gmail.com");
@@ -87,40 +100,17 @@ public class DatabaseSeeder implements CommandLineRunner {
             customer.setAddress("Mumbai");
             customerRepository.save(customer);
 
-            // Create and save an invoice for the customer
-            Invoice invoice = new Invoice();
-            invoice.setCustomer(customer);
-            invoice.setUnitConsumption(BigDecimal.valueOf(30));
-            invoice.setBillDueDate(LocalDate.parse("2024-10-10"));
-            invoice.setCurrentAmountDue(BigDecimal.valueOf(1000.00));
-            invoice.setTotalAmountDue(BigDecimal.valueOf(1000.00));
-            invoiceRepository.save(invoice);
+            User user4 = new User();
+            user4.setName("Sakshi Dhumal");
+            user4.setEmail("sakshi@gmail.com");
+            user4.setPhone("1234567890");
+            user4.setRole(UserRole.CUSTOMER);
+            userRepository.save(user4);
 
-            // Seed a credit card
-            CreditCard creditCard = new CreditCard();
-            creditCard.setCardNumber("1234567812345678");
-            creditCard.setExpiryDate("12/25");
-            creditCard.setCvv("123");
-            creditCardRepository.save(creditCard);
-
-            // Seed a debit card
-            DebitCard debitCard = new DebitCard();
-            debitCard.setCardNumber("8765432187654321");
-            debitCard.setExpiryDate("11/26");
-            debitCard.setCvv("456");
-            debitCardRepository.save(debitCard);
-
-            // Seed net banking
-            NetBanking netBanking = new NetBanking();
-            netBanking.setBankName("BOI");
-            netBanking.setAccountNumber("123456789012");
-            netBanking.setIfscCode("BKID1234567");
-            netBankingRepository.save(netBanking);
-
-            // Seed UPI
-            UPI upi = new UPI();
-            upi.setUpiIdValue("niraj@okaxis");
-            upiRepository.save(upi);
+            Customer customer2 = new Customer();
+            customer2.setUser(user4);
+            customer2.setAddress("Bhor");
+            customerRepository.save(customer2);
 
             System.out.println("Data seeding completed.");
         } else {

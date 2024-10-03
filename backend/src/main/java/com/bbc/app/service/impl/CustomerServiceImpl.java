@@ -135,7 +135,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         List<Customer> customers = parsing.parseCSV(dataFile.getInputStream(),invalidRecords);
 
-        int validRecords = customers.size();;
+        int validRecords = customers.size();
 
         // Save each customer to the repository
         for (Customer customer : customers) {

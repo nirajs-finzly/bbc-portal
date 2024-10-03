@@ -11,18 +11,22 @@ import com.bbc.app.repository.CustomerRepository;
 import com.bbc.app.repository.InvoiceRepository;
 import com.bbc.app.service.InvoiceService;
 import com.bbc.app.service.PdfService;
+import com.bbc.app.utils.InvoiceParsing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class InvoiceServiceImpl implements InvoiceService {
@@ -35,6 +39,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Autowired
     private PdfService pdfService;
+
+    @Autowired
+    private InvoiceParsing invoiceParsing;
 
     private static final BigDecimal RATE_PER_KW = BigDecimal.valueOf(41.50);
 
@@ -137,5 +144,31 @@ public class InvoiceServiceImpl implements InvoiceService {
                 invoice.getGeneratedAt(),
                 invoice.getInvoicePdf()
         );
+    }
+
+    @Override
+    public ResponseEntity<MessageResponse> bulkUploadInvoice(MultipartFile dataFile,String billDuration,LocalDate billDueDate) throws IOException {
+
+        if (!Objects.requireNonNull(dataFile.getOriginalFilename()).endsWith(".csv")) {
+
+            return ResponseEntity.badRequest().body(new MessageResponse("Error! Invalid file format",false));
+        }
+
+        AtomicInteger invalidRecords = new AtomicInteger(0); // To keep track of invalid records
+
+        List<Invoice> invoices = invoiceParsing.parseCSV(dataFile.getInputStream(),invalidRecords,billDuration,billDueDate);
+        // Save each customer to the repository
+        for (Invoice invoice : invoices) {
+            if (invoice.isValid()) {
+                // Save valid customer records
+                invoiceRepository.save(invoice);
+            }
+        }
+
+        int validRecords = invoices.size();
+
+        String message = String.format("Data upload complete. Successfully uploaded: %d, Failed: %d", validRecords, invalidRecords.get());
+        return ResponseEntity.ok(new MessageResponse(message, true));
+
     }
 }

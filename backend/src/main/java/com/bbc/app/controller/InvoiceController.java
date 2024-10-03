@@ -10,6 +10,10 @@ import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/invoices")
@@ -36,4 +40,14 @@ public class InvoiceController {
     public ResponseEntity<SingleInvoiceResponse> getLatestUnpaidInvoice(@PathVariable @Pattern(regexp = "^(MTR)\\d{7}$", message = "Invalid meter number format") String meterNo) {
         return invoiceService.getLatestInvoiceByMeterNo(meterNo);
     }
+
+    @PostMapping("/upload")
+    public ResponseEntity<MessageResponse> bulkUploadInvoice(
+            @RequestParam("file") MultipartFile dataFile,
+            @RequestPart("billDuration") String billDuration,
+            @RequestPart("billDueDate") String billDueDate
+    ) throws IOException {
+        return invoiceService.bulkUploadInvoice(dataFile, billDuration, LocalDate.parse(billDueDate));
+    }
+
 }
