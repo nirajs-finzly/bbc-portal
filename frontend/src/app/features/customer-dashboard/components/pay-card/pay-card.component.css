@@ -9,3 +9,7 @@
 :host ::ng-deep .p-card-content .inner {
     @apply flex flex-col gap-2
 }
+
+:host ::ng-deep .p-dialog-mask > div {
+    @apply w-[40rem];
+}

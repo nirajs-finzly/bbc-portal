@@ -7,6 +7,8 @@ import { RedirectGuard } from './guards/redirect.guard';
 import { DashboardLayoutComponent } from './shared/layouts/dashboard-layout/dashboard-layout.component';
 import { EmployeeDashboardComponent } from './features/employee/components/employee-dashboard/employee-dashboard.component';
 import { InvoicesComponent } from './features/customer-dashboard/components/invoices/invoices.component';
+import { PaymentDashboardComponent } from './features/payment-system/layouts/payment-dashboard/payment-dashboard.component';
+import { PaymentDetailsComponent } from './features/payment-system/components/payment-details/payment-details.component';
 
 export const routes: Routes = [
   {
@@ -21,25 +23,36 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
-    component: DashboardLayoutComponent, // Use DashboardLayoutComponent as the parent
-    canActivate: [AuthGuard], // Guard applied
+    component: DashboardLayoutComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: 'o',
-        component: EmployeeDashboardComponent, // Employee dashboard
+        component: EmployeeDashboardComponent,
       },
       {
         path: 'u',
-        component: CustomerDashboardComponent, // Customer dashboard
+        component: CustomerDashboardComponent,
       },
       {
         path: 'u/invoices',
-        component: InvoicesComponent, // Route for Invoices
+        component: InvoicesComponent,
       },
-    ]
+    ],
   },
   {
-    path: '**', // Wildcard route for 404
+    path: 'pay',
+    component: PaymentDashboardComponent,
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: ':invoiceId/:meterNo',
+        component: PaymentDetailsComponent,
+      },
+    ],
+  },
+  {
+    path: '**',
     redirectTo: '',
-  }
+  },
 ];
