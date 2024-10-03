@@ -1,5 +1,6 @@
 package com.bbc.app.controller;
 
+import com.bbc.app.dto.request.CashPaymentRequest;
 import com.bbc.app.dto.request.ConfirmPaymentRequest;
 import com.bbc.app.dto.request.InitiatePaymentRequest;
 import com.bbc.app.dto.response.MessageResponse;
@@ -26,5 +27,10 @@ public class PaymentController {
     @PostMapping("/confirm")
     public ResponseEntity<MessageResponse> confirmPayment(@RequestBody ConfirmPaymentRequest request) {
         return paymentService.confirmPayment(request.getCustomerId(), request.getInvoiceId(), request.getPaymentMethod(), request.getOtp(), request.getAmount());
+    }
+
+    @PostMapping("/cash-payment")
+    public ResponseEntity<MessageResponse> initiatePayment(@RequestBody CashPaymentRequest request) {
+        return paymentService.markInvoiceAsPaid(request.getInvoiceId(), request.getPaymentMethod());
     }
 }

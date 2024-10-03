@@ -51,7 +51,17 @@ public class PaymentServiceImpl implements PaymentService {
         Optional<Customer> customerOpt = customerRepository.findByCustomerId(customerId);
         Optional<Invoice> invoiceOpt = invoiceRepository.findById(invoiceId);
 
-        if (customerOpt.isPresent() && invoiceOpt.isPresent()) {
+        Invoice invoice = null;
+        if(invoiceOpt.isPresent()){
+            invoice = invoiceOpt.get();
+        }
+
+        assert invoice != null;
+        if (invoice.getPaymentStatus() == PaymentStatus.PAID) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Invoice is already marked as paid.", false));
+        }
+
+        if (customerOpt.isPresent()) {
             Customer customer = customerOpt.get();
 
             boolean isValid = paymentValidator.validatePaymentDetails(paymentMethod, paymentDetails);
@@ -72,9 +82,18 @@ public class PaymentServiceImpl implements PaymentService {
         Optional<Customer> customerOpt = customerRepository.findByCustomerId(customerId);
         Optional<Invoice> invoiceOpt = invoiceRepository.findById(invoiceId);
 
-        if (customerOpt.isPresent() && invoiceOpt.isPresent()) {
+        Invoice invoice = null;
+        if(invoiceOpt.isPresent()){
+            invoice = invoiceOpt.get();
+        }
+
+        assert invoice != null;
+        if (invoice.getPaymentStatus() == PaymentStatus.PAID) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Invoice is already marked as paid.", false));
+        }
+
+        if (customerOpt.isPresent()) {
             Customer customer = customerOpt.get();
-            Invoice invoice = invoiceOpt.get();
 
             boolean isValidOtp = otpService.validateOtp(otp, customer.getUser());
 
@@ -120,4 +139,51 @@ public class PaymentServiceImpl implements PaymentService {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("Customer or Invoice not found.", false));
     }
+
+    @Override
+    public ResponseEntity<MessageResponse> markInvoiceAsPaid(UUID invoiceId, PaymentMethod paymentMethod) {
+        if (!paymentMethod.name().equalsIgnoreCase("CASH")) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Payment method must be cash to mark invoice as paid.", false));
+        }
+
+        // Find the invoice by ID
+        Optional<Invoice> optionalInvoice = invoiceRepository.findById(invoiceId);
+
+        if (optionalInvoice.isEmpty()) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Invoice not found!", false));
+        }
+
+        Invoice invoice = optionalInvoice.get();
+
+        // Check if the invoice is already paid
+        if (invoice.getPaymentStatus() == PaymentStatus.PAID) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Invoice is already marked as paid.", false));
+        }
+
+        // Mark the invoice as paid
+        invoice.setPaymentStatus(PaymentStatus.PAID);
+
+        PaymentTransaction transaction = new PaymentTransaction();
+        transaction.setAmount(invoice.getTotalAmountDue());
+        transaction.setCustomer(invoice.getCustomer());
+        transaction.setInvoice(invoice);
+        transaction.setPaymentMethod(paymentMethod);
+
+        paymentTransactionRepository.save(transaction);
+
+        // Generate a new PDF for the updated invoice
+        try {
+            byte[] updatedInvoicePdf = pdfService.createInvoicePdf(invoice, null);
+            invoice.setInvoicePdf(updatedInvoicePdf);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MessageResponse("Error generating updated invoice PDF!", false));
+        }
+
+        // Save the updated invoice back to the repository
+        invoiceRepository.save(invoice);
+
+        return ResponseEntity.ok(new MessageResponse("Invoice marked as paid and PDF updated successfully!", true));
+    }
+
 }
