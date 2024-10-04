@@ -12,11 +12,4 @@ import { PayCardComponent } from "../pay-card/pay-card.component";
   styleUrl: './invoices.component.css'
 })
 export class InvoicesComponent {
-  user: User | null = null; 
-
-  constructor(private authService: AuthService) {}
-
-  ngOnInit(): void {
-    this.user = this.authService.getUserData();
-  }
 }

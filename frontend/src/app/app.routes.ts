@@ -9,6 +9,7 @@ import { EmployeeDashboardComponent } from './features/employee/components/emplo
 import { InvoicesComponent } from './features/customer-dashboard/components/invoices/invoices.component';
 import { PaymentDashboardComponent } from './features/payment-system/layouts/payment-dashboard/payment-dashboard.component';
 import { PaymentDetailsComponent } from './features/payment-system/components/payment-details/payment-details.component';
+import { CustomersComponent } from './features/employee/components/customers/customers.component';
 
 export const routes: Routes = [
   {
@@ -29,6 +30,10 @@ export const routes: Routes = [
       {
         path: 'o',
         component: EmployeeDashboardComponent,
+      },
+      {
+        path: 'o/customers',
+        component: CustomersComponent,
       },
       {
         path: 'u',

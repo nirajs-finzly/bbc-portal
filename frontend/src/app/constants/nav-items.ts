@@ -8,7 +8,7 @@ export const navItems = {
         {
             label: 'Customers',
             icon: 'fa-solid fa-users',
-            link: '/dashboard/o/invoices'
+            link: '/dashboard/o/customers'
         },
         {
             label: 'Invoices',
