@@ -11,7 +11,7 @@ import java.util.UUID;
 public interface PaymentService {
     ResponseEntity<TransactionsResponse> getAllTransactions(int page, int size);
 
-    ResponseEntity<TransactionsResponse> getAllTransactionsByCustomer(String customerId, int page, int size);
+    ResponseEntity<TransactionsResponse> getAllTransactionsByMeterNo(String meterNo, int page, int size);
 
     ResponseEntity<MessageResponse> initiatePayment(String customerId, UUID invoiceId, PaymentMethod paymentMethod, String paymentDetails);
 

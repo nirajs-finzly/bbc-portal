@@ -19,6 +19,7 @@ import { Invoice } from '../../../../types/invoice';
 import { User } from '../../../../types/user';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { PayCardComponent } from "../pay-card/pay-card.component";
 
 
 @Component({
@@ -36,7 +37,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
     FormsModule,
     BrnSelectModule,
     HlmSelectModule,
-  ],
+    PayCardComponent
+],
   templateUrl: './myinvoices.component.html',
   styleUrl: './myinvoices.component.css',
   host: {

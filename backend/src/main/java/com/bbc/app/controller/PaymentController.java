@@ -25,12 +25,12 @@ public class PaymentController {
         return paymentService.getAllTransactions(page, size);
     }
 
-    @GetMapping("/transactions/{customerId}")
-    public ResponseEntity<TransactionsResponse> getAllTransactions(
-            @PathVariable @Pattern(regexp = "^(CRN)\\d{7}$", message = "Invalid meter number format") String customerId,
+    @GetMapping("/transactions/{meterNo}")
+    public ResponseEntity<TransactionsResponse> getAllTransactionsByMeterNo(
+            @PathVariable @Pattern(regexp = "^(MTR)\\d{7}$", message = "Invalid meter no.") String meterNo,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
-        return paymentService.getAllTransactionsByCustomer(customerId, page, size);
+        return paymentService.getAllTransactionsByMeterNo(meterNo, page, size);
     }
 
     @PostMapping("/initiate")

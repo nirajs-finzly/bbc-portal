@@ -6,12 +6,12 @@ import java.util.List;
 
 public class TransactionsResponse {
     private String message;
-    private List<TransactionData> invoices;
+    private List<TransactionData> transactions;
     private boolean success;
 
-    public TransactionsResponse(String message, List<TransactionData> invoices, boolean success) {
+    public TransactionsResponse(String message, List<TransactionData> transactions, boolean success) {
         this.message = message;
-        this.invoices = invoices;
+        this.transactions = transactions;
         this.success = success;
     }
 
@@ -24,11 +24,11 @@ public class TransactionsResponse {
     }
 
     public List<TransactionData> getInvoices() {
-        return invoices;
+        return transactions;
     }
 
     public void setInvoices(List<TransactionData> invoices) {
-        this.invoices = invoices;
+        this.transactions = invoices;
     }
 
     public boolean isSuccess() {

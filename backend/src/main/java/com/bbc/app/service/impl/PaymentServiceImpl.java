@@ -77,9 +77,15 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public ResponseEntity<TransactionsResponse> getAllTransactionsByCustomer(String customerId, int page, int size) {
+    public ResponseEntity<TransactionsResponse> getAllTransactionsByMeterNo(String meterNo, int page, int size) {
+        Optional<Customer> customer =  customerRepository.findByMeterNo(meterNo);
+
+        if(customer.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new TransactionsResponse("Customer not found!", null, false));
+        }
+
         Pageable pageable = PageRequest.of(page, size);
-        Page<PaymentTransaction> transactionPage = paymentTransactionRepository.findAllByCustomerCustomerId(customerId, pageable);
+        Page<PaymentTransaction> transactionPage = paymentTransactionRepository.findAllByCustomerCustomerId(customer.get().getCustomerId(), pageable);
 
         List<TransactionData> transactionDataList = transactionPage.getContent().stream()
                 .map(transaction -> new TransactionData(
