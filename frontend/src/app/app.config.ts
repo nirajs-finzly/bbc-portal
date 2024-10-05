@@ -18,7 +18,8 @@ import {
   lucideLogIn,
   lucideLogOut,
   lucideSend,
-  lucideUser
+  lucideUser,
+  lucideCreditCard
 } from '@ng-icons/lucide';
 import { provideHotToastConfig } from '@ngxpert/hot-toast';
 import { routes } from './app.routes';
@@ -38,6 +39,7 @@ export const appConfig: ApplicationConfig = {
       lucideEllipsis,
       lucideChevronLeft,
       lucideChevronRight,
+      lucideCreditCard,
     }),
     provideHotToastConfig({
       duration: 5000,

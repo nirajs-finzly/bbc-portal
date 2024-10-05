@@ -55,12 +55,13 @@
   color-scheme: dark;
 }
 
-body{
-  @apply overflow-hidden h-screen
+body {
+  @apply overflow-hidden h-screen;
 }
 
-.cdk-header-row, .cdk-row{
-    justify-content: space-around;
+.cdk-header-row,
+.cdk-row {
+  justify-content: space-around;
 }
 
 *::-webkit-scrollbar {

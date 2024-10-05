@@ -4,11 +4,14 @@ import { Invoice } from '../../../../types/invoice';
 import { InvoiceService } from '../../../../shared/services/invoice.service';
 import { AuthService } from '../../../../shared/services/auth.service';
 import { CurrencyPipe, DatePipe } from '@angular/common';
+import { HlmCardImports } from '@spartan-ng/ui-card-helm';
+import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
+import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
 
 @Component({
   selector: 'app-pay-card',
   standalone: true,
-  imports: [CurrencyPipe, DatePipe],
+  imports: [CurrencyPipe, DatePipe, HlmCardImports, HlmButtonDirective, HlmIconComponent],
   templateUrl: './pay-card.component.html',
   styleUrl: './pay-card.component.css',
   host: {
@@ -38,9 +41,14 @@ export class PayCardComponent {
     if (this.user && this.user.meterNo) {
       this.invoiceService
         .getLatestUnpaidInvoiceByMeterNo(this.user.meterNo)
-        .subscribe((response: any) => {
-          this.latestInvoice = response.invoiceData || null;
-        });
+        .subscribe({
+          next: (response: any) => {
+            this.latestInvoice = response.invoiceData || null;
+          },
+          error: (error: any) => {
+            console.error('Failed to fetch latest unpaid invoice:', error);
+          },
+        })
     } else {
       console.error('Meter number not available for user!');
     }

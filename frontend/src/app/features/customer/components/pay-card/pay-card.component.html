@@ -1,3 +1,43 @@
-@if(latestInvoice === null){
-    <p>Pay Card</p>
+@if(latestInvoice !== null){
+<section hlmCard>
+  <div hlmCardHeader class="pb-2">
+    <h3 hlmCardTitle class="text-destructive">Pay Invoice</h3>
+    <p hlmCardDescription>{{ latestInvoice.billDuration }}</p>
+  </div>
+  <div hlmCardContent class="flex items-center gap-8">
+    <div class="flex flex-col gap-2">
+        <p class="text-sm font-semibold">
+          Amount:
+          <span class="font-light text-destructive">{{
+            latestInvoice.totalAmountDue | currency : "INR"
+          }}</span>
+        </p>
+        <p class="text-sm font-semibold">
+          Due Date:
+          <span class="font-light">{{
+            latestInvoice.billDueDate | date : "longDate"
+          }}</span>
+        </p>
+    </div>
+    <div class="h-full flex flex-col justify-between">
+        <button
+          hlmBtn
+          size="sm"
+          class="text-xs"
+          variant="destructive"
+        >
+        <hlm-icon name="lucideCreditCard" size="sm" class="mr-2" />
+        Pay Now</button>
+        <!-- <button
+          (click)="
+            downloadInvoicePdf(latestInvoice.invoicePdf, latestInvoice.invoiceId)
+          "
+          hlmBtn
+          size="sm"
+          variant="outline"
+          class="text-primary hover:text-primary"
+        >Download</button> -->
+      </div>
+  </div>
+</section>
 }
