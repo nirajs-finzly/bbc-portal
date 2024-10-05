@@ -1,14 +1,15 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './core/components/home/home.component';
-import { LoginComponent } from './features/auth/components/login/login.component';
-import { CustomerDashboardComponent } from './features/customer-dashboard/components/customer-dashboard/customer-dashboard.component';
-import { AuthGuard } from './guards/auth.guard';
 import { RedirectGuard } from './guards/redirect.guard';
+import { LoginComponent } from './core/components/login/login.component';
 import { DashboardLayoutComponent } from './shared/layouts/dashboard-layout/dashboard-layout.component';
+import { AuthGuard } from './guards/auth.guard';
 import { EmployeeDashboardComponent } from './features/employee/components/employee-dashboard/employee-dashboard.component';
-import { InvoicesComponent } from './features/customer-dashboard/components/invoices/invoices.component';
-import { PaymentDashboardComponent } from './features/payment-system/layouts/payment-dashboard/payment-dashboard.component';
-import { PaymentDetailsComponent } from './features/payment-system/components/payment-details/payment-details.component';
+import { CustomersComponent } from './features/employee/components/customers/customers.component';
+import { InvoicesComponent } from './features/employee/components/invoices/invoices.component';
+import { CustomerDashboardComponent } from './features/customer/components/customer-dashboard/customer-dashboard.component';
+import { MyinvoicesComponent } from './features/customer/components/myinvoices/myinvoices.component';
+import { MytransactionsComponent } from './features/customer/components/mytransactions/mytransactions.component';
 
 export const routes: Routes = [
   {
@@ -31,26 +32,38 @@ export const routes: Routes = [
         component: EmployeeDashboardComponent,
       },
       {
+        path: 'o/customers',
+        component: CustomersComponent,
+      },
+      {
+        path: 'o/invoices',
+        component: InvoicesComponent,
+      },
+      {
         path: 'u',
         component: CustomerDashboardComponent,
       },
       {
         path: 'u/invoices',
-        component: InvoicesComponent,
+        component: MyinvoicesComponent,
       },
-    ],
-  },
-  {
-    path: 'pay',
-    component: PaymentDashboardComponent,
-    canActivate: [AuthGuard],
-    children: [
       {
-        path: ':invoiceId/:meterNo',
-        component: PaymentDetailsComponent,
+        path: 'u/transactions',
+        component: MytransactionsComponent,
       },
     ],
   },
+  // {
+  //   path: 'pay',
+  //   component: PaymentDashboardComponent,
+  //   canActivate: [AuthGuard],
+  //   children: [
+  //     {
+  //       path: ':invoiceId/:meterNo',
+  //       component: PaymentDetailsComponent,
+  //     },
+  //   ],
+  // },
   {
     path: '**',
     redirectTo: '',

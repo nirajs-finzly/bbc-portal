@@ -77,6 +77,32 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    public ResponseEntity<TransactionsResponse> getAllTransactionsByCustomer(String customerId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<PaymentTransaction> transactionPage = paymentTransactionRepository.findAllByCustomerCustomerId(customerId, pageable);
+
+        List<TransactionData> transactionDataList = transactionPage.getContent().stream()
+                .map(transaction -> new TransactionData(
+                        transaction.getAmount(),
+                        transaction.getCustomer().getUser().getName(),
+                        transaction.getInvoice().getInvoiceId().toString(),
+                        transaction.getPaymentMethod(),
+                        transaction.getTransactionStatus(),
+                        transaction.getPaymentDate(),
+                        transaction.getPaymentIdentifier(),
+                        transaction.getCardType()
+                ))
+                .toList();
+
+        String message = transactionDataList.isEmpty() ? "No transactions found for this customer!" : "Transactions retrieved successfully!";
+        boolean success = !transactionDataList.isEmpty();
+
+        TransactionsResponse response = new TransactionsResponse(message, transactionDataList, success);
+        return ResponseEntity.ok(response);
+    }
+
+
+    @Override
     public ResponseEntity<MessageResponse> initiatePayment(String customerId, UUID invoiceId, PaymentMethod paymentMethod, String paymentDetails) {
         Optional<Customer> customerOpt = customerRepository.findByCustomerId(customerId);
         Optional<Invoice> invoiceOpt = invoiceRepository.findById(invoiceId);

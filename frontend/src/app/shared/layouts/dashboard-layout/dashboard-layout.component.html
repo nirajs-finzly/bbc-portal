@@ -1,47 +1,6 @@
-<p-menubar [model]="navItems">
-  <ng-template pTemplate="start">
-    <p-avatar image="assets/img/logo.png" shape="circle" />
-    <span class="ml-2 font-bold">Bharat Bijili</span>
-  </ng-template>
-  <ng-template pTemplate="item" let-item let-root="root">
-    <a
-      pRipple
-      [routerLink]="item.link"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: true }"
-      class="flex items-center p-menuitem-link mr-auto text-dark"
-    >
-      <span [class]="item.icon"></span>
-      <span class="ml-2">{{ item.label }}</span>
-    </a>
-  </ng-template>
-  <ng-template pTemplate="end" style="margin-left: 0">
-    <div
-      (click)="menu.toggle($event)"
-      class="flex items-center gap-2 cursor-pointer"
-    >
-      <div class="bg-tertiary rounded-full text-white">
-        <i class="fa-solid fa-user mx-3 my-[0.7rem]"></i>
-      </div>
-    </div>
-    <p-menu #menu [model]="menuItems" [popup]="true">
-      <ng-template pTemplate="start" style="width: fit-content">
-        <div class="p-4 flex gap-4 text-xs">
-          <div class="bg-tertiary rounded-full text-white">
-            <i class="fa-solid fa-user mx-3 my-[0.7rem]"></i>
-          </div>
-          <div class="flex flex-col">
-            <span class="text-sm text-tertiary">{{
-              user?.name + " - " + user?.role | titlecase
-            }}</span>
-            <span class="text-xs text-dark">{{ user?.email }}</span>
-          </div>
-        </div>
-      </ng-template>    
-    </p-menu>
-  </ng-template>
-</p-menubar>
-
-<main class="p-6">
+<div>
+  <app-header />
+</div>
+<main id="main-content" class="p-6 h-[calc(100vh-64px)] overflow-y-auto">
   <router-outlet />
 </main>

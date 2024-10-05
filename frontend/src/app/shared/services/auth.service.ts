@@ -2,11 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-// import { CryptoService } from '../../../shared/services/crypto.service';
 import { Router } from '@angular/router';
-import { CryptoService } from './crypto.service';
-import { ToastService } from './toast.service';
 import { User } from '../../types/user';
+import { HotToastService } from '@ngxpert/hot-toast';
 
 @Injectable({
   providedIn: 'root',
@@ -18,12 +16,7 @@ export class AuthService {
 
   public authState$: Observable<boolean>;
 
-  constructor(
-    private http: HttpClient,
-    private cryptoService: CryptoService,
-    private toast: ToastService,
-    private router: Router
-  ) {
+  constructor(private http: HttpClient, private toast: HotToastService, private router: Router) {
     this.authStateSubject = new BehaviorSubject<boolean>(
       this.hasTokenAndRole()
     );
@@ -43,6 +36,7 @@ export class AuthService {
             this.setToken(response.token);
             this.setRole(response.role);
             this.authStateSubject.next(true);
+            this.toast.success('Login Successful!');
 
             // Fetch the user data after successful login
             this.getUser()
@@ -52,7 +46,6 @@ export class AuthService {
                     this.setUser(res.user);
 
                     const role = this.getRole(); // Fetch the role
-                    this.toast.success('Login Successful!');
 
                     if (role === 'EMPLOYEE') {
                       this.router.navigate(['/dashboard/o']);
@@ -90,44 +83,29 @@ export class AuthService {
   }
 
   private setToken(token: string): void {
-    const encryptedToken = this.cryptoService.encrypt(token);
-    localStorage.setItem('token', encryptedToken);
+    localStorage.setItem('token', token);
   }
 
   private setRole(role: string): void {
-    const encryptedRole = this.cryptoService.encrypt(role);
-    localStorage.setItem('role', encryptedRole);
+    localStorage.setItem('role', role);
   }
 
   private setUser(user: User): void {
     const stringifiedUser = JSON.stringify(user);
-    const encryptedUser = this.cryptoService.encrypt(stringifiedUser);
-    localStorage.setItem('user', encryptedUser);
+    localStorage.setItem('user', stringifiedUser);
   }
 
   public getToken(): string | null {
-    const encryptedToken = localStorage.getItem('token');
-    if (encryptedToken) {
-      return this.cryptoService.decrypt(encryptedToken);
-    }
-    return null;
+    return localStorage.getItem('token');
   }
 
   public getUserData(): User | null {
-    const encryptedUser = localStorage.getItem('user');
-    if (encryptedUser) {
-      const stringifiedUser = this.cryptoService.decrypt(encryptedUser);
-      return JSON.parse(stringifiedUser);
-    }
-    return null;
+    const userData = localStorage.getItem('user');
+    return userData ? JSON.parse(userData) : null;
   }
 
   public getRole(): string | null {
-    const encryptedRole = localStorage.getItem('role');
-    if (encryptedRole) {
-      return this.cryptoService.decrypt(encryptedRole);
-    }
-    return null;
+    return localStorage.getItem('role');
   }
 
   private hasTokenAndRole(): boolean {

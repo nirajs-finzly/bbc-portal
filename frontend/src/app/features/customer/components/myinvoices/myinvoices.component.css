@@ -1,0 +1,7 @@
+.cdk-header, .cdk-row{
+    @apply justify-around;
+}
+
+hlm-th, hlm-td{
+    @apply justify-center;
+}

@@ -1,18 +1,50 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
-import { routes } from './app.routes';
-import { provideAnimations } from '@angular/platform-browser/animations';
 import {
   HTTP_INTERCEPTORS,
   provideHttpClient,
   withInterceptorsFromDi,
 } from '@angular/common/http';
-import { ValidationInterceptor } from './core/interceptors/validation.interceptor';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideIcons } from '@ng-icons/core';
+import {
+  lucideCheck,
+  lucideChevronLeft,
+  lucideChevronRight,
+  lucideDownload,
+  lucideEllipsis,
+  lucideLoader,
+  lucideLogIn,
+  lucideLogOut,
+  lucideSend,
+  lucideUser
+} from '@ng-icons/lucide';
+import { provideHotToastConfig } from '@ngxpert/hot-toast';
+import { routes } from './app.routes';
 import { TokenInterceptor } from './core/interceptors/token.interceptor';
+import { ValidationInterceptor } from './core/interceptors/validation.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideIcons({
+      lucideLogIn,
+      lucideSend,
+      lucideCheck,
+      lucideLoader,
+      lucideUser,
+      lucideLogOut,
+      lucideDownload,
+      lucideEllipsis,
+      lucideChevronLeft,
+      lucideChevronRight,
+    }),
+    provideHotToastConfig({
+      duration: 5000,
+      position: 'bottom-right',
+      autoClose: true,
+      visibleToasts: 1,
+    }),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideAnimations(),

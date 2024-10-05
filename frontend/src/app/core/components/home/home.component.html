@@ -1,10 +1,13 @@
 <div class="flex flex-col gap-8 px-8 md:px-36 items-center justify-center">
-    <div class="flex flex-col gap-7 items-center">
-        <img src="assets/img/logo.png" class="w-28 md:w-44" alt="BBC">
-        <h1 class="text-2xl md:text-5xl font-extrabold">{{title}}</h1>
-        <p class="text-center text-gray-600 text-sm md:text-lg font-mulish">
-            {{description}}
-        </p>
-    </div>
-    <button pButton class="bg-tertiary border-tertiary w-28 rounded-full hover:bg-transparent hover:text-tertiary text-md uppercase" routerLink="/login" label="Login"></button>
+  <div class="flex flex-col gap-7 items-center">
+    <img src="assets/img/logo.png" class="w-28 md:w-44" alt="BBC" />
+    <h1 class="text-2xl md:text-5xl font-extrabold">{{ title }}</h1>
+    <p class="text-center text-muted-foreground text-sm md:text-lg font-mulish">
+      {{ description }}
+    </p>
+  </div>
+  <button hlmBtn class="uppercase" routerLink="/login">
+    <hlm-icon size="sm" name="lucideSend" class="mr-2" />
+    Login
+  </button>
 </div>

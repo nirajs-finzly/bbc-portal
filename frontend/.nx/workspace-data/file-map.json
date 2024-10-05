@@ -1,0 +1,862 @@
+{
+  "version": "6.0",
+  "nxVersion": "19.8.3",
+  "deps": {
+    "@angular/animations": "^18.2.0",
+    "@angular/cdk": "^18.0.0",
+    "@angular/common": "^18.2.0",
+    "@angular/compiler": "^18.2.0",
+    "@angular/core": "^18.2.0",
+    "@angular/forms": "^18.2.0",
+    "@angular/platform-browser": "^18.2.0",
+    "@angular/platform-browser-dynamic": "^18.2.0",
+    "@angular/router": "^18.2.0",
+    "@ng-icons/core": "^25.1.0",
+    "@ng-icons/lucide": "^29.5.1",
+    "@ngneat/overview": "^6.0.0",
+    "@ngxpert/hot-toast": "^3.0.1",
+    "@spartan-ng/ui-core": "^0.0.1-alpha.356",
+    "@spartan-ng/ui-formfield-brain": "0.0.1-alpha.356",
+    "@spartan-ng/ui-forms-brain": "0.0.1-alpha.356",
+    "@spartan-ng/ui-menu-brain": "0.0.1-alpha.356",
+    "@spartan-ng/ui-select-brain": "0.0.1-alpha.356",
+    "@spartan-ng/ui-table-brain": "0.0.1-alpha.356",
+    "class-variance-authority": "^0.6.0",
+    "clsx": "^2.1.1",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "zod": "^3.23.8",
+    "zone.js": "~0.14.10",
+    "@angular-devkit/build-angular": "^18.2.3",
+    "@angular/cli": "^18.2.3",
+    "@angular/compiler-cli": "^18.2.0",
+    "@spartan-ng/cli": "^0.0.1-alpha.366",
+    "@types/jasmine": "~5.1.0",
+    "autoprefixer": "^10.4.20",
+    "jasmine-core": "~5.2.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.1.0",
+    "postcss": "^8.4.47",
+    "tailwind-merge": "^2.2.0",
+    "tailwindcss": "^3.4.13",
+    "tailwindcss-animate": "^1.0.6",
+    "typescript": "~5.5.2"
+  },
+  "pathMappings": {
+    "@spartan-ng/ui-button-helm": [
+      ".\\src/app/ui/components/ui-button-helm/src/index.ts"
+    ],
+    "@spartan-ng/ui-card-helm": [
+      ".\\src/app/ui/components/ui-card-helm/src/index.ts"
+    ],
+    "@spartan-ng/ui-input-helm": [
+      ".\\src/app/ui/components/ui-input-helm/src/index.ts"
+    ],
+    "@spartan-ng/ui-formfield-helm": [
+      ".\\src/app/ui/components/ui-formfield-helm/src/index.ts"
+    ],
+    "@spartan-ng/ui-icon-helm": [
+      ".\\src/app/ui/components/ui-icon-helm/src/index.ts"
+    ],
+    "@spartan-ng/ui-menu-helm": [
+      ".\\src/app/ui/components/ui-menu-helm/src/index.ts"
+    ],
+    "@spartan-ng/ui-table-helm": [
+      ".\\src/app/ui/components/ui-table-helm/src/index.ts"
+    ],
+    "@spartan-ng/ui-select-helm": [
+      ".\\src/app/ui/components/ui-select-helm/src/index.ts"
+    ]
+  },
+  "nxJsonPlugins": [],
+  "fileMap": {
+    "projectFileMap": {
+      "frontend": [
+        {
+          "file": ".angular/cache/18.2.7/frontend/.tsbuildinfo",
+          "hash": "10591264453118964400"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@angular_common.js",
+          "hash": "1146401938188611314"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@angular_common.js.map",
+          "hash": "9947606979680686569"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@angular_common_http.js",
+          "hash": "13012011177876063709"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@angular_common_http.js.map",
+          "hash": "9947606979680686569"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@angular_core.js",
+          "hash": "18442521286335077640"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@angular_core.js.map",
+          "hash": "9947606979680686569"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@angular_forms.js",
+          "hash": "14902132090556453638"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@angular_forms.js.map",
+          "hash": "16540536795779781052"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@angular_platform-browser.js",
+          "hash": "17497177060810114606"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@angular_platform-browser.js.map",
+          "hash": "9947606979680686569"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@angular_platform-browser_animations.js",
+          "hash": "18308142821459831487"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@angular_platform-browser_animations.js.map",
+          "hash": "9994151531497871169"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@angular_router.js",
+          "hash": "9614798863761070633"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@angular_router.js.map",
+          "hash": "6894811589017766986"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@ng-icons_core.js",
+          "hash": "7505326244531653746"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@ng-icons_core.js.map",
+          "hash": "6182780550396009676"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@ng-icons_lucide.js",
+          "hash": "10826540182025478838"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@ng-icons_lucide.js.map",
+          "hash": "4586671473271499305"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@ngxpert_hot-toast.js",
+          "hash": "11102794536707920262"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@ngxpert_hot-toast.js.map",
+          "hash": "11152990667239668372"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@spartan-ng_ui-core.js",
+          "hash": "16251084291178628746"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@spartan-ng_ui-core.js.map",
+          "hash": "9947606979680686569"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@spartan-ng_ui-formfield-brain.js",
+          "hash": "16010007633583990776"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@spartan-ng_ui-formfield-brain.js.map",
+          "hash": "4516964624050344589"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@spartan-ng_ui-forms-brain.js",
+          "hash": "18028935048231679292"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@spartan-ng_ui-forms-brain.js.map",
+          "hash": "3546214018090753125"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@spartan-ng_ui-menu-brain.js",
+          "hash": "15493304676507913748"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@spartan-ng_ui-menu-brain.js.map",
+          "hash": "17812276495298302803"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@spartan-ng_ui-table-brain.js",
+          "hash": "17006332713251484453"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/@spartan-ng_ui-table-brain.js.map",
+          "hash": "3778721619251498071"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/_metadata.json",
+          "hash": "7077453414298707717"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/chunk-37SKYL45.js",
+          "hash": "14623105892249648380"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/chunk-37SKYL45.js.map",
+          "hash": "10826142899079398918"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/chunk-3IG3AZAF.js",
+          "hash": "5941051905550474802"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/chunk-3IG3AZAF.js.map",
+          "hash": "5157939323070455561"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/chunk-BONRK7YY.js",
+          "hash": "9842486051697780547"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/chunk-BONRK7YY.js.map",
+          "hash": "13674639080056459250"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/chunk-FVITGUTG.js",
+          "hash": "11639518175812232364"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/chunk-FVITGUTG.js.map",
+          "hash": "5147765853696607999"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/chunk-H25JTUIN.js",
+          "hash": "3794606737644709361"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/chunk-H25JTUIN.js.map",
+          "hash": "579200083089937988"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/chunk-IXUSS67I.js",
+          "hash": "9941098615037828138"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/chunk-IXUSS67I.js.map",
+          "hash": "5134453755794423192"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/chunk-LOOQOBB3.js",
+          "hash": "7098745036372086163"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/chunk-LOOQOBB3.js.map",
+          "hash": "14122702828195536650"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/chunk-O6VDDHVS.js",
+          "hash": "1667473505203495655"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/chunk-O6VDDHVS.js.map",
+          "hash": "11912131901430881312"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/chunk-V3CJMW24.js",
+          "hash": "16030275412049419790"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/chunk-V3CJMW24.js.map",
+          "hash": "4360051082022328399"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/chunk-WDMUDEB6.js",
+          "hash": "6404267885737011678"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/chunk-WDMUDEB6.js.map",
+          "hash": "9947606979680686569"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/chunk-XWZFNSSO.js",
+          "hash": "7938274939872339622"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/chunk-XWZFNSSO.js.map",
+          "hash": "1619932135174655741"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/class-variance-authority.js",
+          "hash": "1213507025121875024"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/class-variance-authority.js.map",
+          "hash": "6074779803388794761"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/package.json",
+          "hash": "8630294688235076505"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/rxjs.js",
+          "hash": "6315894520883253323"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/rxjs.js.map",
+          "hash": "9947606979680686569"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/rxjs_operators.js",
+          "hash": "962434487233790676"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/rxjs_operators.js.map",
+          "hash": "9947606979680686569"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/zod.js",
+          "hash": "12692486711504505665"
+        },
+        {
+          "file": ".angular/cache/18.2.7/frontend/vite/deps/zod.js.map",
+          "hash": "16114695365981623133"
+        },
+        {
+          "file": ".editorconfig",
+          "hash": "17241496168097493888"
+        },
+        {
+          "file": ".vscode/extensions.json",
+          "hash": "11934160580685414355"
+        },
+        {
+          "file": ".vscode/launch.json",
+          "hash": "17406702432687230417"
+        },
+        {
+          "file": ".vscode/tasks.json",
+          "hash": "10093397977228577162"
+        },
+        {
+          "file": "README.md",
+          "hash": "6711771022528582660"
+        },
+        {
+          "file": "angular.json",
+          "hash": "7996732239600233208"
+        },
+        {
+          "file": "package-lock.json",
+          "hash": "854082527326138606"
+        },
+        {
+          "file": "package.json",
+          "hash": "12791357291133529209",
+          "deps": [
+            "npm:@angular-devkit/build-angular",
+            "npm:@angular/cli",
+            "npm:@angular/compiler-cli",
+            "npm:@spartan-ng/cli",
+            "npm:@types/jasmine",
+            "npm:autoprefixer",
+            "npm:jasmine-core",
+            "npm:karma",
+            "npm:karma-chrome-launcher",
+            "npm:karma-coverage",
+            "npm:karma-jasmine",
+            "npm:karma-jasmine-html-reporter",
+            "npm:postcss",
+            "npm:tailwind-merge",
+            "npm:tailwindcss",
+            "npm:tailwindcss-animate",
+            "npm:typescript",
+            "npm:@angular/animations",
+            "npm:@angular/cdk",
+            "npm:@angular/common",
+            "npm:@angular/compiler",
+            "npm:@angular/core",
+            "npm:@angular/forms",
+            "npm:@angular/platform-browser",
+            "npm:@angular/platform-browser-dynamic",
+            "npm:@angular/router",
+            "npm:@ng-icons/core",
+            "npm:@ng-icons/lucide",
+            "npm:@ngneat/overview",
+            "npm:@ngxpert/hot-toast",
+            "npm:@spartan-ng/ui-core",
+            "npm:@spartan-ng/ui-formfield-brain",
+            "npm:@spartan-ng/ui-forms-brain",
+            "npm:@spartan-ng/ui-menu-brain",
+            "npm:@spartan-ng/ui-select-brain",
+            "npm:@spartan-ng/ui-table-brain",
+            "npm:class-variance-authority",
+            "npm:clsx",
+            "npm:rxjs",
+            "npm:tslib",
+            "npm:zod",
+            "npm:zone.js"
+          ]
+        },
+        {
+          "file": "public/favicon.ico",
+          "hash": "3988961587069885523"
+        },
+        {
+          "file": "src/app/app.component.html",
+          "hash": "16498897523005705592"
+        },
+        {
+          "file": "src/app/app.component.ts",
+          "hash": "5971050147941067675"
+        },
+        {
+          "file": "src/app/app.config.ts",
+          "hash": "9682457584248274360"
+        },
+        {
+          "file": "src/app/app.routes.ts",
+          "hash": "1538956798962958618"
+        },
+        {
+          "file": "src/app/constants/nav-items.ts",
+          "hash": "17299185439776267938"
+        },
+        {
+          "file": "src/app/constants/payment-items.ts",
+          "hash": "4992844946116991039"
+        },
+        {
+          "file": "src/app/core/components/home/home.component.css",
+          "hash": "4148698483227270219"
+        },
+        {
+          "file": "src/app/core/components/home/home.component.html",
+          "hash": "1748963492748157777"
+        },
+        {
+          "file": "src/app/core/components/home/home.component.ts",
+          "hash": "3457854460690313896"
+        },
+        {
+          "file": "src/app/core/components/login/login.component.css",
+          "hash": "3802913649399674071"
+        },
+        {
+          "file": "src/app/core/components/login/login.component.html",
+          "hash": "6364172178173221833"
+        },
+        {
+          "file": "src/app/core/components/login/login.component.ts",
+          "hash": "3503192830259964927"
+        },
+        {
+          "file": "src/app/core/interceptors/token.interceptor.ts",
+          "hash": "10077478913230702019"
+        },
+        {
+          "file": "src/app/core/interceptors/validation.interceptor.ts",
+          "hash": "10237847562479915901"
+        },
+        {
+          "file": "src/app/features/customer/components/customer-dashboard/customer-dashboard.component.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "src/app/features/customer/components/customer-dashboard/customer-dashboard.component.html",
+          "hash": "5906674796414681635"
+        },
+        {
+          "file": "src/app/features/customer/components/customer-dashboard/customer-dashboard.component.ts",
+          "hash": "7382184561174372774"
+        },
+        {
+          "file": "src/app/features/customer/components/myinvoices/myinvoices.component.css",
+          "hash": "5155039068078029553"
+        },
+        {
+          "file": "src/app/features/customer/components/myinvoices/myinvoices.component.html",
+          "hash": "1410040682449995839"
+        },
+        {
+          "file": "src/app/features/customer/components/myinvoices/myinvoices.component.ts",
+          "hash": "6304279676648461255"
+        },
+        {
+          "file": "src/app/features/customer/components/mytransactions/mytransactions.component.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "src/app/features/customer/components/mytransactions/mytransactions.component.html",
+          "hash": "7100146123544505896"
+        },
+        {
+          "file": "src/app/features/customer/components/mytransactions/mytransactions.component.ts",
+          "hash": "12668019134253718942"
+        },
+        {
+          "file": "src/app/features/employee/components/customers/customers.component.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "src/app/features/employee/components/customers/customers.component.html",
+          "hash": "9775965179054928003"
+        },
+        {
+          "file": "src/app/features/employee/components/customers/customers.component.ts",
+          "hash": "1863272238802065135"
+        },
+        {
+          "file": "src/app/features/employee/components/employee-dashboard/employee-dashboard.component.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "src/app/features/employee/components/employee-dashboard/employee-dashboard.component.html",
+          "hash": "2052208172583791457"
+        },
+        {
+          "file": "src/app/features/employee/components/employee-dashboard/employee-dashboard.component.ts",
+          "hash": "1403838071660736059"
+        },
+        {
+          "file": "src/app/features/employee/components/invoices/invoices.component.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "src/app/features/employee/components/invoices/invoices.component.html",
+          "hash": "10847348471607234872"
+        },
+        {
+          "file": "src/app/features/employee/components/invoices/invoices.component.ts",
+          "hash": "7918780029644339369"
+        },
+        {
+          "file": "src/app/guards/auth.guard.ts",
+          "hash": "6936831258756383373"
+        },
+        {
+          "file": "src/app/guards/redirect.guard.ts",
+          "hash": "17764800089461512995"
+        },
+        {
+          "file": "src/app/shared/components/header/header.component.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "src/app/shared/components/header/header.component.html",
+          "hash": "6050649341469372744"
+        },
+        {
+          "file": "src/app/shared/components/header/header.component.ts",
+          "hash": "16431308411492909432"
+        },
+        {
+          "file": "src/app/shared/layouts/dashboard-layout/dashboard-layout.component.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "src/app/shared/layouts/dashboard-layout/dashboard-layout.component.html",
+          "hash": "9170808192770812723"
+        },
+        {
+          "file": "src/app/shared/layouts/dashboard-layout/dashboard-layout.component.ts",
+          "hash": "7117873263831878535"
+        },
+        {
+          "file": "src/app/shared/pipes/format-id.pipe.ts",
+          "hash": "12348360182301338204"
+        },
+        {
+          "file": "src/app/shared/pipes/titlecase.pipe.ts",
+          "hash": "12372861524832995687"
+        },
+        {
+          "file": "src/app/shared/services/auth.service.ts",
+          "hash": "5035373540121394193"
+        },
+        {
+          "file": "src/app/shared/services/invoice.service.ts",
+          "hash": "6813064432531705683"
+        },
+        {
+          "file": "src/app/types/invoice.d.ts",
+          "hash": "9112571704580901695"
+        },
+        {
+          "file": "src/app/types/nav-item.d.ts",
+          "hash": "7813753997160069778"
+        },
+        {
+          "file": "src/app/types/payment-item.d.ts",
+          "hash": "14637873267930093496"
+        },
+        {
+          "file": "src/app/types/toast.d.ts",
+          "hash": "8924441942260272829"
+        },
+        {
+          "file": "src/app/types/user.d.ts",
+          "hash": "18020331749039398207"
+        },
+        {
+          "file": "src/app/ui/components/ui-button-helm/src/index.ts",
+          "hash": "8982221364966377158"
+        },
+        {
+          "file": "src/app/ui/components/ui-button-helm/src/lib/hlm-button.directive.ts",
+          "hash": "6707392129396539941"
+        },
+        {
+          "file": "src/app/ui/components/ui-card-helm/src/index.ts",
+          "hash": "16562238750490677596"
+        },
+        {
+          "file": "src/app/ui/components/ui-card-helm/src/lib/hlm-card-content.directive.ts",
+          "hash": "3041435324140004025"
+        },
+        {
+          "file": "src/app/ui/components/ui-card-helm/src/lib/hlm-card-description.directive.ts",
+          "hash": "12315658723134421129"
+        },
+        {
+          "file": "src/app/ui/components/ui-card-helm/src/lib/hlm-card-footer.directive.ts",
+          "hash": "10972621399707141653"
+        },
+        {
+          "file": "src/app/ui/components/ui-card-helm/src/lib/hlm-card-header.directive.ts",
+          "hash": "10914822965028795660"
+        },
+        {
+          "file": "src/app/ui/components/ui-card-helm/src/lib/hlm-card-title.directive.ts",
+          "hash": "9057266089303559552"
+        },
+        {
+          "file": "src/app/ui/components/ui-card-helm/src/lib/hlm-card.directive.ts",
+          "hash": "7761636437151111445"
+        },
+        {
+          "file": "src/app/ui/components/ui-formfield-helm/src/index.ts",
+          "hash": "1379682831294187538"
+        },
+        {
+          "file": "src/app/ui/components/ui-formfield-helm/src/lib/form-field.spec.ts",
+          "hash": "828620970068933365"
+        },
+        {
+          "file": "src/app/ui/components/ui-formfield-helm/src/lib/hlm-error.directive.ts",
+          "hash": "2202752804672666086"
+        },
+        {
+          "file": "src/app/ui/components/ui-formfield-helm/src/lib/hlm-form-field.component.ts",
+          "hash": "834808206488500332"
+        },
+        {
+          "file": "src/app/ui/components/ui-formfield-helm/src/lib/hlm-hint.directive.ts",
+          "hash": "1353356541003300064"
+        },
+        {
+          "file": "src/app/ui/components/ui-icon-helm/src/index.ts",
+          "hash": "15313191911740362975"
+        },
+        {
+          "file": "src/app/ui/components/ui-icon-helm/src/lib/hlm-icon.component.spec.ts",
+          "hash": "4553494485907318760"
+        },
+        {
+          "file": "src/app/ui/components/ui-icon-helm/src/lib/hlm-icon.component.ts",
+          "hash": "166660981264464896"
+        },
+        {
+          "file": "src/app/ui/components/ui-input-helm/src/index.ts",
+          "hash": "487913567356772959"
+        },
+        {
+          "file": "src/app/ui/components/ui-input-helm/src/lib/hlm-input-error.directive.ts",
+          "hash": "17996525915591253064"
+        },
+        {
+          "file": "src/app/ui/components/ui-input-helm/src/lib/hlm-input.directive.ts",
+          "hash": "8834241796495517286"
+        },
+        {
+          "file": "src/app/ui/components/ui-menu-helm/src/index.ts",
+          "hash": "13241682308641820299"
+        },
+        {
+          "file": "src/app/ui/components/ui-menu-helm/src/lib/hlm-menu-bar-item.directive.ts",
+          "hash": "3744638824110709831"
+        },
+        {
+          "file": "src/app/ui/components/ui-menu-helm/src/lib/hlm-menu-bar.component.ts",
+          "hash": "11800997345689984536"
+        },
+        {
+          "file": "src/app/ui/components/ui-menu-helm/src/lib/hlm-menu-group.component.ts",
+          "hash": "2390418594404509437"
+        },
+        {
+          "file": "src/app/ui/components/ui-menu-helm/src/lib/hlm-menu-item-check.component.ts",
+          "hash": "442394939553680435"
+        },
+        {
+          "file": "src/app/ui/components/ui-menu-helm/src/lib/hlm-menu-item-checkbox.directive.ts",
+          "hash": "10046947516892420249"
+        },
+        {
+          "file": "src/app/ui/components/ui-menu-helm/src/lib/hlm-menu-item-icon.directive.ts",
+          "hash": "4055428653028769667"
+        },
+        {
+          "file": "src/app/ui/components/ui-menu-helm/src/lib/hlm-menu-item-radio.component.ts",
+          "hash": "4649231814150844074"
+        },
+        {
+          "file": "src/app/ui/components/ui-menu-helm/src/lib/hlm-menu-item-radio.directive.ts",
+          "hash": "3553151661794877184"
+        },
+        {
+          "file": "src/app/ui/components/ui-menu-helm/src/lib/hlm-menu-item-sub-indicator.component.ts",
+          "hash": "3041332404932895069"
+        },
+        {
+          "file": "src/app/ui/components/ui-menu-helm/src/lib/hlm-menu-item.directive.ts",
+          "hash": "74896198707272556"
+        },
+        {
+          "file": "src/app/ui/components/ui-menu-helm/src/lib/hlm-menu-label.component.ts",
+          "hash": "11565386289737268086"
+        },
+        {
+          "file": "src/app/ui/components/ui-menu-helm/src/lib/hlm-menu-separator.component.ts",
+          "hash": "8105341354212619150"
+        },
+        {
+          "file": "src/app/ui/components/ui-menu-helm/src/lib/hlm-menu-shortcut.component.ts",
+          "hash": "7736691487501238920"
+        },
+        {
+          "file": "src/app/ui/components/ui-menu-helm/src/lib/hlm-menu.component.ts",
+          "hash": "8732262688409467834"
+        },
+        {
+          "file": "src/app/ui/components/ui-menu-helm/src/lib/hlm-sub-menu.component.ts",
+          "hash": "3690756610582847424"
+        },
+        {
+          "file": "src/app/ui/components/ui-select-helm/src/index.ts",
+          "hash": "14018309011524926443"
+        },
+        {
+          "file": "src/app/ui/components/ui-select-helm/src/lib/hlm-select-content.directive.ts",
+          "hash": "4049320611198806980"
+        },
+        {
+          "file": "src/app/ui/components/ui-select-helm/src/lib/hlm-select-group.directive.ts",
+          "hash": "9542696212381775805"
+        },
+        {
+          "file": "src/app/ui/components/ui-select-helm/src/lib/hlm-select-label.directive.ts",
+          "hash": "10703297612296859893"
+        },
+        {
+          "file": "src/app/ui/components/ui-select-helm/src/lib/hlm-select-option.component.ts",
+          "hash": "13316740413463585327"
+        },
+        {
+          "file": "src/app/ui/components/ui-select-helm/src/lib/hlm-select-scroll-down.component.ts",
+          "hash": "11295596341856372592"
+        },
+        {
+          "file": "src/app/ui/components/ui-select-helm/src/lib/hlm-select-scroll-up.component.ts",
+          "hash": "17717394611683218799"
+        },
+        {
+          "file": "src/app/ui/components/ui-select-helm/src/lib/hlm-select-trigger.component.ts",
+          "hash": "9754805080090712718"
+        },
+        {
+          "file": "src/app/ui/components/ui-select-helm/src/lib/hlm-select-value.directive.ts",
+          "hash": "1440526127885385790"
+        },
+        {
+          "file": "src/app/ui/components/ui-select-helm/src/lib/hlm-select.directive.ts",
+          "hash": "2275226726307479160"
+        },
+        {
+          "file": "src/app/ui/components/ui-table-helm/src/index.ts",
+          "hash": "10469680382427192649"
+        },
+        {
+          "file": "src/app/ui/components/ui-table-helm/src/lib/hlm-caption.component.ts",
+          "hash": "7371483930197080077"
+        },
+        {
+          "file": "src/app/ui/components/ui-table-helm/src/lib/hlm-table.component.ts",
+          "hash": "10871754739613388511"
+        },
+        {
+          "file": "src/app/ui/components/ui-table-helm/src/lib/hlm-table.directive.ts",
+          "hash": "11306128400321269706"
+        },
+        {
+          "file": "src/app/ui/components/ui-table-helm/src/lib/hlm-td.component.ts",
+          "hash": "16649668457900922353"
+        },
+        {
+          "file": "src/app/ui/components/ui-table-helm/src/lib/hlm-th.component.ts",
+          "hash": "6090256936716140355"
+        },
+        {
+          "file": "src/app/ui/components/ui-table-helm/src/lib/hlm-trow.component.ts",
+          "hash": "648155726487399582"
+        },
+        {
+          "file": "src/app/validations/validation.schema.ts",
+          "hash": "6947009509186511973"
+        },
+        {
+          "file": "src/assets/img/avatar.png",
+          "hash": "8929136004366175836"
+        },
+        {
+          "file": "src/assets/img/logo.png",
+          "hash": "3771242527909514130"
+        },
+        {
+          "file": "src/index.html",
+          "hash": "10978432236329079223"
+        },
+        {
+          "file": "src/main.ts",
+          "hash": "4169901790405087765"
+        },
+        {
+          "file": "src/styles.css",
+          "hash": "3366949657379992875"
+        },
+        {
+          "file": "tailwind.config.js",
+          "hash": "17684301052663137520"
+        },
+        {
+          "file": "tsconfig.app.json",
+          "hash": "14560978611694835822"
+        },
+        {
+          "file": "tsconfig.json",
+          "hash": "8033797084762026028"
+        },
+        {
+          "file": "tsconfig.spec.json",
+          "hash": "11023685540591620072"
+        }
+      ]
+    },
+    "nonProjectFiles": []
+  }
+}

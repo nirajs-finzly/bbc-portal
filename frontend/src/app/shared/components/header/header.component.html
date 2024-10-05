@@ -1,0 +1,40 @@
+<div class="flex items-center gap-8">
+  <div id="logo" class="flex items-center gap-2">
+    <img src="assets/img/logo.png" alt="" width="35" />
+    <span class="text-lg font-bold text-primary"
+      >Bharat Bijili Corporation</span
+    >
+  </div>
+  <hlm-menu-bar class="w-fit border-none gap-2">
+    @for(item of items; track item.label){
+    <button
+      hlmBtn
+      routerLink="{{ item.link }}"
+      class="px-3 py-2 w-36 justify-center cursor-pointer hover:text-white"
+      routerLinkActive="bg-primary text-primary-foreground"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      {{ item.label }}
+    </button>
+    }
+  </hlm-menu-bar>
+</div>
+<div hlmBtn [brnMenuTriggerFor]="menu" class="rounded-full w-fit h-fit px-1 py-[3.5px]">
+  <img src="assets/img/avatar.png" alt="" width="35" />
+</div>
+<ng-template #menu>
+  <hlm-menu class="w-56">   
+    <hlm-menu-label>My Account</hlm-menu-label>
+    <hlm-menu-separator />
+    <hlm-menu-group>
+      <button hlmMenuItem class="cursor-pointer">
+        <hlm-icon name="lucideUser" class="mr-2" hlmMenuIcon />
+        <span>Profile</span>
+      </button>
+      <button hlmMenuItem class="cursor-pointer" (click)="logoutUser()">
+        <hlm-icon name="lucideLogOut" class="mr-2" hlmMenuIcon />
+        <span>Logout</span>
+      </button>
+    </hlm-menu-group>
+  </hlm-menu>
+</ng-template>

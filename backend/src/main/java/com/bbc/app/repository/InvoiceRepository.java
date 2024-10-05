@@ -28,7 +28,13 @@ public interface InvoiceRepository extends JpaRepository<Invoice, UUID> {
 
     Optional<Invoice> findTopByCustomerMeterNoOrderByGeneratedAtDesc(String meterNo);
 
-    Optional<Invoice> findByBillDuration(String billDuration);
-
     Optional<Invoice> findByCustomerAndBillDuration(Customer customer, String billDuration);
+
+    Page<CustomerInvoiceData> findByCustomerMeterNoAndBillDurationContaining(String meterNo, String billDuration, Pageable pageable);
+
+    // Method to find invoices by the customer's user name
+    Page<CustomerInvoiceData> findByCustomerUserNameContaining(String userName, Pageable pageable);
+
+    // Method to count total invoices by customer user name
+    Long countByCustomerUserName(String userName);
 }

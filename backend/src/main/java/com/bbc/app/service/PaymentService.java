@@ -11,6 +11,8 @@ import java.util.UUID;
 public interface PaymentService {
     ResponseEntity<TransactionsResponse> getAllTransactions(int page, int size);
 
+    ResponseEntity<TransactionsResponse> getAllTransactionsByCustomer(String customerId, int page, int size);
+
     ResponseEntity<MessageResponse> initiatePayment(String customerId, UUID invoiceId, PaymentMethod paymentMethod, String paymentDetails);
 
     ResponseEntity<MessageResponse> confirmPayment(String customerId, UUID invoiceId, PaymentMethod paymentMethod, String paymentDetails, String otp, BigDecimal amount);

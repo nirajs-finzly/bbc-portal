@@ -16,6 +16,10 @@ public interface InvoiceService {
 
     ResponseEntity<CustomerInvoicesResponse> getInvoicesByMeterNo(String meterNo, int page, int size);
 
+    ResponseEntity<CustomerInvoicesResponse> getInvoicesByCustomerName(String customerName, int page, int size);
+
+    ResponseEntity<CustomerInvoicesResponse> getInvoicesByCustomerBillDuration(String meterNo, String billDuration, int page, int size);
+
     ResponseEntity<MessageResponse> createInvoice(String meterNo, BigDecimal unitsConsumed, String billDuration, LocalDate billDueDate);
 
     ResponseEntity<SingleInvoiceResponse> getLatestInvoiceByMeterNo(String meterNo);

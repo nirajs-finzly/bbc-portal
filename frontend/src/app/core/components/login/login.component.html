@@ -1,0 +1,57 @@
+<section class="w-80" hlmCard>
+  <div hlmCardHeader class="flex flex-col items-center gap-4">
+    <img class="" src="assets/img/logo.png" alt="" width="50" />
+    <h3 hlmCardTitle>Bharat Bijili Corporation</h3>
+    <p hlmCardDescription>
+      @if(currentStep === 1) { Please enter your id to receive the code. } @else
+      { Please enter the code sent to your email. }
+    </p>
+  </div>
+  <form hlmCardContent [formGroup]="loginForm" autocomplete="off">
+    @if(currentStep === 1){
+    <label class="block" hlmLabel>
+      <input
+        class="mt-1.5 w-full"
+        formControlName="identifier"
+        placeholder="Employee ID or Customer ID"
+        hlmInput
+      />
+    </label>
+    } @else {
+    <label class="block" hlmLabel>
+      <input
+        class="mt-1.5 w-full"
+        formControlName="otp"
+        placeholder="OTP"
+        hlmInput
+      />
+    </label>
+    }
+  </form>
+  <div hlmCardFooter class="justify-between">
+    <button
+      hlmBtn
+      (click)="currentStep === 1 ? sendOtp() : login()"
+      class="w-full"
+    >
+      <hlm-icon
+        size="sm"
+        class="mr-2"
+        [ngClass]="{
+          'animate-spin': isLoading,
+          'animate-none': !isLoading
+        }"
+        [name]="
+          currentStep === 1 && !isLoading
+            ? 'lucideSend'
+            : currentStep > 1 && !isLoading
+            ? 'lucideCheck'
+            : isLoading
+            ? 'lucideLoader'
+            : 'lucideSend'
+        "
+      ></hlm-icon>
+      {{ currentStep === 1 ? "Send OTP" : "Login" }}
+    </button>
+  </div>
+</section>

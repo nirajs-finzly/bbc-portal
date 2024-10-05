@@ -6,6 +6,7 @@ import com.bbc.app.dto.request.InitiatePaymentRequest;
 import com.bbc.app.dto.response.MessageResponse;
 import com.bbc.app.dto.response.TransactionsResponse;
 import com.bbc.app.service.PaymentService;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,14 @@ public class PaymentController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
         return paymentService.getAllTransactions(page, size);
+    }
+
+    @GetMapping("/transactions/{customerId}")
+    public ResponseEntity<TransactionsResponse> getAllTransactions(
+            @PathVariable @Pattern(regexp = "^(CRN)\\d{7}$", message = "Invalid meter number format") String customerId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+        return paymentService.getAllTransactionsByCustomer(customerId, page, size);
     }
 
     @PostMapping("/initiate")

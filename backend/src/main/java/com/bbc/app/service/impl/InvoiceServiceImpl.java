@@ -17,6 +17,7 @@ import com.bbc.app.utils.InvoiceParsing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -87,10 +88,59 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public ResponseEntity<MessageResponse> createInvoice(String meterNo, BigDecimal unitsConsumed, String billDuration, LocalDate billDueDate) {
+    public ResponseEntity<CustomerInvoicesResponse> getInvoicesByCustomerName(String customerName, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
 
-        Optional<Invoice> invoice = invoiceRepository.findByBillDuration(billDuration);
-        if(invoice.isPresent()){
+        // Fetch paginated invoices by customer name
+        Page<CustomerInvoiceData> invoicesPage = invoiceRepository.findByCustomerUserNameContaining(customerName, pageable);
+
+        if (invoicesPage.isEmpty()) {
+            return ResponseEntity.ok(new CustomerInvoicesResponse("No invoices found for customer: " + customerName, List.of(), 0L, false));
+        }
+
+        CustomerInvoicesResponse response = new CustomerInvoicesResponse("Invoices retrieved successfully!", invoicesPage.getContent(), invoicesPage.getTotalElements(), true);
+        return ResponseEntity.ok(response);
+    }
+
+
+    @Override
+    public ResponseEntity<CustomerInvoicesResponse> getInvoicesByCustomerBillDuration(String meterNo, String billDuration, int page, int size) {
+        try {
+            // Create pageable object for pagination
+            PageRequest pageable = PageRequest.of(page, size);
+
+            // Fetch invoices that match the meter number and partial bill duration with pagination
+            Page<CustomerInvoiceData> invoicesPage = invoiceRepository.findByCustomerMeterNoAndBillDurationContaining(meterNo, billDuration, pageable);
+
+            // Check if no invoices match the criteria
+            if (invoicesPage.isEmpty()) {
+                return ResponseEntity.ok(new CustomerInvoicesResponse("No invoices found for the specified meter number and bill duration!", List.of(), 0L, false));
+            }
+
+            // Create a response with the invoices and pagination details
+            CustomerInvoicesResponse response = new CustomerInvoicesResponse(
+                    "Invoices retrieved successfully!",
+                    invoicesPage.getContent(),
+                    invoicesPage.getTotalElements(),
+                    true
+            );
+
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Failed to retrieve invoices", e);
+        }
+    }
+
+
+    @Override
+    public ResponseEntity<MessageResponse> createInvoice(String meterNo, BigDecimal unitsConsumed, String billDuration, LocalDate billDueDate) {
+        Optional<Customer> customer = customerRepository.findByMeterNo(meterNo);
+        if(customer.isEmpty()) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Customer not found!", false));
+        }
+
+        Optional<Invoice> invoice = invoiceRepository.findByCustomerAndBillDuration(customer.get(), billDuration);
+        if (invoice.isPresent()) {
             return ResponseEntity.badRequest().body(new MessageResponse("Invoice already exists!", false));
         }
 
@@ -108,13 +158,6 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         // Add the total unpaid amount to the current invoice amount
         BigDecimal newInvoiceAmount = invoiceAmount.add(totalUnpaidAmount);
-
-        // Find the customer by meter number
-        Optional<Customer> customer = customerRepository.findByMeterNo(meterNo);
-
-        if (customer.isEmpty()) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Customer not found!", false));
-        }
 
         // Create and save the new invoice
         Invoice newInvoice = new Invoice();
@@ -175,16 +218,16 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public ResponseEntity<MessageResponse> bulkUploadInvoice(MultipartFile dataFile,String billDuration,LocalDate billDueDate) throws IOException {
+    public ResponseEntity<MessageResponse> bulkUploadInvoice(MultipartFile dataFile, String billDuration, LocalDate billDueDate) throws IOException {
 
         if (!Objects.requireNonNull(dataFile.getOriginalFilename()).endsWith(".csv")) {
 
-            return ResponseEntity.badRequest().body(new MessageResponse("Error! Invalid file format",false));
+            return ResponseEntity.badRequest().body(new MessageResponse("Error! Invalid file format", false));
         }
 
         AtomicInteger invalidRecords = new AtomicInteger(0); // To keep track of invalid records
 
-        List<Invoice> invoices = invoiceParsing.parseCSV(dataFile.getInputStream(),invalidRecords,billDuration,billDueDate);
+        List<Invoice> invoices = invoiceParsing.parseCSV(dataFile.getInputStream(), invalidRecords, billDuration, billDueDate);
         // Save each customer to the repository
         for (Invoice invoice : invoices) {
             if (invoice.isValid()) {

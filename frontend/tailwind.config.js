@@ -1,24 +1,13 @@
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  presets: [require('@spartan-ng/ui-core/hlm-tailwind-preset')],
   content: [
-    "./src/**/*.{html,ts}",
+    './src/**/*.{html,ts}',
+    './src/app/ui/components/**/*.{html,ts}',
   ],
   theme: {
-    extend: {
-      colors: {
-        'primary': '#fa6f59',
-        'secondary': '#e68a1d',
-        'tertiary': '#7f75ec',
-        'background': '#d8dbe2',
-        'dark': '#3A405A',
-        'success': '#22c55e',
-        'danger': '#ef4444',
-        'muted': '#94a3b8',
-      },
-      fontFamily: {
-        'inter': ['Inter', 'sans-serif'],
-      },
-    },
+    extend: {},
   },
   plugins: [],
-}
+};

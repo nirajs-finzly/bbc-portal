@@ -7,6 +7,7 @@ import com.bbc.app.dto.response.MessageResponse;
 import com.bbc.app.dto.response.SingleInvoiceResponse;
 import com.bbc.app.service.InvoiceService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +39,25 @@ public class InvoiceController {
             @RequestParam(defaultValue = "5") int size
     ) {
         return invoiceService.getInvoicesByMeterNo(meterNo, page, size);
+    }
+
+    @GetMapping("/customer/{customerName}")
+    public ResponseEntity<CustomerInvoicesResponse> getInvoicesByCustomerName(
+            @PathVariable String customerName,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ) {
+        return invoiceService.getInvoicesByCustomerName(customerName, page, size);
+    }
+
+    @GetMapping("/{meterNo}/{billDuration}")
+    public ResponseEntity<CustomerInvoicesResponse> getInvoicesCustomerByBillDuration(
+            @PathVariable @Pattern(regexp = "^(MTR)\\d{7}$", message = "Invalid meter number format") String meterNo,
+            @PathVariable @NotBlank(message = "Bill duration is required") String billDuration,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ) {
+        return invoiceService.getInvoicesByCustomerBillDuration(meterNo, billDuration, page, size);
     }
 
     @PostMapping("")

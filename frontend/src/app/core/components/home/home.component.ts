@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { ButtonModule } from 'primeng/button';
+import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
+import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ButtonModule, RouterModule],
+  imports: [RouterModule, HlmButtonDirective, HlmIconComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
