@@ -11,10 +11,35 @@
       <hlm-icon size="sm" class="mr-2" name="lucideUserPlus" />
       New customer
     </button>
-    <button hlmBtn>
-      <hlm-icon size="sm" class="mr-2" name="lucideImport" />
-      Import customers
-    </button>
+    <hlm-dialog>
+      <button brnDialogTrigger hlmBtn>
+        <hlm-icon size="sm" class="mr-2" name="lucideImport" />Import Customers
+      </button>
+      <hlm-dialog-content *brnDialogContent="let ctx">
+        <hlm-dialog-header>
+          <h3 brnDialogTitle hlm class="text-xl font-semibold">
+            Import Customers Data
+          </h3>
+          <p brnDialogDescription hlm class="text-muted-foreground">
+            Import csv file by selecting it from your computer
+          </p>
+        </hlm-dialog-header>
+        <div class="py-8">
+          <input
+            class="w-full"
+            hlmInput
+            type="file"
+            ccept=".csv"
+            (change)="onFileSelected($event)"
+          />
+        </div>
+        <hlm-dialog-footer>
+          <button hlmBtn type="submit">
+            <hlm-icon size="sm" class="mr-2" name="lucideImport" />Import
+          </button>
+        </hlm-dialog-footer>
+      </hlm-dialog-content>
+    </hlm-dialog>
   </div>
 </div>
 <brn-table
@@ -146,5 +171,3 @@
     </hlm-select-content>
   </brn-select>
 </nav>
-
-<app-import-customers />

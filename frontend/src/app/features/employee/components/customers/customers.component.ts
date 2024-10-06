@@ -11,6 +11,20 @@ import {
   BrnTableImports,
   useBrnColumnManager,
 } from '@spartan-ng/ui-table-brain';
+import {
+  BrnDialogContentDirective,
+  BrnDialogDescriptionDirective,
+  BrnDialogTitleDirective,
+  BrnDialogTriggerDirective,
+} from '@spartan-ng/ui-dialog-brain';
+import {
+  HlmDialogComponent,
+  HlmDialogContentComponent,
+  HlmDialogDescriptionDirective,
+  HlmDialogFooterComponent,
+  HlmDialogHeaderComponent,
+  HlmDialogTitleDirective,
+} from '@spartan-ng/ui-dialog-helm';
 import { HlmTableImports } from '@spartan-ng/ui-table-helm';
 import { TitleCasePipe } from '../../../../shared/pipes/titlecase.pipe';
 import { Subject } from 'rxjs';
@@ -18,6 +32,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Customer } from '../../../../types/customer';
 import { CustomerService } from '../../../../shared/services/customer.service';
 import { ImportCustomersComponent } from '../../modals/import-customers/import-customers.component';
+import { HotToastService } from '@ngxpert/hot-toast';
 
 @Component({
   selector: 'app-customers',
@@ -34,7 +49,17 @@ import { ImportCustomersComponent } from '../../modals/import-customers/import-c
     FormsModule,
     BrnSelectModule,
     HlmSelectModule,
-    ImportCustomersComponent
+    ImportCustomersComponent,
+    HlmDialogComponent,
+    HlmDialogContentComponent,
+    HlmDialogDescriptionDirective,
+    HlmDialogFooterComponent,
+    HlmDialogHeaderComponent,
+    HlmDialogTitleDirective,
+    BrnDialogContentDirective,
+    BrnDialogTriggerDirective,
+    BrnDialogTitleDirective,
+    BrnDialogDescriptionDirective
   ],
   templateUrl: './customers.component.html',
   styleUrl: './customers.component.css',
@@ -77,7 +102,8 @@ export class CustomersComponent {
   protected readonly _availablePageSizes = [5, 10, 20, 10000];
 
   constructor(
-    private customerService: CustomerService
+    private customerService: CustomerService,
+    private toast: HotToastService
   ) {}
 
   ngOnInit(): void {
@@ -197,5 +223,27 @@ export class CustomersComponent {
       console.error('No customers found');
     }
   }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+  
+      // Check if the file is a CSV
+      if (file.type !== 'text/csv' && !file.name.endsWith('.csv')) {
+        this.toast.error('Please upload a valid CSV file.');
+        input.value = '';
+        return;
+      }
+  
+      // Process the file (e.g., read it, upload it, etc.)
+      this.uploadFile(file);
+    }
+  }
+  
+  uploadFile(file: File) {
+    // Implement your upload logic here
+  }
+  
 }
 
