@@ -29,6 +29,7 @@ public class PaymentTransaction {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_method", nullable = false, length = 20)
+
     private PaymentMethod paymentMethod;
 
     @Column(name = "payment_identifier", length = 50)

@@ -9,6 +9,7 @@ import java.util.UUID;
 
 public class InvoiceData {
     private UUID invoiceId;
+    private String customerName;
     private String meterNo;
     private String name;
     private BigDecimal unitConsumption;
@@ -20,8 +21,9 @@ public class InvoiceData {
     private LocalDateTime generatedAt;
     private byte[] invoicePdf;
 
-    public InvoiceData(UUID invoiceId, String meterNo, String name, BigDecimal unitConsumption, String billDuration, LocalDate billDueDate, BigDecimal currentAmountDue, BigDecimal totalAmountDue, PaymentStatus paymentStatus, LocalDateTime generatedAt, byte[] invoicePdf) {
+    public InvoiceData(UUID invoiceId, String customerName, String meterNo, String name, BigDecimal unitConsumption, String billDuration, LocalDate billDueDate, BigDecimal currentAmountDue, BigDecimal totalAmountDue, PaymentStatus paymentStatus, LocalDateTime generatedAt, byte[] invoicePdf) {
         this.invoiceId = invoiceId;
+        this.customerName = customerName;
         this.meterNo = meterNo;
         this.name = name;
         this.unitConsumption = unitConsumption;
@@ -52,6 +54,14 @@ public class InvoiceData {
 
     public void setInvoiceId(UUID invoiceId) {
         this.invoiceId = invoiceId;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
     public String getMeterNo() {

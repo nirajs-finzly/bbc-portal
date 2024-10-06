@@ -46,6 +46,9 @@ public class Invoice {
     @Column(name = "invoice_pdf", columnDefinition = "LONGBLOB")
     private byte[] invoicePdf;
 
+    @Column(name = "payment_initiated", nullable = false)
+    private boolean paymentInitiated = false;
+
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<PaymentTransaction> paymentTransactions;
 
@@ -57,7 +60,7 @@ public class Invoice {
     public Invoice() {
     }
 
-    public Invoice(UUID invoiceId, Customer customer, BigDecimal unitConsumption, String billDuration, LocalDate billDueDate, BigDecimal currentAmountDue, BigDecimal totalAmountDue, PaymentStatus paymentStatus, LocalDateTime generatedAt, byte[] invoicePdf, Set<PaymentTransaction> paymentTransactions) {
+    public Invoice(UUID invoiceId, Customer customer, BigDecimal unitConsumption, String billDuration, LocalDate billDueDate, BigDecimal currentAmountDue, BigDecimal totalAmountDue, PaymentStatus paymentStatus, LocalDateTime generatedAt, byte[] invoicePdf, boolean paymentInitiated, Set<PaymentTransaction> paymentTransactions) {
         this.invoiceId = invoiceId;
         this.customer = customer;
         this.unitConsumption = unitConsumption;
@@ -68,6 +71,7 @@ public class Invoice {
         this.paymentStatus = paymentStatus;
         this.generatedAt = generatedAt;
         this.invoicePdf = invoicePdf;
+        this.paymentInitiated = paymentInitiated;
         this.paymentTransactions = paymentTransactions;
     }
 
@@ -157,6 +161,14 @@ public class Invoice {
 
     public void setPaymentTransactions(Set<PaymentTransaction> paymentTransactions) {
         this.paymentTransactions = paymentTransactions;
+    }
+
+    public boolean isPaymentInitiated() {
+        return paymentInitiated;
+    }
+
+    public void setPaymentInitiated(boolean paymentInitiated) {
+        this.paymentInitiated = paymentInitiated;
     }
 
     public boolean isValid() {

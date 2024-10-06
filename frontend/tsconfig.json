@@ -48,6 +48,12 @@
       ],
       "@spartan-ng/ui-pagination-helm": [
         ".\\src/app/ui/components/ui-pagination-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-separator-helm": [
+        ".\\src/app/ui/components/ui-separator-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-radiogroup-helm": [
+        ".\\src/app/ui/components/ui-radiogroup-helm/src/index.ts"
       ]
     }
   },

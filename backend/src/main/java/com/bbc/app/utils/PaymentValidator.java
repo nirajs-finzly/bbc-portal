@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 
@@ -82,6 +83,9 @@ public class PaymentValidator {
         if (!isValidAccountNumber(accountNumber) || !isValidIfscCode(ifscCode)) {
             return false;
         }
+
+        System.out.println(isValidAccountNumber(accountNumber));
+        System.out.println(isValidIfscCode(ifscCode));
 
         // Check if account number and IFSC code exist in the database
         return netBankingRepository.existsByAccountNumberAndIfscCode(accountNumber, ifscCode);
@@ -198,4 +202,13 @@ public class PaymentValidator {
         return false;
     }
 
+    public boolean checkIfEarlyPayment(String billDueDate) {
+        if (billDueDate == null) return false;
+        LocalDate dueDate = LocalDate.parse(billDueDate);
+        return LocalDate.now().isBefore(dueDate);
+    }
+
+    public boolean checkIfOnlinePayment(PaymentMethod paymentMethod) {
+        return true;
+    }
 }

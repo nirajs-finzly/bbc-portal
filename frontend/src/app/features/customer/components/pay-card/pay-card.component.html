@@ -25,18 +25,10 @@
           size="sm"
           class="text-xs"
           variant="destructive"
+          (click)="initiateInvoicePayment()"
         >
         <hlm-icon name="lucideCreditCard" size="sm" class="mr-2" />
         Pay Now</button>
-        <!-- <button
-          (click)="
-            downloadInvoicePdf(latestInvoice.invoicePdf, latestInvoice.invoiceId)
-          "
-          hlmBtn
-          size="sm"
-          variant="outline"
-          class="text-primary hover:text-primary"
-        >Download</button> -->
       </div>
   </div>
 </section>

@@ -7,16 +7,25 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 import { HlmCardImports } from '@spartan-ng/ui-card-helm';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
+import { Router, RouterLink } from '@angular/router';
+import { PaymentService } from '../../../../shared/services/payment.service';
 
 @Component({
   selector: 'app-pay-card',
   standalone: true,
-  imports: [CurrencyPipe, DatePipe, HlmCardImports, HlmButtonDirective, HlmIconComponent],
+  imports: [
+    CurrencyPipe,
+    DatePipe, 
+    HlmCardImports,
+    HlmButtonDirective,
+    HlmIconComponent,
+    RouterLink,
+  ],
   templateUrl: './pay-card.component.html',
   styleUrl: './pay-card.component.css',
   host: {
-    class: 'w-fit block mb-4'
-  }
+    class: 'w-fit block mb-4',
+  },
 })
 export class PayCardComponent {
   user: User | null = null;
@@ -24,7 +33,9 @@ export class PayCardComponent {
 
   constructor(
     private invoiceService: InvoiceService,
-    private authService: AuthService
+    private authService: AuthService,
+    private paymentService: PaymentService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -48,13 +59,27 @@ export class PayCardComponent {
           error: (error: any) => {
             console.error('Failed to fetch latest unpaid invoice:', error);
           },
-        })
+        });
     } else {
       console.error('Meter number not available for user!');
     }
   }
 
-  downloadInvoicePdf(pdfData: string, invoiceId: string): void {
-    this.invoiceService.downloadInvoicePDF(pdfData, invoiceId);
+  initiateInvoicePayment(): void {
+    if (this.user && this.latestInvoice && this.user.meterNo) {
+      this.paymentService.initiatePayment(this.user?.meterNo, this.latestInvoice.invoiceId).subscribe({
+        next: (response: any) => {
+          if(response.success) {
+            console.log
+            this.router.navigate([response.callbackUrl]);
+          }
+        },
+        error: (error: any) => {
+          console.error('Failed to initiate payment:', error);
+        },
+      });
+    } else {
+      console.error('Meter number not available for user');
+    }
   }
 }

@@ -8,4 +8,4 @@ export interface Invoice {
     paymentStatus: 'PAID' | 'UNPAID';
     generatedAt: Date;
     invoicePdf: string;
-}
+};

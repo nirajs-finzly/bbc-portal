@@ -1,0 +1,15 @@
+<div
+  hlmCard
+  class="w-1/4 transition-opacity duration-500 ease-out opacity-0"
+  [ngClass]="{ 'opacity-100': isPopupVisible, 'opacity-0': !isPopupVisible }"
+>
+  <div hlmCardContent class="flex flex-col gap-8">
+    <p class="text-center text-3xl font-bold mt-4">Payment Successful</p>
+    <div class="flex justify-center items-center">
+      <img src="assets/img/check-circle.png" alt="" width="120" />
+    </div>
+    <p class="text-muted-foreground text-center">
+      You'll be redirected to the dashboard!
+    </p>
+  </div>
+</div>

@@ -1,1 +1,140 @@
-<p>mytransactions works!</p>
+<div>
+  <h1 class="text-2xl font-bold mb-4">My Transactions</h1>
+</div>
+<brn-table
+  hlm
+  stickyHeader
+  class="border-border mt-4 block min-h-[400px] overflow-auto rounded-md border"
+  [dataSource]="transactions"
+  [displayedColumns]="_allDisplayedColumns()"
+  [trackBy]="_trackBy"
+>
+  <brn-column-def name="transactionId" class="w-[15%]">
+    <hlm-th *brnHeaderDef>Transaction ID</hlm-th>
+    <hlm-td *brnCellDef="let transaction">
+      {{ transaction.transactionId | formatId }}
+    </hlm-td>
+  </brn-column-def>
+  <brn-column-def name="invoiceId" class="w-[15%]">
+    <hlm-th *brnHeaderDef>Invoice ID</hlm-th>
+    <hlm-td *brnCellDef="let transaction">
+      {{ transaction.invoiceId | formatId }}
+    </hlm-td>
+  </brn-column-def>
+  <brn-column-def name="transactionDate" class="w-[15%]">
+    <hlm-th *brnHeaderDef>Transaction Date</hlm-th>
+    <hlm-td *brnCellDef="let transaction">
+      {{ transaction.transactionDate | date : "longDate" }}
+    </hlm-td>
+  </brn-column-def>
+  <brn-column-def name="amount" class="w-[15%]">
+    <hlm-th *brnHeaderDef>Amount</hlm-th>
+    <hlm-td *brnCellDef="let transaction">
+      {{ transaction.amount | currency : "INR" }}
+    </hlm-td>
+  </brn-column-def>
+  <brn-column-def name="paymentMethod" class="w-[15%]">
+    <hlm-th *brnHeaderDef>Payment Method</hlm-th>
+    <hlm-td *brnCellDef="let transaction">
+      {{ transaction.paymentMethod | titlecase }}
+    </hlm-td>
+  </brn-column-def>
+  <brn-column-def name="paymentIdentifier" class="w-[15%]">
+    <hlm-th *brnHeaderDef>Payer ID</hlm-th>
+    <hlm-td *brnCellDef="let transaction">
+      {{
+        transaction.paymentIdentifier ? transaction.paymentIdentifier : "N/A"
+      }}
+    </hlm-td>
+  </brn-column-def>
+  <brn-column-def name="transactionStatus" class="w-[10%]">
+    <hlm-th *brnHeaderDef>Status</hlm-th>
+    <hlm-td *brnCellDef="let transaction">
+      <span
+        class="py-2 px-4 text-white cursor-default rounded-full"
+        [class]="{
+          'bg-primary': transaction.transactionStatus === 'SUCCESS',
+          'bg-destructive': transaction.transactionStatus === 'FAILED',
+        }"
+        >{{ transaction.transactionStatus | titlecase }}</span
+      >
+    </hlm-td>
+  </brn-column-def>
+  <div
+    class="flex items-center justify-center p-20 text-muted-foreground"
+    brnNoDataRow
+  >
+    No data available
+  </div>
+</brn-table>
+<nav hlmPagination class="mt-4">
+  <ul hlmPaginationContent class="w-fit gap-6">
+    <li hlmPaginationItem class="w-28">
+      <button
+        hlmPaginationLink
+        class="w-full px-4 flex items-center"
+        [disabled]="currentPage === 0"
+        (click)="
+          loadTransactions({
+            first: (currentPage - 1) * pageSize,
+            rows: pageSize
+          })
+        "
+      >
+        <hlm-icon name="lucideChevronLeft" class="h-fit" />
+        Previous
+      </button>
+    </li>
+    <div class="flex gap-2 items-center">
+      <li
+        hlmPaginationItem
+        *ngFor="let i of calculatePageNumbers(); trackBy: trackByPageIndex"
+        class="cursor-pointer"
+      >
+        <a
+          *ngIf="i >= 0"
+          hlmPaginationLink
+          [class]="i === currentPage ? 'text-primary' : ''"
+          (click)="loadTransactions({ first: i * pageSize, rows: pageSize })"
+        >
+          <span>{{ i + 1 }}</span>
+        </a>
+        <span *ngIf="i === -1" class="ellipsis">...</span>
+      </li>
+    </div>
+    
+    <li hlmPaginationItem class="w-28">
+      <button
+        hlmPaginationLink
+        class="w-full px-4 flex items-center"
+        [disabled]="(currentPage + 1) * pageSize >= totalTransactions"
+        (click)="
+          loadTransactions({
+            first: (currentPage + 1) * pageSize,
+            rows: pageSize
+          })
+        "
+      >
+        Next
+        <hlm-icon name="lucideChevronRight" class="h-fit" />
+      </button>
+    </li>
+  </ul>
+  <brn-select
+    class="inline-block"
+    placeholder="{{ _availablePageSizes[0] }}"
+    [(ngModel)]="pageSize"
+    (ngModelChange)="onPageSizeChange($event)"
+  >
+    <hlm-select-trigger class="inline-flex mr-1 w-15 h-9">
+      <hlm-select-value />
+    </hlm-select-trigger>
+    <hlm-select-content class="cursor-pointer">
+      @for (size of _availablePageSizes; track size) {
+      <hlm-option [value]="size">
+        {{ size === 10000 ? "All" : size }}
+      </hlm-option>
+      }
+    </hlm-select-content>
+  </brn-select>
+</nav>

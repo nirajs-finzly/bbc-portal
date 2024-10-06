@@ -59,9 +59,22 @@ body {
   @apply overflow-hidden h-screen;
 }
 
-.cdk-header-row,
+.cdk-header,
 .cdk-row {
-  justify-content: space-around;
+  @apply justify-around;
+}
+
+brn-table {
+  @apply bg-background;
+}
+
+hlm-th,
+hlm-td {
+  @apply justify-center;
+}
+
+.fade {
+  transition: all 0.3s ease-in-out;
 }
 
 *::-webkit-scrollbar {
@@ -74,4 +87,20 @@ body {
 
 *::-webkit-scrollbar-thumb {
   @apply bg-primary rounded-full;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+
+  margin: 0;
+}
+
+input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.error{
+  @apply text-destructive;
 }

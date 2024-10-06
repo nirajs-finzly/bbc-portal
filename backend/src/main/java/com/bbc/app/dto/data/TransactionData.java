@@ -5,8 +5,10 @@ import com.bbc.app.model.TransactionStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class TransactionData {
+    private UUID transactionId;
     private BigDecimal amount;
     private String customerName;
     private String invoiceId;
@@ -16,7 +18,8 @@ public class TransactionData {
     private String paymentIdentifier;
     private String cardType;
 
-    public TransactionData(BigDecimal amount, String customerName, String invoiceId, PaymentMethod paymentMethod, TransactionStatus transactionStatus, LocalDateTime transactionDate, String paymentIdentifier, String cardType) {
+    public TransactionData(UUID transactionId, BigDecimal amount, String customerName, String invoiceId, PaymentMethod paymentMethod, TransactionStatus transactionStatus, LocalDateTime transactionDate, String paymentIdentifier, String cardType) {
+        this.transactionId = transactionId;
         this.amount = amount;
         this.customerName = customerName;
         this.invoiceId = invoiceId;
@@ -25,6 +28,14 @@ public class TransactionData {
         this.transactionDate = transactionDate;
         this.paymentIdentifier = paymentIdentifier;
         this.cardType = cardType;
+    }
+
+    public UUID getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(UUID transactionId) {
+        this.transactionId = transactionId;
     }
 
     public BigDecimal getAmount() {

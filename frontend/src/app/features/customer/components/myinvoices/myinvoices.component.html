@@ -1,11 +1,11 @@
+<app-pay-card />
 <div>
-  <app-pay-card />
+  <h1 class="text-2xl font-bold mb-4">My Invoices</h1>
 </div>
-
 <div class="flex flex-col justify-between gap-4 sm:flex-row">
   <input
     hlmInput
-    class="w-full md:w-80"
+    class="w-full md:w-80 bg-background"
     placeholder="Search by bill duration"
     [(ngModel)]="billDuration"
     (ngModelChange)="onBillDurationChange($event)"
@@ -56,13 +56,13 @@
         class="py-2 px-4 text-white cursor-default rounded-full"
         [class]="{
           'bg-primary': invoice.paymentStatus === 'PAID',
-          'bg-danger': invoice.paymentStatus === 'UNPAID',
+          'bg-destructive': invoice.paymentStatus === 'UNPAID',
         }"
         >{{ invoice.paymentStatus | titlecase }}</span
       >
     </hlm-td>
   </brn-column-def>
-  <brn-column-def name="actions" class="w-20">
+  <brn-column-def name="actions" class="w-[10%]">
     <hlm-th *brnHeaderDef></hlm-th>
     <hlm-td *brnCellDef="let invoice" class="cursor-pointer">
       <button
@@ -76,6 +76,12 @@
       </button>
     </hlm-td>
   </brn-column-def>
+  <div
+    class="flex items-center justify-center p-20 text-muted-foreground"
+    brnNoDataRow
+  >
+    No data available
+  </div>
 </brn-table>
 <nav hlmPagination class="mt-4">
   <ul hlmPaginationContent class="w-fit gap-6">

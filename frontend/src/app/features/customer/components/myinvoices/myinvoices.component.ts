@@ -120,7 +120,6 @@ export class MyinvoicesComponent {
           next: (response: any) => {
             this.invoices = response.invoices || [];
             this.totalInvoices = response.totalInvoices || 0;
-            this.sortInvoicesByGeneratedAt();
             this.loading = false;
           },
           error: (error: any) => {
@@ -141,14 +140,6 @@ export class MyinvoicesComponent {
     }
     this.pageSize = event.rows!;
     this.getInvoices(this.currentPage, this.pageSize);
-  }
-
-  sortInvoicesByGeneratedAt(): void {
-    this.invoices.sort((a: Invoice, b: Invoice) => {
-      const dateA = new Date(a.generatedAt).getTime();
-      const dateB = new Date(b.generatedAt).getTime();
-      return dateB - dateA;
-    });
   }
 
   downloadInvoicePdf(pdfData: string, invoiceId: string): void {
@@ -217,7 +208,6 @@ export class MyinvoicesComponent {
           next: (response: any) => {
             this.invoices = response.invoices || [];
             this.totalInvoices = response.totalInvoices || 0;
-            this.sortInvoicesByGeneratedAt();
             this.loading = false;
           },
           error: (error: any) => {

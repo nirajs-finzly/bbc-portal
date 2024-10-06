@@ -1,6 +1,7 @@
 package com.bbc.app.service;
 
 import com.bbc.app.dto.response.MessageResponse;
+import com.bbc.app.dto.response.PaymentResponse;
 import com.bbc.app.dto.response.TransactionsResponse;
 import com.bbc.app.model.PaymentMethod;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +14,13 @@ public interface PaymentService {
 
     ResponseEntity<TransactionsResponse> getAllTransactionsByMeterNo(String meterNo, int page, int size);
 
-    ResponseEntity<MessageResponse> initiatePayment(String customerId, UUID invoiceId, PaymentMethod paymentMethod, String paymentDetails);
+    ResponseEntity<PaymentResponse> initiatePayment(String customerId, UUID invoiceId);
 
-    ResponseEntity<MessageResponse> confirmPayment(String customerId, UUID invoiceId, PaymentMethod paymentMethod, String paymentDetails, String otp, BigDecimal amount);
+    ResponseEntity<MessageResponse> validatePaymentInitiation(UUID invoiceId);
+
+    ResponseEntity<MessageResponse> makePayment(String meterNo, UUID invoiceId, PaymentMethod paymentMethod, String paymentDetails);
+
+    ResponseEntity<PaymentResponse> confirmPayment(String meterNo, UUID invoiceId, PaymentMethod paymentMethod, String paymentDetails, String otp, BigDecimal amount);
 
     ResponseEntity<MessageResponse> markInvoiceAsPaid(UUID invoiceId, PaymentMethod paymentMethod);
 }

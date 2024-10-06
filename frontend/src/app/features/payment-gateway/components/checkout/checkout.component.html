@@ -1,0 +1,306 @@
+<section hlmCard class="w-full flex flex-col items-center px-12">
+  <div hlmCardHeader class="self-start px-0">
+    <h3 hlmCardTitle>
+      {{
+        currentStep === 1
+          ? "Invoice Details"
+          : currentStep === 2
+          ? "Select Payment Method"
+          : "Enter OTP"
+      }}
+    </h3>
+  </div>
+  <div hlmCardContent class="flex flex-col items-center p-0 w-full mb-6">
+    @if(currentStep === 1){
+    <div class="flex justify-between gap-8 p-0 w-full">
+      <div class="flex flex-col gap-4">
+        <p>Invoice ID</p>
+        <p>Meter No</p>
+        <p>Customer Name</p>
+        <p>Bill Duration</p>
+        <p>Bill Amount</p>
+      </div>
+      <div class="flex flex-col gap-4 text-right">
+        <p>{{ invoice?.invoiceId | formatId }}</p>
+        <p>{{ user?.meterNo }}</p>
+        <p>{{ user?.name }}</p>
+        <p>{{ invoice?.billDuration }}</p>
+        <p>{{ invoice?.totalAmountDue | currency : "INR" }}</p>
+      </div>
+    </div>
+    <div class="h-[1px] w-full bg-accent text-center m-3"></div>
+    <div class="flex justify-between gap-8 p-0 w-full">
+      <div class="flex flex-col gap-4">
+        <p>Early Payment Discount (5%)</p>
+        <p>Online Payment Discount (5%)</p>
+        <p>Total Discount</p>
+        <p>Final Bill Amount</p>
+      </div>
+      <div class="flex flex-col gap-4 text-right text-primary">
+        <p>{{ earlyPaymentDiscount | currency : "INR" }}</p>
+        <p>{{ onlinePaymentDiscount | currency : "INR" }}</p>
+        <p>{{ totalDiscount | currency : "INR" }}</p>
+        <p>{{ finalBillAmount | currency : "INR" }}</p>
+      </div>
+    </div>
+    } @else if(currentStep === 2){
+    <div class="flex flex-col justify-between gap-4 w-full">
+      <div class="flex gap-4 justify-between">
+        <label class="flex items-center space-x-2 cursor-pointer w-full">
+          <input
+            type="radio"
+            [checked]="paymentMethod === 'CREDIT_CARD'"
+            name="paymentMethod"
+            [(ngModel)]="paymentMethod"
+            value="CREDIT_CARD"
+            class="hidden peer"
+          />
+          <span
+            class="px-4 py-2 bg-accent peer-checked:bg-primary peer-checked:text-white fade w-full text-center rounded-md text-muted-foreground flex gap-2 items-center"
+          >
+            <img src="assets/img/card.png" alt="" width="30" />
+            Credit Card</span
+          >
+        </label>
+
+        <!-- Debit Card -->
+        <label class="flex items-center space-x-2 cursor-pointer w-full">
+          <input
+            type="radio"
+            name="paymentMethod"
+            [(ngModel)]="paymentMethod"
+            value="DEBIT_CARD"
+            class="hidden peer"
+          />
+          <span
+            class="px-4 py-2 bg-accent peer-checked:bg-primary peer-checked:text-white fade w-full text-center rounded-md text-muted-foreground flex gap-2 items-center"
+            ><img src="assets/img/card.png" alt="" width="30" />Debit Card</span
+          >
+        </label>
+      </div>
+
+      <div class="flex gap-4 justify-between">
+        <!-- Net Banking -->
+        <label class="flex items-center space-x-2 cursor-pointer w-full">
+          <input
+            type="radio"
+            name="paymentMethod"
+            [(ngModel)]="paymentMethod"
+            value="NET_BANKING"
+            class="hidden peer"
+          />
+          <span
+            class="px-4 py-2 bg-accent peer-checked:bg-primary peer-checked:text-white fade w-full text-center rounded-md text-muted-foreground flex gap-2 items-center"
+            ><img src="assets/img/bank.png" alt="" width="30" />Net
+            Banking</span
+          >
+        </label>
+
+        <!-- UPI -->
+        <label class="flex items-center space-x-2 cursor-pointer w-full">
+          <input
+            type="radio"
+            name="paymentMethod"
+            [(ngModel)]="paymentMethod"
+            value="UPI"
+            class="hidden peer"
+          />
+          <span
+            class="px-4 py-2 bg-accent peer-checked:bg-primary peer-checked:text-white fade w-full text-center rounded-md text-muted-foreground flex gap-2 items-center"
+            ><img src="assets/img/upi.png" alt="" width="30" />UPI</span
+          >
+        </label>
+      </div>
+    </div>
+
+    @if(currentStep === 2) {
+    <form
+      hlmCardContent
+      [formGroup]="
+        paymentMethod === 'CREDIT_CARD' || paymentMethod === 'DEBIT_CARD'
+          ? cardPaymentForm
+          : paymentMethod === 'NET_BANKING'
+          ? netBankingPaymentForm
+          : paymentMethod === 'UPI'
+          ? upiPaymentForm
+          : cardPaymentForm
+      "
+      autocomplete="off"
+      class="w-full pt-6 pb-0 px-0 flex flex-col gap-4"
+    >
+      @if(paymentMethod === 'CREDIT_CARD' || paymentMethod === "DEBIT_CARD"){
+      <label class="block" hlmLabel>
+        <input
+          type="number"
+          min="0"
+          maxlength="19"
+          class="mt-1.5 w-full"
+          formControlName="cardNumber"
+          placeholder="Card Number"
+          hlmInput
+          (input)="onCardNumberInput($event)"
+        />
+        @if(cardPaymentForm.get('cardNumber')?.invalid &&
+        cardPaymentForm.get('cardNumber')?.touched){
+
+        <div class="error">Invalid Card Number</div>
+        }
+      </label>
+      <div class="flex justify-between w-full">
+        <label class="block w-fit" hlmLabel>
+          <input
+            class="mt-1.5 w-full"
+            formControlName="expiryDate"
+            placeholder="MM/YY"
+            hlmInput
+            maxlength="5"
+            (input)="onCardExpiryInput($event)"
+          />
+          @if(cardPaymentForm.get('expiryDate')?.invalid &&
+          cardPaymentForm.get('expiryDate')?.touched){
+
+          <div class="error">Invalid expiry date</div>
+          }
+        </label>
+        <label class="block w-fit" hlmLabel>
+          <input
+            class="mt-1.5 w-full"
+            maxlength="3"
+            formControlName="cvv"
+            placeholder="CVV"
+            hlmInput
+            (input)="onCvvInput($event)"
+          />
+          @if(cardPaymentForm.get('cvv')?.invalid &&
+          cardPaymentForm.get('cvv')?.touched){
+
+          <div class="error">Invalid CVV</div>
+          }
+        </label>
+      </div>
+      } @else if(paymentMethod === "NET_BANKING"){
+      <label class="block" hlmLabel>
+        <input
+          class="mt-1.5 w-full"
+          formControlName="bankName"
+          placeholder="Bank Name"
+          hlmInput
+        />
+        @if(netBankingPaymentForm.get('bankName')?.invalid &&
+        netBankingPaymentForm.get('bankName')?.touched){
+
+        <div class="error">Bank Name is required</div>
+        }
+      </label>
+      <div class="flex justify-between w-full">
+        <label class="block w-fit" hlmLabel>
+          <input
+            class="mt-1.5 w-full"
+            type="number"
+            formControlName="accountNumber"
+            placeholder="Account Number"
+            hlmInput
+          />
+          @if(netBankingPaymentForm.get('accountNumber')?.invalid &&
+          netBankingPaymentForm.get('accountNumber')?.touched){
+
+          <div class="error">Invalid Account Number</div>
+          }
+        </label>
+        <label class="block w-fit" hlmLabel>
+          <input
+            class="mt-1.5 w-full"
+            formControlName="ifscCode"
+            placeholder="IFSC Code"
+            hlmInput
+          />
+          @if(netBankingPaymentForm.get('ifscCode')?.invalid &&
+          netBankingPaymentForm.get('ifscCode')?.touched){
+
+          <div class="error">Invalid IFSC Code</div>
+          }
+        </label>
+      </div>
+      } @else if (paymentMethod === "UPI"){
+      <div class="flex justify-between w-full">
+        <label class="block w-full" hlmLabel>
+          <input
+            class="mt-1.5 w-full"
+            formControlName="upiId"
+            placeholder="UPI ID"
+            hlmInput
+          />
+          @if(upiPaymentForm.get('upiId')?.invalid &&
+          upiPaymentForm.get('upiId')?.touched){
+
+          <div class="error">Invalid UPI ID</div>
+          }
+        </label>
+      </div>
+      }
+    </form>
+    } } @else if (currentStep === 3) {
+    <form
+      hlmCardContent
+      [formGroup]="otpForm"
+      autocomplete="off"
+      class="w-full p-0 flex flex-col gap-4"
+    >
+      <label class="block" hlmLabel>
+        <input
+          type="number"
+          min="0"
+          maxlength="6"
+          minlength="6"
+          class="mt-1.5 w-full"
+          formControlName="otp"
+          placeholder="OTP"
+          hlmInput
+        />
+        @if(otpForm.get('otp')?.invalid && otpForm.get('otp')?.touched){
+
+        <div class="error">Invalid OTP</div>
+        }
+      </label>
+    </form>
+    }
+  </div>
+  <p
+    hlmCardFooter
+    class="self-end px-0"
+    [class]="currentStep > 1 ? 'w-full' : ''"
+  >
+    <button
+      hlmBtn
+      (click)="
+        currentStep === 1
+          ? nextStep()
+          : currentStep === 2
+          ? makePaymentRequest()
+          : currentStep === 3
+          ? confirmPayment()
+          : nextStep()
+      "
+      [class]="currentStep > 1 ? 'w-full' : ''"
+    >
+      <hlm-icon
+        size="sm"
+        class="mr-2"
+        [ngClass]="{
+          'animate-spin': isLoading,
+          'animate-none': !isLoading
+        }"
+        [name]="
+          currentStep === 1 && !isLoading
+            ? 'lucideSend'
+            : currentStep > 1 && !isLoading
+            ? 'lucideCheck'
+            : isLoading
+            ? 'lucideLoader'
+            : 'lucideSend'
+        "
+      ></hlm-icon>
+      {{ currentStep === 1 ? "Pay" : currentStep === 2 ? "Confirm" : "Submit" }}
+    </button>
+  </p>
+</section>

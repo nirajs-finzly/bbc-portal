@@ -7,11 +7,13 @@ import java.util.List;
 public class TransactionsResponse {
     private String message;
     private List<TransactionData> transactions;
+    private Long totalTransactions;
     private boolean success;
 
-    public TransactionsResponse(String message, List<TransactionData> transactions, boolean success) {
+    public TransactionsResponse(String message, List<TransactionData> transactions, Long totalTransactions, boolean success) {
         this.message = message;
         this.transactions = transactions;
+        this.totalTransactions = totalTransactions;
         this.success = success;
     }
 
@@ -23,12 +25,20 @@ public class TransactionsResponse {
         this.message = message;
     }
 
-    public List<TransactionData> getInvoices() {
+    public List<TransactionData> getTransactions() {
         return transactions;
     }
 
-    public void setInvoices(List<TransactionData> invoices) {
-        this.transactions = invoices;
+    public void setTransactions(List<TransactionData> transactions) {
+        this.transactions = transactions;
+    }
+
+    public Long getTotalTransactions() {
+        return totalTransactions;
+    }
+
+    public void setTotalTransactions(Long totalTransactions) {
+        this.totalTransactions = totalTransactions;
     }
 
     public boolean isSuccess() {

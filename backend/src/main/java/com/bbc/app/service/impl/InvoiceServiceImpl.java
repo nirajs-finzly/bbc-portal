@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -50,7 +51,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public ResponseEntity<InvoicesResponse> getAllInvoices(int page, int size) {
-        PageRequest pageable = PageRequest.of(page, size);
+        PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "generatedAt"));
         System.out.println(page + " " + size);
 
         // Fetching all invoices with pagination
@@ -74,7 +75,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public ResponseEntity<CustomerInvoicesResponse> getInvoicesByMeterNo(String meterNo, int page, int size) {
-        PageRequest pageable = PageRequest.of(page, size);
+        // Add sorting by generatedAt in descending order
+        PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "generatedAt"));
 
         Page<CustomerInvoiceData> invoicesPage = invoiceRepository.findByCustomerMeterNo(meterNo, pageable);
         Long totalInvoicesCount = invoiceRepository.countByCustomerMeterNo(meterNo);
@@ -83,13 +85,20 @@ public class InvoiceServiceImpl implements InvoiceService {
             return ResponseEntity.ok(new CustomerInvoicesResponse("No invoices found!", List.of(), 0L, false));
         }
 
-        CustomerInvoicesResponse response = new CustomerInvoicesResponse("Invoices retrieved successfully!", invoicesPage.getContent(), totalInvoicesCount, true);
+        CustomerInvoicesResponse response = new CustomerInvoicesResponse(
+                "Invoices retrieved successfully!",
+                invoicesPage.getContent(),
+                totalInvoicesCount,
+                true
+        );
+
         return ResponseEntity.ok(response);
     }
 
+
     @Override
     public ResponseEntity<CustomerInvoicesResponse> getInvoicesByCustomerName(String customerName, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "generatedAt"));
 
         // Fetch paginated invoices by customer name
         Page<CustomerInvoiceData> invoicesPage = invoiceRepository.findByCustomerUserNameContaining(customerName, pageable);
@@ -107,7 +116,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     public ResponseEntity<CustomerInvoicesResponse> getInvoicesByCustomerBillDuration(String meterNo, String billDuration, int page, int size) {
         try {
             // Create pageable object for pagination
-            PageRequest pageable = PageRequest.of(page, size);
+            PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "generatedAt"));
 
             // Fetch invoices that match the meter number and partial bill duration with pagination
             Page<CustomerInvoiceData> invoicesPage = invoiceRepository.findByCustomerMeterNoAndBillDurationContaining(meterNo, billDuration, pageable);
@@ -187,7 +196,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     public ResponseEntity<SingleInvoiceResponse> getLatestInvoiceByMeterNo(String meterNo) {
         Optional<Invoice> latestInvoice = invoiceRepository.findTopByCustomerMeterNoOrderByGeneratedAtDesc(meterNo);
 
-        if (latestInvoice.isEmpty()) {
+        if (latestInvoice.isEmpty() || latestInvoice.get().getPaymentStatus() == PaymentStatus.PAID) {
             return ResponseEntity.badRequest().body(
                     new SingleInvoiceResponse(
                             "No unpaid invoice found!",
@@ -204,6 +213,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     private InvoiceData convertToInvoiceData(Invoice invoice) {
         return new InvoiceData(
                 invoice.getInvoiceId(),
+                invoice.getCustomer().getUser().getName(),
                 invoice.getCustomer().getMeterNo(),
                 invoice.getCustomer().getUser().getName(),
                 invoice.getUnitConsumption(),

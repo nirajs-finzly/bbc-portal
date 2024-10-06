@@ -3,13 +3,17 @@ package com.bbc.app.controller;
 import com.bbc.app.dto.request.CashPaymentRequest;
 import com.bbc.app.dto.request.ConfirmPaymentRequest;
 import com.bbc.app.dto.request.InitiatePaymentRequest;
+import com.bbc.app.dto.request.MakePaymentRequest;
 import com.bbc.app.dto.response.MessageResponse;
+import com.bbc.app.dto.response.PaymentResponse;
 import com.bbc.app.dto.response.TransactionsResponse;
 import com.bbc.app.service.PaymentService;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/payment")
@@ -34,13 +38,23 @@ public class PaymentController {
     }
 
     @PostMapping("/initiate")
-    public ResponseEntity<MessageResponse> initiatePayment(@RequestBody InitiatePaymentRequest request) {
-        return paymentService.initiatePayment(request.getCustomerId(), request.getInvoiceId(), request.getPaymentMethod(), request.getPaymentDetails());
+    public ResponseEntity<PaymentResponse> initiatePayment(@RequestBody InitiatePaymentRequest request) {
+        return paymentService.initiatePayment(request.getMeterNo(), request.getInvoiceId());
+    }
+
+    @GetMapping("/validate-initiation/{invoiceId}")
+    public ResponseEntity<MessageResponse> validatePaymentInitiation(@PathVariable UUID invoiceId) {
+        return paymentService.validatePaymentInitiation(invoiceId);
+    }
+
+    @PostMapping("/make-payment")
+    public ResponseEntity<MessageResponse> makePayment(@RequestBody MakePaymentRequest request) {
+        return paymentService.makePayment(request.getMeterNo(), request.getInvoiceId(), request.getPaymentMethod(), request.getPaymentDetails());
     }
 
     @PostMapping("/confirm")
-    public ResponseEntity<MessageResponse> confirmPayment(@RequestBody ConfirmPaymentRequest request) {
-        return paymentService.confirmPayment(request.getCustomerId(), request.getInvoiceId(), request.getPaymentMethod(), request.getPaymentDetails(), request.getOtp(), request.getAmount());
+    public ResponseEntity<PaymentResponse> confirmPayment(@RequestBody ConfirmPaymentRequest request) {
+        return paymentService.confirmPayment(request.getMeterNo(), request.getInvoiceId(), request.getPaymentMethod(), request.getPaymentDetails(), request.getOtp(), request.getAmount());
     }
 
     @PostMapping("/cash-payment")
