@@ -24,6 +24,8 @@ import { HlmDialogComponent, HlmDialogContentComponent, HlmDialogDescriptionDire
 import { BrnDialogContentDirective, BrnDialogDescriptionDirective, BrnDialogTitleDirective, BrnDialogTriggerDirective } from '@spartan-ng/ui-dialog-brain';
 import { BrnAlertDialogContentDirective, BrnAlertDialogTriggerDirective } from '@spartan-ng/ui-alertdialog-brain';
 import { HlmAlertDialogActionButtonDirective, HlmAlertDialogCancelButtonDirective, HlmAlertDialogComponent, HlmAlertDialogContentComponent, HlmAlertDialogDescriptionDirective, HlmAlertDialogFooterComponent, HlmAlertDialogHeaderComponent, HlmAlertDialogOverlayDirective, HlmAlertDialogTitleDirective } from '@spartan-ng/ui-alertdialog-helm';
+import { Transaction } from '../../../../types/transaction';
+import { PaymentService } from '../../../../shared/services/payment.service';
 // import { PayCardComponent } from "../pay-card/pay-card.component";
 
 @Component({
@@ -111,6 +113,7 @@ export class InvoicesComponent {
 
   constructor(
     private invoiceService: InvoiceService,
+    private paymentService: PaymentService,
     private toast: HotToastService
   ) {}
 
@@ -284,5 +287,23 @@ export class InvoicesComponent {
     } else {
       console.error('No invoices found');
     }
+  }
+
+
+
+  // Function to mark the invoice as paid
+  markAsPaid(invoiceId: string): void {
+    this.paymentService.markInvoiceAsPaid(invoiceId, 'CASH').subscribe(
+      (response) => {
+        // On success, update the paymentStatus of the invoice to PAID
+        const invoice = this.invoices.find(i => i.invoiceId === invoiceId);
+        if (invoice) {
+          invoice.paymentStatus = 'PAID';
+        }
+      },
+      (error) => {
+        console.error('Error marking invoice as paid:', error);
+      }
+    );
   }
 }

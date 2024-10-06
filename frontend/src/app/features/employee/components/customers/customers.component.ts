@@ -138,10 +138,8 @@ export class CustomersComponent {
 
   protected readonly _brnModalColumnManager = useBrnColumnManager({
     transactionDate: { visible: true, label: 'Date' },
-    transactionId: { visible: true, label: 'Transaction ID' },
     amount: { visible: true, label: 'Amount' },
     paymentMethod: { visible: true, label: 'Payment Method' },
-    transactionStatus: { visible: true, label: 'Transaction Status' },
   });
 
   protected readonly _allModalDisplayedColumns = computed(() => [

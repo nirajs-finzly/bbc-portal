@@ -163,13 +163,20 @@
     <hlm-th *brnHeaderDef>Status</hlm-th>
     <hlm-td *brnCellDef="let invoice">
       <span
-        class="py-2 px-4 text-white cursor-default rounded-full"
-        [class]="{
-            'bg-primary': invoice.paymentStatus === 'PAID',
-            'bg-destructive': invoice.paymentStatus === 'UNPAID',
-          }"
+        *ngIf="invoice.paymentStatus === 'PAID'; else markAsPaidTemplate"
+        class="py-2 px-4 text-white cursor-default rounded-full bg-primary"
         >{{ invoice.paymentStatus | titlecase }}</span
       >
+      
+      <!-- Template for unpaid invoices -->
+      <ng-template #markAsPaidTemplate>
+        <button
+          class="py-2 px-4 text-white bg-destructive rounded-full"
+          (click)="markAsPaid(invoice.invoiceId)"
+        >
+          Mark as Paid
+        </button>
+      </ng-template>
     </hlm-td>
   </brn-column-def>
   <brn-column-def name="actions" class="w-[8%]">

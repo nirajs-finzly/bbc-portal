@@ -32,6 +32,13 @@ export class PaymentService {
     });
   }
 
+  // Method to mark the invoice as paid
+  markInvoiceAsPaid(invoiceId: string, paymentMethod: string): Observable<any> {
+    const payload = { invoiceId, paymentMethod };
+
+    return this.http.post(`${this.apiUrl}/cash-payment`, payload);
+  }
+
   initiatePayment(meterNo: string, invoiceId: string): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/initiate`, {
       meterNo,

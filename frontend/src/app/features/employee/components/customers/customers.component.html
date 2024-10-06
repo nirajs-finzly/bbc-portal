@@ -358,12 +358,6 @@
                     {{ customer.transactionDate }}
                   </hlm-td>
                 </brn-column-def>
-                <brn-column-def name="transactionId" class="w-[16%]">
-                  <hlm-th *brnHeaderDef>Transaction ID</hlm-th>
-                  <hlm-td truncate *brnCellDef="let customer">
-                    {{ customer.transactionId }}
-                  </hlm-td>
-                </brn-column-def>
                 <brn-column-def name="amount" class="w-[16%] text-center">
                   <hlm-th *brnHeaderDef>Amount</hlm-th>
                   <hlm-td truncate *brnCellDef="let customer">
@@ -374,12 +368,6 @@
                   <hlm-th *brnHeaderDef>Payment Method</hlm-th>
                   <hlm-td truncate *brnCellDef="let customer">
                     {{ customer.paymentMethod }}
-                  </hlm-td>
-                </brn-column-def>
-                <brn-column-def name="transactionStatus" class="w-[16%]">
-                  <hlm-th *brnHeaderDef>Transaction Status</hlm-th>
-                  <hlm-td truncate *brnCellDef="let customer">
-                    {{ customer.transactionStatus }}
                   </hlm-td>
                 </brn-column-def>
                 <div
