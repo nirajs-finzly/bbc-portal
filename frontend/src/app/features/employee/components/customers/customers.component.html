@@ -24,7 +24,7 @@
             Import csv file by selecting it from your computer
           </p>
         </hlm-dialog-header>
-        <div class="py-8">
+        <div class="py-4">
           <input
             class="w-full"
             hlmInput
@@ -34,7 +34,7 @@
           />
         </div>
         <hlm-dialog-footer>
-          <button hlmBtn type="submit">
+          <button hlmBtn class="w-full" type="submit">
             <hlm-icon size="sm" class="mr-2" name="lucideImport" />Import
           </button>
         </hlm-dialog-footer>
@@ -88,17 +88,42 @@
       [attr.colspan]="4"
     >
       <div class="flex gap-2">
-        <button hlmBtn variant="ghost" title="View Customer" size="icon">
-          <hlm-icon name="lucideEye" class="text-primary" />
+        <button hlmBtn variant="ghost" title="View Customer" size="sm">
+          <hlm-icon name="lucideEye" class="text-primary w-[1.3rem] h-[1.3rem]" />
         </button>
         <button hlmBtn variant="ghost" title="Edit Customer" size="icon">
-          <hlm-icon name="lucidePencil" class="text-primary" />
+          <hlm-icon name="lucidePencil" class="text-primary w-[1.3rem] h-[1.3rem]" />
         </button>
-        <button hlmBtn variant="ghost" title="Delete Customer" size="icon">
-          <hlm-icon name="lucideTrash2" class="text-primary" />
-        </button>
+        <hlm-alert-dialog>
+          <button
+            id="edit-profile"
+            variant="ghost"
+            brnAlertDialogTrigger
+            title="Delete Customer"
+            size="icon"
+            hlmBtn
+          >
+            <hlm-icon name="lucideTrash2" class="text-primary w-[1.3rem] h-[1.3rem]" />
+          </button>
+          <hlm-alert-dialog-content *brnAlertDialogContent="let ctx">
+            <hlm-alert-dialog-header>
+              <h3 hlmAlertDialogTitle>Are you absolutely sure?</h3>
+              <p hlmAlertDialogDescription>
+                This action cannot be undone. This will permanently delete customer's
+                account and remove data from servers.
+              </p>
+            </hlm-alert-dialog-header>
+            <hlm-alert-dialog-footer class="mt-4">
+              <button hlmAlertDialogCancel (click)="ctx.close()">Cancel</button>
+              <button hlmAlertDialogAction class="!bg-destructive" (click)="ctx.close()">
+                <hlm-icon name="lucideTrash2" class="w-[1.3rem] h-[1.3rem] mr-2" />
+                Delete Customer
+              </button>
+            </hlm-alert-dialog-footer>
+          </hlm-alert-dialog-content>
+        </hlm-alert-dialog>
         <button hlmBtn variant="ghost" title="View transactions" size="icon">
-          <hlm-icon name="lucideReceipt" class="text-primary" />
+          <hlm-icon name="lucideReceipt" class="text-primary w-[1.3rem] h-[1.3rem]" />
         </button>
       </div>
     </hlm-td>

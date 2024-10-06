@@ -15,6 +15,7 @@ import { User } from '../../../types/user';
 import { BrnMenuTriggerDirective } from '@spartan-ng/ui-menu-brain';
 import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
 import { AuthService } from '../../services/auth.service';
+import { TitleCasePipe } from '../../pipes/titlecase.pipe';
 
 @Component({
   selector: 'app-header',
@@ -31,6 +32,7 @@ import { AuthService } from '../../services/auth.service';
     HlmMenuSeparatorComponent,
     HlmMenuLabelComponent,
     HlmButtonDirective,
+    TitleCasePipe
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',

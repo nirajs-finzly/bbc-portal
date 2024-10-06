@@ -31,8 +31,9 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Customer } from '../../../../types/customer';
 import { CustomerService } from '../../../../shared/services/customer.service';
-import { ImportCustomersComponent } from '../../modals/import-customers/import-customers.component';
 import { HotToastService } from '@ngxpert/hot-toast';
+import { BrnAlertDialogContentDirective, BrnAlertDialogTriggerDirective } from '@spartan-ng/ui-alertdialog-brain';
+import { HlmAlertDialogActionButtonDirective, HlmAlertDialogCancelButtonDirective, HlmAlertDialogComponent, HlmAlertDialogContentComponent, HlmAlertDialogDescriptionDirective, HlmAlertDialogFooterComponent, HlmAlertDialogHeaderComponent, HlmAlertDialogOverlayDirective, HlmAlertDialogTitleDirective } from '@spartan-ng/ui-alertdialog-helm';
 
 @Component({
   selector: 'app-customers',
@@ -49,7 +50,6 @@ import { HotToastService } from '@ngxpert/hot-toast';
     FormsModule,
     BrnSelectModule,
     HlmSelectModule,
-    ImportCustomersComponent,
     HlmDialogComponent,
     HlmDialogContentComponent,
     HlmDialogDescriptionDirective,
@@ -59,7 +59,19 @@ import { HotToastService } from '@ngxpert/hot-toast';
     BrnDialogContentDirective,
     BrnDialogTriggerDirective,
     BrnDialogTitleDirective,
-    BrnDialogDescriptionDirective
+    BrnDialogDescriptionDirective,
+    BrnAlertDialogTriggerDirective,
+    BrnAlertDialogContentDirective,
+
+    HlmAlertDialogComponent,
+    HlmAlertDialogOverlayDirective,
+    HlmAlertDialogHeaderComponent,
+    HlmAlertDialogFooterComponent,
+    HlmAlertDialogTitleDirective,
+    HlmAlertDialogDescriptionDirective,
+    HlmAlertDialogCancelButtonDirective,
+    HlmAlertDialogActionButtonDirective,
+    HlmAlertDialogContentComponent,
   ],
   templateUrl: './customers.component.html',
   styleUrl: './customers.component.css',

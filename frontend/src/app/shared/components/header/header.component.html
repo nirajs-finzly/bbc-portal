@@ -19,20 +19,43 @@
     }
   </hlm-menu-bar>
 </div>
-<div hlmBtn [brnMenuTriggerFor]="menu" class="rounded-full w-fit h-fit px-1 py-[3.5px]">
+<div
+  hlmBtn
+  [brnMenuTriggerFor]="menu"
+  class="rounded-full w-fit h-fit px-1 py-[3.5px]"
+>
   <img src="assets/img/avatar.png" alt="" width="35" />
 </div>
 <ng-template #menu>
-  <hlm-menu class="w-56">   
+  <hlm-menu class="w-80">
     <hlm-menu-label>My Account</hlm-menu-label>
     <hlm-menu-separator />
     <hlm-menu-group>
-      <button hlmMenuItem class="cursor-pointer">
-        <hlm-icon name="lucideUser" class="mr-2" hlmMenuIcon />
-        <span>Profile</span>
-      </button>
-      <button hlmMenuItem class="cursor-pointer" (click)="logoutUser()">
-        <hlm-icon name="lucideLogOut" class="mr-2" hlmMenuIcon />
+      <div class="flex items-center gap-2 p-2 my-2 cursor-pointer hover:bg-accent">
+        <img src="assets/img/avatar.png" alt="" width="35" />
+        <div class="flex flex-col">
+          <span class="ml-2 text-sm font-bold text-primary"
+            >{{ user?.name + " "
+            }}<span class="font-thin">({{ user?.role | titlecase }})</span></span
+          >
+          <span class="ml-2 text-sm text-muted-foreground">{{
+            user?.email
+          }}</span>
+          <span class="ml-2 text-sm text-muted-foreground">{{
+            user?.meterNo
+          }}</span>
+        </div>
+      </div>
+      <button
+        hlmMenuItem
+        class="cursor-pointer text-muted-foreground items-center"
+        (click)="logoutUser()"
+      >
+        <hlm-icon
+          name="lucideLogOut"
+          class="mr-2 text-muted-foreground w-[1.2rem] h-[1.2rem]"
+          hlmMenuIcon
+        />
         <span>Logout</span>
       </button>
     </hlm-menu-group>
