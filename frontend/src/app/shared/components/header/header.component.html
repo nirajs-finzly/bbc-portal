@@ -24,7 +24,11 @@
   [brnMenuTriggerFor]="menu"
   class="rounded-full w-fit h-fit px-1 py-[3.5px]"
 >
-  <img src="assets/img/avatar.png" alt="" width="35" />
+  @if(user?.role === 'EMPLOYEE'){
+    <img src="assets/img/employee-avatar.png" alt="" width="35" />
+  } @else {
+    <img src="assets/img/customer-avatar.png" alt="" width="35" />
+  }
 </div>
 <ng-template #menu>
   <hlm-menu class="w-80">
@@ -32,7 +36,11 @@
     <hlm-menu-separator />
     <hlm-menu-group>
       <div class="flex items-center gap-2 p-2 my-2 cursor-pointer hover:bg-accent">
-        <img src="assets/img/avatar.png" alt="" width="35" />
+        @if(user?.role === 'EMPLOYEE'){
+          <img src="assets/img/employee-avatar.png" alt="" width="35" />
+        } @else {
+          <img src="assets/img/customer-avatar.png" alt="" width="35" />
+        }
         <div class="flex flex-col">
           <span class="ml-2 text-sm font-bold text-primary"
             >{{ user?.name + " "
