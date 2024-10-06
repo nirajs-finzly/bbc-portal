@@ -129,57 +129,9 @@ export class MytransactionsComponent {
     });
   }
 
-  // Method: calculatePageNumbers
-  calculatePageNumbers(): number[] {
-    if (this.totalTransactions == null || this.pageSize == null || this.pageSize === 0) {
-        return [];
-    }
-
-    const totalPages = Math.ceil(this.totalTransactions / this.pageSize);
-    const pageNumbers: number[] = [];
-    const maxVisiblePages = 5;
-
-    if (totalPages <= maxVisiblePages) {
-        // If total pages are less than or equal to maxVisiblePages
-        for (let i = 0; i < totalPages; i++) {
-            pageNumbers.push(i);
-        }
-    } else {
-        // Show the first, last, and ellipsis logic
-        pageNumbers.push(0); // Always show the first page
-
-        // Add ellipsis and show first 2 and last 2 pages
-        if (this.currentPage > 2 && this.currentPage < totalPages - 3) {
-            pageNumbers.push(1); // Second page
-            pageNumbers.push(-1); // Ellipsis placeholder for hidden pages
-            pageNumbers.push(this.currentPage - 1, this.currentPage, this.currentPage + 1); // Current page, before, and after
-            pageNumbers.push(-1); // Ellipsis placeholder for hidden pages
-        } else if (this.currentPage <= 2) {
-            // Show first 3 pages directly and ellipsis before last page
-            pageNumbers.push(1, 2);
-            pageNumbers.push(-1); // Ellipsis placeholder
-        } else {
-            // Show last pages with ellipsis before
-            pageNumbers.push(totalPages - 3, totalPages - 2);
-            pageNumbers.push(-1); // Ellipsis placeholder
-        }
-
-        pageNumbers.push(totalPages - 1); // Always show the last page
-    }
-
-    return pageNumbers;
-}
-
-
   onPageSizeChange(event: any) {
     this.currentPage = 0;
     this.loadTransactions({ first: 0, rows: this.pageSize });
-  }
-
-  showEllipsisBefore(): boolean {
-    const totalPages = Math.ceil(this.totalTransactions / this.pageSize);
-    console.log(totalPages >= 5);
-    return totalPages >= 5;
   }
 
   trackByPageIndex(index: number, item: any): number {

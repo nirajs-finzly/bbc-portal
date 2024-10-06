@@ -67,12 +67,30 @@
     No data available
   </div>
 </brn-table>
-<nav hlmPagination class="mt-4">
-  <ul hlmPaginationContent class="w-fit gap-6">
-    <li hlmPaginationItem class="w-28">
+<nav hlmPagination class="mt-4 flex justify-end">
+  
+  <brn-select
+    class="inline-block h-full"
+    placeholder="{{ _availablePageSizes[0] }}"
+    [(ngModel)]="pageSize"
+    (ngModelChange)="onPageSizeChange($event)"
+  >
+    <hlm-select-trigger class="inline-flex mr-1 w-15 h-full">
+      <hlm-select-value />
+    </hlm-select-trigger>
+    <hlm-select-content class="cursor-pointer h-full">
+      @for (size of _availablePageSizes; track size) {
+      <hlm-option [value]="size">
+        {{ size === 10000 ? "All" : size }}
+      </hlm-option>
+      }
+    </hlm-select-content>
+  </brn-select>
+  <ul hlmPaginationContent class="w-fit gap-2">
+    <li hlmPaginationItem class="w-20">
       <button
         hlmPaginationLink
-        class="w-full px-4 flex items-center"
+        class="w-full px-4 flex items-center bg-white border-border"
         [disabled]="currentPage === 0"
         (click)="
           loadTransactions({
@@ -81,32 +99,13 @@
           })
         "
       >
-        <hlm-icon name="lucideChevronLeft" class="h-fit" />
         Previous
       </button>
     </li>
-    <div class="flex gap-2 items-center">
-      <li
-        hlmPaginationItem
-        *ngFor="let i of calculatePageNumbers(); trackBy: trackByPageIndex"
-        class="cursor-pointer"
-      >
-        <a
-          *ngIf="i >= 0"
-          hlmPaginationLink
-          [class]="i === currentPage ? 'text-primary' : ''"
-          (click)="loadTransactions({ first: i * pageSize, rows: pageSize })"
-        >
-          <span>{{ i + 1 }}</span>
-        </a>
-        <span *ngIf="i === -1" class="ellipsis">...</span>
-      </li>
-    </div>
-    
-    <li hlmPaginationItem class="w-28">
+    <li hlmPaginationItem class="w-20">
       <button
         hlmPaginationLink
-        class="w-full px-4 flex items-center"
+        class="w-full px-4 flex items-center bg-white border-border"
         [disabled]="(currentPage + 1) * pageSize >= totalTransactions"
         (click)="
           loadTransactions({
@@ -116,25 +115,7 @@
         "
       >
         Next
-        <hlm-icon name="lucideChevronRight" class="h-fit" />
       </button>
     </li>
   </ul>
-  <brn-select
-    class="inline-block"
-    placeholder="{{ _availablePageSizes[0] }}"
-    [(ngModel)]="pageSize"
-    (ngModelChange)="onPageSizeChange($event)"
-  >
-    <hlm-select-trigger class="inline-flex mr-1 w-15 h-9">
-      <hlm-select-value />
-    </hlm-select-trigger>
-    <hlm-select-content class="cursor-pointer">
-      @for (size of _availablePageSizes; track size) {
-      <hlm-option [value]="size">
-        {{ size === 10000 ? "All" : size }}
-      </hlm-option>
-      }
-    </hlm-select-content>
-  </brn-select>
 </nav>

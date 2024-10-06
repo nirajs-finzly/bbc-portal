@@ -20,7 +20,6 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { FormatIdPipe } from '../../../../shared/pipes/format-id.pipe';
 // import { PayCardComponent } from "../pay-card/pay-card.component";
 
-
 @Component({
   selector: 'app-invoices',
   standalone: true,
@@ -36,7 +35,7 @@ import { FormatIdPipe } from '../../../../shared/pipes/format-id.pipe';
     FormsModule,
     BrnSelectModule,
     HlmSelectModule,
-    FormatIdPipe
+    FormatIdPipe,
   ],
   templateUrl: './invoices.component.html',
   styleUrl: './invoices.component.css',
@@ -80,14 +79,11 @@ export class InvoicesComponent {
 
   protected readonly _availablePageSizes = [5, 10, 20, 10000];
 
-  constructor(
-    private invoiceService: InvoiceService
-  ) {}
+  constructor(private invoiceService: InvoiceService) {}
 
   ngOnInit(): void {
-  
     this.loadInvoices({ first: 0, rows: this.pageSize });
-  
+
     // Listen to debounced bill duration changes
     this.customerNameSubject
       .pipe(
@@ -98,24 +94,21 @@ export class InvoicesComponent {
         this.fetchInvoicesByCustomerName(customerName);
       });
   }
-  
 
   // Fetch invoices with server-side pagination
   getInvoices(page: number, size: number): void {
-      this.loading = true;
-      this.invoiceService
-        .getAllInvoices( page, size)
-        .subscribe({
-          next: (response: any) => {
-            this.invoices = response.invoices || [];
-            this.totalInvoices = response.totalInvoices || 0;
-            this.loading = false;
-          },
-          error: (error: any) => {
-            console.error('Failed to fetch invoices:', error);
-            this.loading = false;
-          },
-        });
+    this.loading = true;
+    this.invoiceService.getAllInvoices(page, size).subscribe({
+      next: (response: any) => {
+        this.invoices = response.invoices || [];
+        this.totalInvoices = response.totalInvoices || 0;
+        this.loading = false;
+      },
+      error: (error: any) => {
+        console.error('Failed to fetch invoices:', error);
+        this.loading = false;
+      },
+    });
   }
 
   loadInvoices(event: any): void {
@@ -127,8 +120,7 @@ export class InvoicesComponent {
     this.pageSize = event.rows!;
     this.getInvoices(this.currentPage, this.pageSize);
   }
-  
-  
+
   viewInvoicePdf(pdfData: string, invoiceId: string): void {
     if (!pdfData) {
       console.error('No PDF data found for invoice:', invoiceId);
@@ -137,49 +129,10 @@ export class InvoicesComponent {
     this.invoiceService.viewInvoicePDF(pdfData, invoiceId);
   }
 
-  calculatePageNumbers(): number[] {
-    const totalPages = Math.ceil(this.totalInvoices / this.pageSize);
-    const pageNumbers = [];
-    const maxVisiblePages = 3; // Adjust as necessary
-
-    if (totalPages <= maxVisiblePages) {
-      // Show all pages if less than or equal to maxVisiblePages
-      for (let i = 0; i < totalPages; i++) {
-        pageNumbers.push(i);
-      }
-    } else {
-      if (this.currentPage <= 1) {
-        // Show the first few pages
-        pageNumbers.push(0, 1);
-      } else if (this.currentPage >= totalPages - 2) {
-        // Show the last few pages
-        pageNumbers.push(totalPages - 2, totalPages - 1);
-      } else {
-        // Show current page, with neighbors
-        pageNumbers.push(
-          this.currentPage - 1,
-          this.currentPage,
-          this.currentPage + 1
-        );
-      }
-      // Always show first page
-      pageNumbers.unshift(0);
-      // Always show last page
-      pageNumbers.push(totalPages - 1);
-    }
-    return pageNumbers;
-  }
-
   onPageSizeChange(event: any) {
     this.currentPage = 0;
     this.loadInvoices({ first: 0, rows: this.pageSize });
   }
-
-  showEllipsisBefore(): boolean {
-    const totalPages = Math.ceil(this.totalInvoices / this.pageSize);
-    return this.currentPage > 2 && totalPages > 5;
-  }
-
   trackByPageIndex(index: number, item: any): number {
     return index;
   }
@@ -187,29 +140,25 @@ export class InvoicesComponent {
   onCustomerNameChange(value: string): void {
     this.customerNameSubject.next(value);
   }
-  
+
   fetchInvoicesByCustomerName(customerName: string): void {
     if (!customerName) {
-      this.getInvoices(0, this.pageSize); 
-    } else if (this.invoices.length!==0) {
+      this.getInvoices(0, this.pageSize);
+    } else if (this.invoices.length !== 0) {
       this.loading = true;
-      this.invoiceService
-        .getInvoicesByCustomerName(customerName)
-        .subscribe({
-          next: (response: any) => {
-            this.invoices = response.invoices || [];
-            this.totalInvoices = response.totalInvoices || 0;
-            this.loading = false;
-          },
-          error: (error: any) => {
-            console.error('Failed to fetch invoices:', error);
-            this.loading = false;
-          },
-        });
+      this.invoiceService.getInvoicesByCustomerName(customerName).subscribe({
+        next: (response: any) => {
+          this.invoices = response.invoices || [];
+          this.totalInvoices = response.totalInvoices || 0;
+          this.loading = false;
+        },
+        error: (error: any) => {
+          console.error('Failed to fetch invoices:', error);
+          this.loading = false;
+        },
+      });
     } else {
       console.error('No invoices found');
     }
   }
 }
-
-

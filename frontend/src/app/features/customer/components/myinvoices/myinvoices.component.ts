@@ -146,47 +146,9 @@ export class MyinvoicesComponent {
     this.invoiceService.downloadInvoicePDF(pdfData, invoiceId);
   }
 
-  calculatePageNumbers(): number[] {
-    const totalPages = Math.ceil(this.totalInvoices / this.pageSize);
-    const pageNumbers = [];
-    const maxVisiblePages = 3; // Adjust as necessary
-
-    if (totalPages <= maxVisiblePages) {
-      // Show all pages if less than or equal to maxVisiblePages
-      for (let i = 0; i < totalPages; i++) {
-        pageNumbers.push(i);
-      }
-    } else {
-      if (this.currentPage <= 1) {
-        // Show the first few pages
-        pageNumbers.push(0, 1);
-      } else if (this.currentPage >= totalPages - 2) {
-        // Show the last few pages
-        pageNumbers.push(totalPages - 2, totalPages - 1);
-      } else {
-        // Show current page, with neighbors
-        pageNumbers.push(
-          this.currentPage - 1,
-          this.currentPage,
-          this.currentPage + 1
-        );
-      }
-      // Always show first page
-      pageNumbers.unshift(0);
-      // Always show last page
-      pageNumbers.push(totalPages - 1);
-    }
-    return pageNumbers;
-  }
-
   onPageSizeChange(event: any) {
     this.currentPage = 0;
     this.loadInvoices({ first: 0, rows: this.pageSize });
-  }
-
-  showEllipsisBefore(): boolean {
-    const totalPages = Math.ceil(this.totalInvoices / this.pageSize);
-    return this.currentPage > 2 && totalPages > 5;
   }
 
   trackByPageIndex(index: number, item: any): number {

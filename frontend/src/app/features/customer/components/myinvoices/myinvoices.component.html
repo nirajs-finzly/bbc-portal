@@ -83,65 +83,17 @@
     No data available
   </div>
 </brn-table>
-<nav hlmPagination class="mt-4">
-  <ul hlmPaginationContent class="w-fit gap-6">
-    <li hlmPaginationItem class="w-28">
-      <button
-        hlmPaginationLink
-        class="w-full px-4 flex items-center"
-        [disabled]="currentPage === 0"
-        (click)="
-          loadInvoices({ first: (currentPage - 1) * pageSize, rows: pageSize })
-        "
-      >
-        <hlm-icon name="lucideChevronLeft" class="h-fit" />
-        Previous
-      </button>
-    </li>
-    <div class="flex gap-2 items-center">
-      <li
-        hlmPaginationItem
-        *ngFor="let i of calculatePageNumbers(); trackBy: trackByPageIndex"
-        class="cursor-pointer"
-      >
-        <a
-          hlmPaginationLink
-          [class]="i === currentPage ? 'text-primary' : ''"
-          (click)="loadInvoices({ first: i * pageSize, rows: pageSize })"
-        >
-          {{ i + 1 }}</a
-        >
-      </li>
-      @if(showEllipsisBefore()){
-      <li hlmPaginationItem>
-        <hlm-pagination-ellipsis />
-      </li>
-      }
-    </div>
-    <li hlmPaginationItem class="w-28">
-      <button
-        hlmPaginationLink
-        class="w-full px-4 flex items-center"
-        [disabled]="(currentPage + 1) * pageSize >= totalInvoices"
-        (click)="
-          loadInvoices({ first: (currentPage + 1) * pageSize, rows: pageSize })
-        "
-      >
-        Next
-        <hlm-icon name="lucideChevronRight" class="h-fit" />
-      </button>
-    </li>
-  </ul>
+<nav hlmPagination class="mt-4 flex justify-end">
   <brn-select
-    class="inline-block"
+    class="inline-block h-full"
     placeholder="{{ _availablePageSizes[0] }}"
     [(ngModel)]="pageSize"
     (ngModelChange)="onPageSizeChange($event)"
   >
-    <hlm-select-trigger class="inline-flex mr-1 w-15 h-9">
+    <hlm-select-trigger class="inline-flex mr-1 w-15 h-full">
       <hlm-select-value />
     </hlm-select-trigger>
-    <hlm-select-content class="cursor-pointer">
+    <hlm-select-content class="cursor-pointer h-full">
       @for (size of _availablePageSizes; track size) {
       <hlm-option [value]="size">
         {{ size === 10000 ? "All" : size }}
@@ -149,4 +101,36 @@
       }
     </hlm-select-content>
   </brn-select>
+  <ul hlmPaginationContent class="w-fit gap-2">
+    <li hlmPaginationItem class="w-20">
+      <button
+        hlmPaginationLink
+        class="w-full px-4 flex items-center bg-white border-border"
+        [disabled]="currentPage === 0"
+        (click)="
+          loadInvoices({
+            first: (currentPage - 1) * pageSize,
+            rows: pageSize
+          })
+        "
+      >
+        Previous
+      </button>
+    </li>
+    <li hlmPaginationItem class="w-20">
+      <button
+        hlmPaginationLink
+        class="w-full px-4 flex items-center bg-white border-border"
+        [disabled]="(currentPage + 1) * pageSize >= totalInvoices"
+        (click)="
+          loadInvoices({
+            first: (currentPage + 1) * pageSize,
+            rows: pageSize
+          })
+        "
+      >
+        Next
+      </button>
+    </li>
+  </ul>
 </nav>
