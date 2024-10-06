@@ -10,6 +10,49 @@ export class InvoiceService {
 
   constructor(private http: HttpClient) {}
 
+  // Get all invoices with pagination
+  getAllInvoices(page: number = 0, size: number = 5): Observable<any> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<any>(`${this.apiUrl}`, { params });
+  }
+
+  
+  // Create a new invoice
+  createInvoice(request: {
+    meterNo: string;
+    unitsConsumed: number;
+    billDuration: string;
+    billDueDate: string;
+  }): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}`, request);
+  }
+
+  // Bulk upload invoices from a file
+  bulkUploadInvoice(dataFile: File, billDuration: string, billDueDate: string): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', dataFile);
+    formData.append('billDuration', billDuration);
+    formData.append('billDueDate', billDueDate);
+
+    return this.http.post<any>(`${this.apiUrl}/upload`, formData);
+  }
+
+  // Get invoices by customer name with pagination
+  getInvoicesByCustomerName(
+    customerName: string,
+    page: number = 0,
+    size: number = 5
+  ): Observable<any> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<any>(`${this.apiUrl}/customer/${customerName}`, { params });
+  }
+
   getInvoicesByMeterNo(
     meterNo: string,
     page: number = 0,
@@ -56,6 +99,20 @@ export class InvoiceService {
     window.URL.revokeObjectURL(url);
   }
 
+  viewInvoicePDF(pdfData: string, invoiceId: string): void {
+    const dataUri = `data:application/pdf;base64,${pdfData}`;
+    const blob = this.dataURItoBlob(dataUri);
+    const url = window.URL.createObjectURL(blob);
+  
+    // Open the PDF in a new tab
+    window.open(url);
+  
+    // Optionally, revoke the object URL after a certain time to free up memory
+    setTimeout(() => {
+      window.URL.revokeObjectURL(url);
+    }, 100);
+  }
+  
   // Helper method to convert base64 to Blob
   dataURItoBlob(dataURI: string): Blob {
     const byteString = atob(dataURI.split(',')[1]);
