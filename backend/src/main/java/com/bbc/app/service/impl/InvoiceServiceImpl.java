@@ -1,9 +1,11 @@
 package com.bbc.app.service.impl;
 
 import com.bbc.app.dto.data.InvoiceData;
+import com.bbc.app.dto.data.StatisticsData;
 import com.bbc.app.dto.response.InvoicesResponse;
 import com.bbc.app.dto.response.MessageResponse;
 import com.bbc.app.dto.response.SingleInvoiceResponse;
+import com.bbc.app.dto.response.StatisticsResponse;
 import com.bbc.app.model.Customer;
 import com.bbc.app.model.Invoice;
 import com.bbc.app.model.PaymentStatus;
@@ -24,10 +26,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -48,9 +49,134 @@ public class InvoiceServiceImpl implements InvoiceService {
     private static final BigDecimal RATE_PER_KW = BigDecimal.valueOf(41.50);
 
     @Override
+    public ResponseEntity<StatisticsResponse> getTotalInvoicesCount() {
+        Long invoicesCount = invoiceRepository.count();
+        return ResponseEntity.ok(new StatisticsResponse("Total Invoices Count", invoicesCount, null, true)); // Method 1: Returns the total number of invoices
+    }
+
+    @Override
+    public ResponseEntity<StatisticsResponse> getAllUnpaidInvoicesCount() {
+        Long unpaidInvoicesCount = invoiceRepository.countByPaymentStatus(PaymentStatus.UNPAID); // Method 3: Returns the total number of unpaid invoices
+        return ResponseEntity.ok(new StatisticsResponse("Total Unpaid Invoices Count", unpaidInvoicesCount, null, true));
+    }
+
+    @Override
+    public ResponseEntity<StatisticsResponse> getTotalInvoicesCountForCustomer(String meterNo) {
+        Long totalInvoicesCount = invoiceRepository.countByCustomerMeterNo(meterNo);
+        return ResponseEntity.ok(new StatisticsResponse("Total Invoices Count", totalInvoicesCount, null, true));
+    }
+
+    @Override
+    public ResponseEntity<StatisticsResponse> getUnpaidInvoicesCountForCustomer(String meterNo) {
+        Long unpaidInvoicesCount = invoiceRepository.countByCustomerMeterNoAndPaymentStatus(meterNo, PaymentStatus.UNPAID);
+        return ResponseEntity.ok(new StatisticsResponse("Total Unpaid Invoices Count", unpaidInvoicesCount, null, true));
+    }
+
+    @Override
+    public ResponseEntity<StatisticsResponse> getLastPaymentAmountForCustomer(String meterNo) {
+        Optional<Invoice> latestPaidInvoice = invoiceRepository.findTopByCustomerMeterNoAndPaymentStatusOrderByGeneratedAtDesc(meterNo, PaymentStatus.PAID);
+
+        if (latestPaidInvoice.isEmpty()) {
+            return ResponseEntity.ok(new StatisticsResponse("No paid invoices found for the customer", 0L, null, true));
+        }
+
+        BigDecimal totalAmount = latestPaidInvoice.map(Invoice::getTotalAmountDue).orElse(BigDecimal.ZERO);
+
+        StatisticsData data = new StatisticsData();
+        data.setAmount(totalAmount);
+
+        return ResponseEntity.ok(new StatisticsResponse("Last Payment Amount", 1L, data, true));
+    }
+
+    @Override
+    public ResponseEntity<StatisticsResponse> getAverageUnitConsumptionByMeterNo(String meterNo) {
+        // Fetch all invoices for the customer by meter number, sorted by bill duration
+        List<Invoice> invoices = invoiceRepository.findByCustomerMeterNoOrderByBillDurationAsc(meterNo);
+
+        // Check if no invoices are found
+        if (invoices.isEmpty()) {
+            return ResponseEntity.ok(new StatisticsResponse("No invoices found for the specified meter number!", 0L, null, false));
+        }
+
+        // Calculate the total unit consumption for all invoices
+        BigDecimal totalUnitConsumption = invoices.stream()
+                .map(Invoice::getUnitConsumption)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        // Calculate the average unit consumption
+        BigDecimal averageUnitConsumption = totalUnitConsumption.divide(BigDecimal.valueOf(invoices.size()), 2, RoundingMode.HALF_UP);
+
+        // Return the response with the calculated average
+        return ResponseEntity.ok(new StatisticsResponse("Average unit consumption calculated successfully.", 0L, new StatisticsData(null, averageUnitConsumption, null, null), true));
+    }
+
+    @Override
+    public ResponseEntity<StatisticsResponse> getUnitConsumptionDataForAllCustomers() {
+        // Fetch all invoices sorted by customer and bill duration
+        List<Invoice> invoices = invoiceRepository.findAll(Sort.by(Sort.Direction.ASC, "customer.meterNo", "billDuration"));
+
+        if (invoices.isEmpty()) {
+            return ResponseEntity.ok(new StatisticsResponse(
+                    "No invoices found for any customer!", 0L, null,
+                    false));
+        }
+
+        // Create a map to store the unit consumption data by year
+        Map<String, BigDecimal> consumptionDataByYear = new LinkedHashMap<>();
+
+        // Create a map to track the number of customers with invoices for each year
+        Map<String, Integer> customerCountsByYear = new LinkedHashMap<>();
+
+        // Calculate total unit consumption for each year across all customers
+        invoices.forEach(invoice -> {
+            // Extract the year from billDuration (assuming it's in the format 'MMMM yyyy', e.g., 'April 2025')
+            String billDuration = invoice.getBillDuration();
+            String year = billDuration.split(" ")[1]; // Get the year part
+
+            BigDecimal unitConsumption = invoice.getUnitConsumption();
+
+            // Accumulate unit consumption for each year
+            consumptionDataByYear.merge(year, unitConsumption, BigDecimal::add);
+
+            // Track how many customers have invoices for this year
+            customerCountsByYear.merge(year, 1, Integer::sum);
+        });
+
+        // Calculate average consumption per year by dividing the total by the number of customers with invoices
+        consumptionDataByYear.replaceAll((year, totalConsumption) ->
+                totalConsumption.divide(BigDecimal.valueOf(customerCountsByYear.get(year)), 2, RoundingMode.HALF_UP)
+        );
+
+        return ResponseEntity.ok(new StatisticsResponse(
+                "Year-wise Unit Consumption Data for All Customers",
+                (long) consumptionDataByYear.size(),
+                new StatisticsData(null, null, consumptionDataByYear, null),
+                true
+        ));
+    }
+
+
+    @Override
+    public ResponseEntity<StatisticsResponse> getInvoiceStatusCount() {
+        // Count the number of paid invoices
+        Long paidInvoicesCount = invoiceRepository.countByPaymentStatus(PaymentStatus.PAID);
+
+        // Count the number of unpaid invoices
+        Long unpaidInvoicesCount = invoiceRepository.countByPaymentStatus(PaymentStatus.UNPAID);
+
+        // Create a map to hold the pie chart data (paid/unpaid counts)
+        Map<String, Long> invoiceStatusData = new LinkedHashMap<>();
+        invoiceStatusData.put("Paid", paidInvoicesCount);
+        invoiceStatusData.put("Unpaid", unpaidInvoicesCount);
+
+        // Return the response with the pie chart data
+        return ResponseEntity.ok(new StatisticsResponse("Invoice Status Data", 0L, new StatisticsData(null, null, null, invoiceStatusData), true));
+    }
+
+
+    @Override
     public ResponseEntity<InvoicesResponse> getAllInvoices(int page, int size) {
         PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "generatedAt"));
-        System.out.println(page + " " + size);
 
         // Fetching all invoices with pagination
         Page<InvoiceData> invoicesPage = invoiceRepository.findAll(pageable)
@@ -120,7 +246,6 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
 
-
     @Override
     public ResponseEntity<InvoicesResponse> getInvoicesByCustomerBillDuration(String meterNo, String billDuration, int page, int size) {
         try {
@@ -153,7 +278,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public ResponseEntity<MessageResponse> createInvoice(String meterNo, BigDecimal unitsConsumed, String billDuration, LocalDate billDueDate) {
         Optional<Customer> customer = customerRepository.findByMeterNo(meterNo);
-        if(customer.isEmpty()) {
+        if (customer.isEmpty()) {
             return ResponseEntity.badRequest().body(new MessageResponse("Customer not found!", false));
         }
 

@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -17,7 +18,6 @@ import java.util.UUID;
 @Repository
 public interface InvoiceRepository extends JpaRepository<Invoice, UUID> {
 
-    @Query("SELECT COUNT(i) FROM Invoice i WHERE i.customer.meterNo = ?1")
     long countByCustomerMeterNo(String meterNo);
 
     List<Invoice> findByCustomerMeterNoAndPaymentStatus(String meterNo, PaymentStatus paymentStatus);
@@ -37,4 +37,13 @@ public interface InvoiceRepository extends JpaRepository<Invoice, UUID> {
     @Query("SELECT new com.bbc.app.dto.data.InvoiceData(i.invoiceId, c.user.name, c.meterNo, c.user.name, i.unitConsumption, i.billDuration, i.billDueDate, i.currentAmountDue, i.totalAmountDue, i.paymentStatus, i.generatedAt, i.invoicePdf) FROM Invoice i JOIN i.customer c WHERE c.meterNo = ?1 AND i.billDuration LIKE %?2%")
     Page<InvoiceData> findByCustomerMeterNoAndBillDurationContaining(String meterNo, String billDuration, Pageable pageable);
 
+    Long countByPaymentStatus(PaymentStatus paymentStatus);
+
+    Collection<Object> findByPaymentStatus(PaymentStatus paymentStatus);
+
+    Long countByCustomerMeterNoAndPaymentStatus(String meterNo, PaymentStatus paymentStatus);
+
+    Optional<Invoice> findTopByCustomerMeterNoAndPaymentStatusOrderByGeneratedAtDesc(String meterNo, PaymentStatus paymentStatus);
+
+    List<Invoice> findByCustomerMeterNoOrderByBillDurationAsc(String meterNo);
 }

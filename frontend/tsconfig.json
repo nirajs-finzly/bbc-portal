@@ -55,11 +55,11 @@
       "@spartan-ng/ui-radiogroup-helm": [
         ".\\src/app/ui/components/ui-radiogroup-helm/src/index.ts"
       ],
-      "@spartan-ng/ui-dialog-helm": [
-        ".\\src/app/uic/components/ui-dialog-helm/src/index.ts"
-      ],
       "@spartan-ng/ui-alertdialog-helm": [
         ".\\src/app/ui/components/ui-alertdialog-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-dialog-helm": [
+        ".\\src/app/ui/components/ui-dialog-helm/src/index.ts"
       ]
     }
   },

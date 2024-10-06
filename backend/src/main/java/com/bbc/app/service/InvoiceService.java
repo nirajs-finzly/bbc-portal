@@ -3,6 +3,7 @@ package com.bbc.app.service;
 import com.bbc.app.dto.response.InvoicesResponse;
 import com.bbc.app.dto.response.MessageResponse;
 import com.bbc.app.dto.response.SingleInvoiceResponse;
+import com.bbc.app.dto.response.StatisticsResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,6 +12,22 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public interface InvoiceService {
+    ResponseEntity<StatisticsResponse> getTotalInvoicesCount();
+
+    ResponseEntity<StatisticsResponse> getAllUnpaidInvoicesCount();
+
+    ResponseEntity<StatisticsResponse> getTotalInvoicesCountForCustomer(String meterNo);
+
+    ResponseEntity<StatisticsResponse> getUnpaidInvoicesCountForCustomer(String meterNo);
+
+    ResponseEntity<StatisticsResponse> getLastPaymentAmountForCustomer(String meterNo);
+
+    ResponseEntity<StatisticsResponse> getAverageUnitConsumptionByMeterNo(String meterNo);
+
+    ResponseEntity<StatisticsResponse> getUnitConsumptionDataForAllCustomers();
+
+    ResponseEntity<StatisticsResponse> getInvoiceStatusCount();
+
     ResponseEntity<InvoicesResponse> getAllInvoices(int page, int size);
 
     ResponseEntity<InvoicesResponse> getInvoicesByMeterNo(String meterNo, int page, int size);

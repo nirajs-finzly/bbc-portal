@@ -27,7 +27,8 @@ import {
   lucideEye,
   lucideTrash2,
   lucideReceipt,
-  lucidePencil
+  lucidePencil,
+  lucideTriangleAlert
 } from '@ng-icons/lucide';
 import { provideHotToastConfig } from '@ngxpert/hot-toast';
 import { routes } from './app.routes';
@@ -56,6 +57,7 @@ export const appConfig: ApplicationConfig = {
       lucideTrash2,
       lucideReceipt,
       lucidePencil,
+      lucideTriangleAlert
     }),
     provideHotToastConfig({
       duration: 5000,

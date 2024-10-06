@@ -3,6 +3,7 @@ package com.bbc.app.service.impl;
 import com.bbc.app.dto.data.CustomerData;
 import com.bbc.app.dto.response.CustomersResponse;
 import com.bbc.app.dto.response.MessageResponse;
+import com.bbc.app.dto.response.StatisticsResponse;
 import com.bbc.app.model.Customer;
 import com.bbc.app.model.User;
 import com.bbc.app.model.UserRole;
@@ -36,6 +37,12 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private Parsing parsing;
+
+    @Override
+    public ResponseEntity<StatisticsResponse> getTotalCustomersCount() {
+        Long totalCustomersCount = customerRepository.count();
+        return ResponseEntity.ok(new StatisticsResponse("Total Customers Count", totalCustomersCount, null, true));
+    }
 
     @Override
     public ResponseEntity<CustomersResponse> getAllCustomers(int page, int size) {

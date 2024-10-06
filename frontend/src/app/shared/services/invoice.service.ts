@@ -10,6 +10,58 @@ export class InvoiceService {
 
   constructor(private http: HttpClient) {}
 
+  // Get total count of all invoices
+  getAllInvoicesCount(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/statistics/all-invoices-count`);
+  }
+
+  // Get total count of all unpaid invoices
+  getAllUnpaidInvoicesCount(): Observable<any> {
+    return this.http.get<any>(
+      `${this.apiUrl}/statistics/all-unpaid-invoices-count`
+    );
+  }
+
+  // Get invoices status data
+  getInvoiceStatusData(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/statistics/invoices-status-data`);
+  }
+
+  // Get total count of all invoices for a customer by meter number
+  getAllCustomerInvoicesCount(meterNo: string): Observable<any> {
+    return this.http.get<any>(
+      `${this.apiUrl}/statistics/customer-invoices-count/${meterNo}`
+    );
+  }
+
+  // Get total count of unpaid invoices for a customer by meter number
+  getCustomerUnpaidInvoicesCount(meterNo: string): Observable<any> {
+    return this.http.get<any>(
+      `${this.apiUrl}/statistics/customer-unpaid-invoices-count/${meterNo}`
+    );
+  }
+
+  // Get the last payment amount for a customer by meter number
+  getLastPaymentAmount(meterNo: string): Observable<any> {
+    return this.http.get<any>(
+      `${this.apiUrl}/statistics/last-payment-amount/${meterNo}`
+    );
+  }
+
+  // Get the average unit consumption for a customer by meter number
+  getAverageUnitConsumptionOfCustomer(meterNo: string): Observable<any> {
+    return this.http.get<any>(
+      `${this.apiUrl}/statistics/average-unit-consumption/${meterNo}`
+    );
+  }
+
+  // Get the average unit consumption for all customers
+  getAverageUnitConsumption(): Observable<any> {
+    return this.http.get<any>(
+      `${this.apiUrl}/statistics/average-unit-consumption`
+    );
+  }
+  
   // Get all invoices with pagination
   getAllInvoices(page: number = 0, size: number = 5): Observable<any> {
     let params = new HttpParams()
@@ -19,7 +71,6 @@ export class InvoiceService {
     return this.http.get<any>(`${this.apiUrl}`, { params });
   }
 
-  
   // Create a new invoice
   createInvoice(request: {
     meterNo: string;
@@ -31,7 +82,11 @@ export class InvoiceService {
   }
 
   // Bulk upload invoices from a file
-  bulkUploadInvoice(dataFile: File, billDuration: string, billDueDate: string): Observable<any> {
+  bulkUploadInvoice(
+    dataFile: File,
+    billDuration: string,
+    billDueDate: string
+  ): Observable<any> {
     const formData = new FormData();
     formData.append('file', dataFile);
     formData.append('billDuration', billDuration);
@@ -50,7 +105,9 @@ export class InvoiceService {
       .set('page', page.toString())
       .set('size', size.toString());
 
-    return this.http.get<any>(`${this.apiUrl}/customer/${customerName}`, { params });
+    return this.http.get<any>(`${this.apiUrl}/customer/${customerName}`, {
+      params,
+    });
   }
 
   getInvoicesByMeterNo(
@@ -103,16 +160,16 @@ export class InvoiceService {
     const dataUri = `data:application/pdf;base64,${pdfData}`;
     const blob = this.dataURItoBlob(dataUri);
     const url = window.URL.createObjectURL(blob);
-  
+
     // Open the PDF in a new tab
     window.open(url);
-  
+
     // Optionally, revoke the object URL after a certain time to free up memory
     setTimeout(() => {
       window.URL.revokeObjectURL(url);
     }, 100);
   }
-  
+
   // Helper method to convert base64 to Blob
   dataURItoBlob(dataURI: string): Blob {
     const byteString = atob(dataURI.split(',')[1]);

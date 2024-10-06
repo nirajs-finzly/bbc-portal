@@ -11,6 +11,13 @@ export class CustomerService {
 
   constructor(private http: HttpClient) {}
 
+  // Get total count of all customers
+  getTotalCustomersCount(): Observable<any> {
+    return this.http.get<any>(
+      `${this.apiUrl}/statistics/total-customers-count`
+    );
+  }
+
   // Get all customers with pagination
   getAllCustomers(page: number = 0, size: number = 5): Observable<any> {
     let params = new HttpParams()

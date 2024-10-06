@@ -1,1 +1,58 @@
-<p>customer-dashboard works!</p>
+<div class="flex flex-wrap gap-8">
+  <section hlmCard class="w-[21rem] h-fit flex justify-between">
+    <div class="flex flex-col">
+      <div hlmCardHeader class="py-4">
+        <h3 hlmCardTitle>Total Invoices</h3>
+        <p hlmCardDescription>{{ user?.meterNo }}</p>
+      </div>
+      <div hlmCardContent class="pb-4">
+        <span class="text-3xl font-bold text-primary">{{ totalInvoices }}</span>
+      </div>
+    </div>
+    <div class="w-24 flex flex-col items-end justify-center pr-4">
+        <img src="assets/img/bill-receipt.png" alt="">
+    </div>
+  </section>
+  <section hlmCard class="w-[21rem] h-fit flex justify-between">
+    <div class="flex flex-col">
+      <div hlmCardHeader class="py-4">
+        <h3 hlmCardTitle>Unpaid Invoices</h3>
+        <p hlmCardDescription>{{ user?.meterNo }}</p>
+      </div>
+      <div hlmCardContent class="pb-4">
+        <span class="text-3xl font-bold text-destructive">{{ unpaidInvoices }}</span>
+      </div>
+    </div>
+    <div class="w-24 flex flex-col items-end justify-center pr-4">
+        <img src="assets/img/invoice-receipt.png" alt="">
+    </div>
+  </section>
+  <section hlmCard class="w-[21rem] h-fit flex justify-between">
+    <div class="flex flex-col">
+      <div hlmCardHeader class="py-4">
+        <h3 hlmCardTitle>Last Paid Amount</h3>
+        <p hlmCardDescription>{{ user?.meterNo }}</p>
+      </div>
+      <div hlmCardContent class="pb-4">
+        <span class="text-3xl font-bold text-yellow-500">{{ lastPaidAmount | currency: 'INR' }}</span>
+      </div>
+    </div>
+    <div class="w-24 flex flex-col items-end justify-center pr-4">
+        <img src="assets/img/rupee-symbol.png" alt="">
+    </div>
+  </section>
+  <section hlmCard class="w-[21rem] h-fit flex justify-between">
+    <div class="flex flex-col">
+      <div hlmCardHeader class="py-4">
+        <h3 hlmCardTitle>Average Consumption</h3>
+        <p hlmCardDescription>{{ user?.meterNo }}</p>
+      </div>
+      <div hlmCardContent class="pb-4">
+        <span class="text-3xl font-bold text-violet-500">{{ averageConsumption }} Kw</span>
+      </div>
+    </div>
+    <div class="w-24 flex flex-col items-end justify-center pr-4">
+        <img src="assets/img/electricity.png" alt="">
+    </div>
+  </section>
+</div>

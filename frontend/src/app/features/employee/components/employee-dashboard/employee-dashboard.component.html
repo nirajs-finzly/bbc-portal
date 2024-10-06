@@ -1,1 +1,55 @@
-<p>employee-dashboard works!</p>
+<div class="flex flex-wrap gap-8 h-fit">
+  <section hlmCard class="w-[21rem] h-fit flex justify-between">
+    <div class="flex flex-col">
+      <div hlmCardHeader class="py-4">
+        <h3 hlmCardTitle>Total Invoices</h3>
+      </div>
+      <div hlmCardContent class="pb-4">
+        <span class="text-3xl font-bold text-primary">{{ totalInvoices }}</span>
+      </div>
+    </div>
+    <div class="w-24 flex flex-col items-end justify-center pr-4">
+      <img src="assets/img/bill-receipt.png" alt="" />
+    </div>
+  </section>
+  <section hlmCard class="w-[21rem] h-fit flex justify-between">
+    <div class="flex flex-col">
+      <div hlmCardHeader class="py-4">
+        <h3 hlmCardTitle>Unpaid Invoices</h3>
+      </div>
+      <div hlmCardContent class="pb-4">
+        <span class="text-3xl font-bold text-destructive">{{
+          unpaidInvoices
+        }}</span>
+      </div>
+    </div>
+    <div class="w-24 flex flex-col items-end justify-center pr-4">
+      <img src="assets/img/invoice-receipt.png" alt="" />
+    </div>
+  </section>
+  <section hlmCard class="w-[21rem] h-fit flex justify-between">
+    <div class="flex flex-col">
+      <div hlmCardHeader class="py-4">
+        <h3 hlmCardTitle>Total Customers</h3>
+      </div>
+      <div hlmCardContent class="pb-4">
+        <span class="text-3xl font-bold text-yellow-500">{{
+          totalCustomers
+        }}</span>
+      </div>
+    </div>
+    <div class="w-24 flex flex-col items-end justify-center pr-4">
+      <img src="assets/img/customer-avatar.png" alt="" />
+    </div>
+  </section>
+</div>
+<div class="flex gap-8">
+  <div hlmCard class="chart-container p-6 w-[30vw]">
+    <h3 hlmCardTitle>Average Unit Consumption Per Year</h3>
+    <canvas id="barChart">{{ barChart }}</canvas>
+  </div>
+  <div hlmCard class="chart-container p-6 w-[30vw]">
+    <h3 hlmCardTitle>Paid Invoices vs Unpaid Invoices</h3>
+    <canvas id="doughnutChart">{{ doughnutChart }}</canvas>
+  </div>
+</div>

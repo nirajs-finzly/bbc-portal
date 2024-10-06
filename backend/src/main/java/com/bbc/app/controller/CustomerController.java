@@ -4,6 +4,7 @@ import com.bbc.app.dto.request.CreateCustomerRequest;
 import com.bbc.app.dto.request.UpdateCustomerRequest;
 import com.bbc.app.dto.response.CustomersResponse;
 import com.bbc.app.dto.response.MessageResponse;
+import com.bbc.app.dto.response.StatisticsResponse;
 import com.bbc.app.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,11 @@ public class CustomerController {
 
     @Autowired
     private CustomerService customerService;
+
+    @GetMapping("/statistics/total-customers-count")
+    public ResponseEntity<StatisticsResponse> getTotalCustomersCount() {
+        return customerService.getTotalCustomersCount();
+    }
 
     @GetMapping("")
     public ResponseEntity<CustomersResponse> getAllCustomers(

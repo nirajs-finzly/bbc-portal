@@ -2,6 +2,7 @@ package com.bbc.app.service;
 
 import com.bbc.app.dto.response.CustomersResponse;
 import com.bbc.app.dto.response.MessageResponse;
+import com.bbc.app.dto.response.StatisticsResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,6 +11,8 @@ import java.io.IOException;
 
 @Service
 public interface CustomerService {
+
+    ResponseEntity<StatisticsResponse> getTotalCustomersCount();
 
     // Retrieve all customers
     ResponseEntity<CustomersResponse> getAllCustomers(int page, int size);
