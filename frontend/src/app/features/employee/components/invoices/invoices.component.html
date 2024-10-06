@@ -7,14 +7,112 @@
     (ngModelChange)="onCustomerNameChange($event)"
   />
   <div class="flex justify-end gap-4">
-    <button hlmBtn>
-      <hlm-icon size="sm" class="mr-2" name="lucideFilePlus2" />
-      Create invoice
-    </button>
-    <button hlmBtn>
-      <hlm-icon size="sm" class="mr-2" name="lucideImport" />
-      Import invoices
-    </button>
+    <hlm-dialog>
+      <button brnDialogTrigger hlmBtn>
+        <hlm-icon size="sm" class="mr-2" name="lucideFilePlus2" />Create invoice
+      </button>
+      <hlm-dialog-content *brnDialogContent="let ctx">
+        <hlm-dialog-header>
+          <h3 brnDialogTitle hlm class="text-xl font-semibold">
+            Create new invoice
+          </h3>
+          <p brnDialogDescription hlm class="text-muted-foreground">
+            Please enter invoice data
+          </p>
+        </hlm-dialog-header>
+        <div class="py-4">
+          <label hlmLabel>Meter number
+            <input 
+              class="w-80" 
+              hlmInput 
+              type="text" 
+              placeholder="Enter meter number"
+              #meterNo
+            />
+          </label>
+          <label hlmLabel>Units consumption
+            <input 
+              class="w-80" 
+              hlmInput 
+              type="text" 
+              placeholder="Enter unit consumption"
+              #unitsConsumed
+            />
+          </label>
+          <label hlmLabel>Bill Duration
+            <input 
+              class="w-80" 
+              hlmInput 
+              type="text" 
+              placeholder="Enter bill duration"
+              #billDuration
+            />
+          </label>
+          <label hlmLabel>Bill Due Date
+            <input 
+              class="w-80" 
+              hlmInput 
+              type="date" 
+              placeholder="Enter bill due date"
+              #billDueDate
+            />
+          </label>
+        </div>
+        <hlm-dialog-footer>
+          <button hlmBtn class="w-full" (click)="createInvoice(meterNo.value, unitsConsumed.value, billDuration.value, billDueDate.value, ctx)" type="submit">
+            <hlm-icon size="sm" class="mr-2" name="lucideFilePlus2" />Create
+          </button>
+        </hlm-dialog-footer>
+      </hlm-dialog-content>
+    </hlm-dialog>
+    <hlm-dialog>
+      <button brnDialogTrigger hlmBtn>
+        <hlm-icon size="sm" class="mr-2" name="lucideImport" />Import invoices
+      </button>
+      <hlm-dialog-content *brnDialogContent="let ctx">
+        <hlm-dialog-header>
+          <h3 brnDialogTitle hlm class="text-xl font-semibold">
+            Import Invoices Data
+          </h3>
+          <p brnDialogDescription hlm class="text-muted-foreground">
+            Import csv file by selecting it from your computer
+          </p>
+        </hlm-dialog-header>
+        <div class="py-4">
+          <input
+            class="w-full"
+            hlmInput
+            type="file"
+            accept=".csv"
+            (change)="onFileSelected($event)"
+            #fileInput
+          />
+          <label hlmLabel>Bill Duration
+            <input 
+              class="w-80" 
+              hlmInput 
+              type="text" 
+              placeholder="Enter bill duration"
+              #billDuration
+            />
+          </label>
+          <label hlmLabel>Bill Due Date
+            <input 
+              class="w-80" 
+              hlmInput 
+              type="date" 
+              placeholder="Enter bill due date"
+              #billDueDate
+            />
+          </label>
+        </div>
+        <hlm-dialog-footer>
+          <button hlmBtn class="w-full" (click)="importFile(fileInput, billDuration.value, billDueDate.value, ctx)" type="submit">
+            <hlm-icon size="sm" class="mr-2" name="lucideImport" />Import
+          </button>
+        </hlm-dialog-footer>
+      </hlm-dialog-content>
+    </hlm-dialog>
   </div>
 </div>
 <brn-table

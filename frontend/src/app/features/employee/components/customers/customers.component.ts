@@ -29,11 +29,13 @@ import { HlmTableImports } from '@spartan-ng/ui-table-helm';
 import { TitleCasePipe } from '../../../../shared/pipes/titlecase.pipe';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { Customer } from '../../../../types/customer';
+import { Customer, MessageResponse } from '../../../../types/customer';
 import { CustomerService } from '../../../../shared/services/customer.service';
 import { HotToastService } from '@ngxpert/hot-toast';
 import { BrnAlertDialogContentDirective, BrnAlertDialogTriggerDirective } from '@spartan-ng/ui-alertdialog-brain';
 import { HlmAlertDialogActionButtonDirective, HlmAlertDialogCancelButtonDirective, HlmAlertDialogComponent, HlmAlertDialogContentComponent, HlmAlertDialogDescriptionDirective, HlmAlertDialogFooterComponent, HlmAlertDialogHeaderComponent, HlmAlertDialogOverlayDirective, HlmAlertDialogTitleDirective } from '@spartan-ng/ui-alertdialog-helm';
+import { Transaction } from '../../../../types/transaction';
+import { PaymentService } from '../../../../shared/services/payment.service';
 
 @Component({
   selector: 'app-customers',
@@ -90,6 +92,13 @@ export class CustomersComponent {
 
   meterNo: string = '';
 
+  customer: any;
+
+  selectedFile: File | null = null;
+
+  transactions: Transaction[] = []; 
+  showDialog: boolean = false;
+
   meterNoSubject: Subject<string> = new Subject<string>();
 
   protected readonly _brnColumnManager = useBrnColumnManager({
@@ -115,6 +124,7 @@ export class CustomersComponent {
 
   constructor(
     private customerService: CustomerService,
+    private paymentService: PaymentService,
     private toast: HotToastService
   ) {}
 
@@ -198,25 +208,189 @@ export class CustomersComponent {
     }
   }
 
+  viewCustomer(meterNo: string) {
+    this.customerService.getCustomersByMeterNo(meterNo).subscribe((data) => {
+      this.customer = data;
+    });
+  }
+
+   // Method to update customer
+  updateCustomer(meterNo: string, name: string, phone: string, address: string, ctx: any): void {
+    // Validate input values
+    if (!name) {
+      this.toast.error('Please enter the customer name');
+      return;
+    }
+    if (!phone || !this.validatePhone(phone)) {
+      this.toast.error('Please enter a valid phone number');
+      return;
+    }
+    if (!address) {
+      this.toast.error('Please enter the customer address');
+      return;
+    }
+  
+    // Create the request payload
+    const request = {
+      name: name,
+      phone: phone,
+      address: address,
+    };
+  
+    // Call the service to update customer
+    this.customerService.updateCustomer(meterNo, request).subscribe(
+      (response: MessageResponse) => {
+        this.toast.success('Customer updated successfully!');
+        ctx.close(); // Close the dialog on success
+        this.loadCustomers({ first: 0, rows: this.pageSize });
+      },
+      (error) => {
+        this.toast.error('Failed to update the customer');
+      }
+    );
+  }
+  
+
+  // Method to view transactions when user clicks the button
+  viewTransactions(meterNo: string): void {
+    this.paymentService.getAllTransactionsByMeterNo(meterNo).subscribe(
+      (response) => {
+        this.transactions = response.transactions; // Assuming the API returns a list of transactions
+        this.showDialog = true; // Show the dialog when data is available
+      },
+      (error) => {
+        console.error('Failed to load transactions', error);
+      }
+    );
+  }
+
+  // Method to track transactions by transactionId
+  trackByTransactionId(index: number, transaction: Transaction): string {
+    return transaction.transactionId;
+  }
+
+  // Method to close the dialog
+  closeDialog(): void {
+    this.showDialog = false;
+  }
+  
+  
+
+  // Method to create a new customer
+  createCustomer(name: string, email: string, phone: string, address: string, ctx: any): void {
+    // Validate input values
+    if (!name) {
+      this.toast.error('Please enter the customer name');
+      return;
+    }
+    if (!email || !this.validateEmail(email)) {
+      this.toast.error('Please enter a valid email address');
+      return;
+    }
+    if (!phone || !this.validatePhone(phone)) {
+      this.toast.error('Please enter the phone number');
+      return;
+    }
+    if (!address) {
+      this.toast.error('Please enter the customer address');
+      return;
+    }
+
+    // Create the request payload
+    const request = {
+      name: name,
+      email: email,
+      phone: phone,
+      address: address,
+    };
+
+    // Call the service to create customer
+    this.customerService.createCustomer(request).subscribe(
+      (response: MessageResponse) => {
+        this.toast.success('Customer created successfully!');
+        ctx.close(); // Close the dialog on success
+        this.loadCustomers({ first: 0, rows: this.pageSize });
+      },
+      (error) => {
+        this.toast.error('Failed to create the customer');
+      }
+    );
+  }
+
+  // Email validation method
+  private validateEmail(email: string): boolean {
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return emailPattern.test(email);
+  }
+
+  // Phone number validation method
+  private validatePhone(phone: string): boolean {
+    const phonePattern = /^[0-9]{10}$/;
+    return phonePattern.test(phone);
+  }
+
+  // Delete customer method
+  deleteCustomer(meterNo: string, ctx: any): void {
+    if (!meterNo) {
+      this.toast.error('Meter number is required');
+      return;
+    }
+
+    this.customerService.deleteCustomer(meterNo).subscribe(
+      (response) => {
+        this.toast.success('Customer deleted successfully');
+        ctx.close(); 
+        this.loadCustomers({ first: 0, rows: this.pageSize }); 
+      },
+      (error) => {
+        this.toast.error('Failed to delete customer');
+      }
+    );
+  }
+
+  
+
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
   
+      if (input?.files?.length) {
+        this.selectedFile = input.files[0];
+      }
+
       // Check if the file is a CSV
       if (file.type !== 'text/csv' && !file.name.endsWith('.csv')) {
         this.toast.error('Please upload a valid CSV file.');
         input.value = '';
         return;
       }
-  
-      // Process the file (e.g., read it, upload it, etc.)
-      this.uploadFile(file);
     }
   }
   
-  uploadFile(file: File) {
-    // Implement your upload logic here
+
+  // File import handler
+  importFile(fileInput: HTMLInputElement, ctx: any): void {
+    const file = fileInput?.files?.[0]; // Access file from input element
+    if (!file) {
+      this.toast.error('Please select a file');
+      return;
+    }
+
+    this.uploadFile(file, ctx);
+  }
+
+  uploadFile(file: File, ctx: any) {
+    this.customerService.bulkUploadCustomer(file).subscribe(
+      (response: MessageResponse) => {
+        this.toast.success('File uploaded successfully!.');
+        ctx.close();
+        this.loadCustomers({ first: 0, rows: this.pageSize });
+      },
+      (error) => {
+        this.toast.error('File upload failed!');
+      }
+    );
   }
   
 }

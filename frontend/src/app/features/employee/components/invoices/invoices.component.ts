@@ -18,6 +18,12 @@ import { Invoice } from '../../../../types/invoice';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { FormatIdPipe } from '../../../../shared/pipes/format-id.pipe';
+import { HotToastService } from '@ngxpert/hot-toast';
+import { MessageResponse } from '../../../../types/customer';
+import { HlmDialogComponent, HlmDialogContentComponent, HlmDialogDescriptionDirective, HlmDialogFooterComponent, HlmDialogHeaderComponent, HlmDialogTitleDirective } from '@spartan-ng/ui-dialog-helm';
+import { BrnDialogContentDirective, BrnDialogDescriptionDirective, BrnDialogTitleDirective, BrnDialogTriggerDirective } from '@spartan-ng/ui-dialog-brain';
+import { BrnAlertDialogContentDirective, BrnAlertDialogTriggerDirective } from '@spartan-ng/ui-alertdialog-brain';
+import { HlmAlertDialogActionButtonDirective, HlmAlertDialogCancelButtonDirective, HlmAlertDialogComponent, HlmAlertDialogContentComponent, HlmAlertDialogDescriptionDirective, HlmAlertDialogFooterComponent, HlmAlertDialogHeaderComponent, HlmAlertDialogOverlayDirective, HlmAlertDialogTitleDirective } from '@spartan-ng/ui-alertdialog-helm';
 // import { PayCardComponent } from "../pay-card/pay-card.component";
 
 @Component({
@@ -36,6 +42,28 @@ import { FormatIdPipe } from '../../../../shared/pipes/format-id.pipe';
     BrnSelectModule,
     HlmSelectModule,
     FormatIdPipe,
+    HlmDialogComponent,
+    HlmDialogContentComponent,
+    HlmDialogDescriptionDirective,
+    HlmDialogFooterComponent,
+    HlmDialogHeaderComponent,
+    HlmDialogTitleDirective,
+    BrnDialogContentDirective,
+    BrnDialogTriggerDirective,
+    BrnDialogTitleDirective,
+    BrnDialogDescriptionDirective,
+    BrnAlertDialogTriggerDirective,
+    BrnAlertDialogContentDirective,
+
+    HlmAlertDialogComponent,
+    HlmAlertDialogOverlayDirective,
+    HlmAlertDialogHeaderComponent,
+    HlmAlertDialogFooterComponent,
+    HlmAlertDialogTitleDirective,
+    HlmAlertDialogDescriptionDirective,
+    HlmAlertDialogCancelButtonDirective,
+    HlmAlertDialogActionButtonDirective,
+    HlmAlertDialogContentComponent,
   ],
   templateUrl: './invoices.component.html',
   styleUrl: './invoices.component.css',
@@ -53,6 +81,8 @@ export class InvoicesComponent {
   loading: boolean = true;
 
   customerName: string = '';
+
+  selectedFile: File | null = null;
 
   customerNameSubject: Subject<string> = new Subject<string>();
 
@@ -79,7 +109,10 @@ export class InvoicesComponent {
 
   protected readonly _availablePageSizes = [5, 10, 20, 10000];
 
-  constructor(private invoiceService: InvoiceService) {}
+  constructor(
+    private invoiceService: InvoiceService,
+    private toast: HotToastService
+  ) {}
 
   ngOnInit(): void {
     this.loadInvoices({ first: 0, rows: this.pageSize });
@@ -119,6 +152,97 @@ export class InvoicesComponent {
     }
     this.pageSize = event.rows!;
     this.getInvoices(this.currentPage, this.pageSize);
+  }
+  
+  createInvoice(meterNo: string, unitsConsumed: string, billDuration: string, billDueDate: string, ctx: any): void {
+    // Validate input values
+    if (!meterNo) {
+      this.toast.error('Please enter the meter number');
+      return;
+    }
+    if (!unitsConsumed || isNaN(Number(unitsConsumed))) {
+      this.toast.error('Please enter a valid units consumed');
+      return;
+    }
+    if (!billDuration) {
+      this.toast.error('Please enter the bill duration');
+      return;
+    }
+    if (!billDueDate) {
+      this.toast.error('Please enter the bill due date');
+      return;
+    }
+
+    // Create the request payload
+    const request = {
+      meterNo: meterNo,
+      unitsConsumed: Number(unitsConsumed), // Convert unitsConsumed to a number
+      billDuration: billDuration,
+      billDueDate: billDueDate,
+    };
+
+    // Call the service to create the invoice
+    this.invoiceService.createInvoice(request).subscribe(
+      (response: MessageResponse) => {
+        this.toast.success('Invoice created successfully!');
+        ctx.close();
+        this.loadInvoices({ first: 0, rows: this.pageSize });
+      },
+      (error) => {
+        this.toast.error('Failed to create the invoice');
+      }
+    );
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+  
+      if (input?.files?.length) {
+        this.selectedFile = input.files[0];
+      }
+
+      // Check if the file is a CSV
+      if (file.type !== 'text/csv' && !file.name.endsWith('.csv')) {
+        this.toast.error('Please upload a valid CSV file.');
+        input.value = '';
+        return;
+      }
+    }
+  }
+  
+
+  // File import handler
+  importFile(fileInput: HTMLInputElement,billDuration: string, billDueDate: string, ctx: any): void {
+    const file = fileInput?.files?.[0]; // Access file from input element
+    if (!file) {
+      this.toast.error('Please select a file');
+      return;
+    }
+    if (!billDuration) {
+      this.toast.error('Please enter bill duration');
+      return;
+    }
+    if (!billDueDate) {
+      this.toast.error('Please enter bill due date');
+      return;
+    }
+
+    this.uploadFile(file, billDuration, billDueDate, ctx);
+  }
+
+  uploadFile(file: File, billDuration: string, billDueDate: string, ctx: any) {
+    this.invoiceService.bulkUploadInvoice(file,billDuration,billDueDate).subscribe(
+      (response: MessageResponse) => {
+        this.toast.success('File uploaded successfully!.');
+        ctx.close();
+        this.loadInvoices({ first: 0, rows: this.pageSize });
+      },
+      (error) => {
+        this.toast.error('File upload failed!');
+      }
+    );
   }
 
   viewInvoicePdf(pdfData: string, invoiceId: string): void {

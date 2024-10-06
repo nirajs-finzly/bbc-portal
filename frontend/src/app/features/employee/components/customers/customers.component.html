@@ -7,10 +7,64 @@
     (ngModelChange)="onMeterNoChange($event)"
   />
   <div class="flex justify-end gap-4">
-    <button hlmBtn>
-      <hlm-icon size="sm" class="mr-2" name="lucideUserPlus" />
-      New customer
-    </button>
+    <hlm-dialog>
+      <button brnDialogTrigger hlmBtn>
+        <hlm-icon size="sm" class="mr-2" name="lucideUserPlus" />New customer
+      </button>
+      <hlm-dialog-content *brnDialogContent="let ctx">
+        <hlm-dialog-header>
+          <h3 brnDialogTitle hlm class="text-xl font-semibold">
+            Create new customer
+          </h3>
+          <p brnDialogDescription hlm class="text-muted-foreground">
+            Please enter customer data
+          </p>
+        </hlm-dialog-header>
+        <div class="py-4">
+          <label hlmLabel>Name
+            <input 
+              class="w-80" 
+              hlmInput 
+              type="text" 
+              placeholder="Enter customer name"
+              #name
+            />
+          </label>
+          <label hlmLabel>Email
+            <input 
+              class="w-80" 
+              hlmInput 
+              type="email" 
+              placeholder="Enter customer email"
+              #email
+            />
+          </label>
+          <label hlmLabel>Phone
+            <input 
+              class="w-80" 
+              hlmInput 
+              type="text" 
+              placeholder="Enter customer phone number"
+              #phone
+            />
+          </label>
+          <label hlmLabel>Address
+            <input 
+              class="w-80" 
+              hlmInput 
+              type="text" 
+              placeholder="Enter customer address"
+              #address
+            />
+          </label>
+        </div>
+        <hlm-dialog-footer>
+          <button hlmBtn class="w-full" (click)="createCustomer(name.value, email.value, phone.value, address.value, ctx)" type="submit">
+            <hlm-icon size="sm" class="mr-2" name="lucideUserPlus" />Create
+          </button>
+        </hlm-dialog-footer>
+      </hlm-dialog-content>
+    </hlm-dialog>
     <hlm-dialog>
       <button brnDialogTrigger hlmBtn>
         <hlm-icon size="sm" class="mr-2" name="lucideImport" />Import Customers
@@ -29,12 +83,13 @@
             class="w-full"
             hlmInput
             type="file"
-            ccept=".csv"
+            accept=".csv"
             (change)="onFileSelected($event)"
+            #fileInput
           />
         </div>
         <hlm-dialog-footer>
-          <button hlmBtn class="w-full" type="submit">
+          <button hlmBtn class="w-full" (click)="importFile(fileInput, ctx)" type="submit">
             <hlm-icon size="sm" class="mr-2" name="lucideImport" />Import
           </button>
         </hlm-dialog-footer>
@@ -88,15 +143,102 @@
       [attr.colspan]="4"
     >
       <div class="flex gap-2">
-        <button hlmBtn variant="ghost" title="View Customer" size="sm">
-          <hlm-icon name="lucideEye" class="text-primary w-[1.3rem] h-[1.3rem]" />
-        </button>
-        <button hlmBtn variant="ghost" title="Edit Customer" size="icon">
-          <hlm-icon name="lucidePencil" class="text-primary w-[1.3rem] h-[1.3rem]" />
-        </button>
         <hlm-alert-dialog>
           <button
-            id="edit-profile"
+            id="view"
+            variant="ghost"
+            brnAlertDialogTrigger
+            title="View Customer"
+            size="icon"
+            hlmBtn
+            (click)="viewCustomer(customer.meterNo)"
+          >
+            <hlm-icon name="lucideEye" class="text-primary w-[1.3rem] h-[1.3rem]" />
+          </button>
+          <hlm-alert-dialog-content *brnAlertDialogContent="let ctx">
+            <hlm-alert-dialog-header>
+              <h3 hlmAlertDialogTitle>Customer Information</h3>
+            </hlm-alert-dialog-header>
+              <!-- Customer Data Section -->
+              <div *ngIf="customer; else loading">
+                <p><strong>Meter No:</strong> {{ customer.meterNo }}</p>
+                <p><strong>Name:</strong> {{ customer.name }}</p>
+                <p><strong>Email:</strong> {{ customer.email }}</p>
+                <p><strong>Phone:</strong> {{ customer.phone }}</p>
+                <p><strong>Address:</strong> {{ customer.address }}</p>
+                <!-- Add more customer fields as needed -->
+              </div>
+              
+              <!-- Loading Placeholder -->
+              <ng-template #loading>
+                <p>Loading customer data...</p>
+              </ng-template>
+            <hlm-alert-dialog-footer class="mt-4">
+              <button hlmAlertDialogCancel (click)="ctx.close()">close</button>
+            </hlm-alert-dialog-footer>
+          </hlm-alert-dialog-content>
+        </hlm-alert-dialog>
+        <!-- edit -->
+        <hlm-dialog>
+          <button
+            id="edit"
+            variant="ghost"
+            brnAlertDialogTrigger
+            title="Edit Customer"
+            size="icon"
+            hlmBtn
+          >
+            <hlm-icon name="lucidePencil" class="text-primary w-[1.3rem] h-[1.3rem]" />
+          </button>
+          <hlm-dialog-content *brnDialogContent="let ctx">
+            <hlm-dialog-header>
+              <h3 brnDialogTitle hlm class="text-xl font-semibold">
+                Edit customer data
+              </h3>
+              <p brnDialogDescription hlm class="text-muted-foreground">
+                Please enter customer data to update
+              </p>
+            </hlm-dialog-header>
+            <div class="py-4">
+              <label hlmLabel>Name
+                <input 
+                  class="w-80" 
+                  hlmInput 
+                  type="text" 
+                  placeholder="Enter customer name"
+                  #name
+                />
+              </label>
+              <label hlmLabel>Phone
+                <input 
+                  class="w-80" 
+                  hlmInput 
+                  type="text" 
+                  placeholder="Enter customer phone number"
+                  #phone
+                />
+              </label>
+              <label hlmLabel>Address
+                <input 
+                  class="w-80" 
+                  hlmInput 
+                  type="text" 
+                  placeholder="Enter customer address"
+                  #address
+                />
+              </label>
+            </div>
+            <hlm-dialog-footer>
+              <button hlmBtn class="w-full" (click)="updateCustomer(customer.meterNo, name.value, phone.value, address.value, ctx)" type="submit">
+                <hlm-icon size="sm" class="mr-2" name="lucidePencil" />Update
+              </button>
+            </hlm-dialog-footer>
+          </hlm-dialog-content>
+        </hlm-dialog>
+        <!-- delete -->
+        <hlm-alert-dialog>
+          <button
+            id="delete"
             variant="ghost"
             brnAlertDialogTrigger
             title="Delete Customer"
@@ -115,16 +257,23 @@
             </hlm-alert-dialog-header>
             <hlm-alert-dialog-footer class="mt-4">
               <button hlmAlertDialogCancel (click)="ctx.close()">Cancel</button>
-              <button hlmAlertDialogAction class="!bg-destructive" (click)="ctx.close()">
+              <button hlmAlertDialogAction class="!bg-destructive" (click)="deleteCustomer(customer.meterNo, ctx)">
                 <hlm-icon name="lucideTrash2" class="w-[1.3rem] h-[1.3rem] mr-2" />
                 Delete Customer
               </button>
             </hlm-alert-dialog-footer>
           </hlm-alert-dialog-content>
         </hlm-alert-dialog>
-        <button hlmBtn variant="ghost" title="View transactions" size="icon">
+        <!-- view transaction -->
+        <button 
+          hlmBtn 
+          variant="ghost" 
+          title="View transactions" 
+          size="icon"
+          >
           <hlm-icon name="lucideReceipt" class="text-primary w-[1.3rem] h-[1.3rem]" />
         </button>
+        
       </div>
     </hlm-td>
   </brn-column-def>
