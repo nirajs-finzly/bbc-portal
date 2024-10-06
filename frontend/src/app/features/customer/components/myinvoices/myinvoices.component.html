@@ -40,7 +40,7 @@
   <brn-column-def name="billDueDate" class="w-[15%]">
     <hlm-th *brnHeaderDef>Bill Due Date</hlm-th>
     <hlm-td *brnCellDef="let invoice">
-      {{ invoice.billDueDate | date : "longDate" }}
+      {{ invoice.billDueDate | date : "MMM d, y" }}
     </hlm-td>
   </brn-column-def>
   <brn-column-def name="amountDue" class="w-[15%]">

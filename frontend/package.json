@@ -24,6 +24,7 @@
     "@ngneat/overview": "^6.0.0",
     "@ngxpert/hot-toast": "^3.0.1",
     "@spartan-ng/ui-core": "^0.0.1-alpha.356",
+    "@spartan-ng/ui-dialog-brain": "0.0.1-alpha.356",
     "@spartan-ng/ui-formfield-brain": "0.0.1-alpha.356",
     "@spartan-ng/ui-forms-brain": "0.0.1-alpha.356",
     "@spartan-ng/ui-menu-brain": "0.0.1-alpha.356",

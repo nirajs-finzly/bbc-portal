@@ -3,7 +3,6 @@ package com.bbc.app.service.impl;
 import com.bbc.app.dto.data.CustomerData;
 import com.bbc.app.dto.response.CustomersResponse;
 import com.bbc.app.dto.response.MessageResponse;
-import com.bbc.app.dto.response.SingleCustomerResponse;
 import com.bbc.app.model.Customer;
 import com.bbc.app.model.User;
 import com.bbc.app.model.UserRole;
@@ -14,6 +13,8 @@ import com.bbc.app.utils.Parsing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,7 +39,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public ResponseEntity<CustomersResponse> getAllCustomers(int page, int size) {
-        PageRequest pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "user.name"));
         Page<Customer> customerPage = customerRepository.findAll(pageable);
 
         if (customerPage.isEmpty()) {
@@ -59,15 +60,25 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public ResponseEntity<SingleCustomerResponse> getCustomerByMeterno(String meterNo) {
-        Optional<Customer> customer = customerRepository.findByMeterNo(meterNo);
+    public ResponseEntity<CustomersResponse> getCustomersByMeterNo(String meterNo, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "user.name"));
+        Page<Customer> customerPage = customerRepository.findByMeterNoContaining(meterNo, pageable);
 
-        return customer.map(value ->
-                        ResponseEntity.ok(new SingleCustomerResponse(
-                                "Customer found", value, true)))
-                .orElseGet(() -> ResponseEntity.ok(
-                        new SingleCustomerResponse(
-                                "Customer not found", null, false)));
+        if (customerPage.isEmpty()) {
+            return ResponseEntity.ok(new CustomersResponse("No customers found!", List.of(), false));
+        }
+
+        List<CustomerData> customerDataList = customerPage.getContent().stream()
+                .map(customer -> new CustomerData(
+                        customer.getUser().getName(),
+                        customer.getUser().getEmail(),
+                        customer.getUser().getPhone(),
+                        customer.getAddress(),
+                        customer.getMeterNo()
+                ))
+                .toList();
+
+        return ResponseEntity.ok(new CustomersResponse("Customers data found!", customerDataList, true));
 
     }
 
@@ -128,12 +139,12 @@ public class CustomerServiceImpl implements CustomerService {
 
         if (!Objects.requireNonNull(dataFile.getOriginalFilename()).endsWith(".csv")) {
 
-            return ResponseEntity.badRequest().body(new MessageResponse("Error! Invalid file format",false));
+            return ResponseEntity.badRequest().body(new MessageResponse("Error! Invalid file format", false));
         }
 
         AtomicInteger invalidRecords = new AtomicInteger(0); // To keep track of invalid records
 
-        List<Customer> customers = parsing.parseCSV(dataFile.getInputStream(),invalidRecords);
+        List<Customer> customers = parsing.parseCSV(dataFile.getInputStream(), invalidRecords);
 
         int validRecords = customers.size();
 

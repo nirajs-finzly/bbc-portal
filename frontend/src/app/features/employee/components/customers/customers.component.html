@@ -1,163 +1,150 @@
-<!-- <div>
-    <app-pay-card />
-  </div> -->
-  
-  <div class="flex flex-col justify-between gap-4 sm:flex-row">
-    <input
-      hlmInput
-      class="w-full md:w-80"
-      placeholder="Search by meter number"
-      [(ngModel)]="meterNo"
-      (ngModelChange)="onMeterNoChange($event)"
-    />
-    <div class="flex justify-end gap-4">
-        <button hlmBtn>
-            <hlm-icon size="sm" class="mr-2" name="lucideUserPlus" />
-            New customer
-        </button>
-        <button hlmBtn>
-            <hlm-icon size="sm" class="mr-2" name="lucideImport" />
-            Import customers
-        </button>
-    </div>
+<div class="flex flex-col justify-between gap-4 sm:flex-row">
+  <input
+    hlmInput
+    class="w-full md:w-80 bg-background"
+    placeholder="Search by meter number"
+    [(ngModel)]="meterNo"
+    (ngModelChange)="onMeterNoChange($event)"
+  />
+  <div class="flex justify-end gap-4">
+    <button hlmBtn>
+      <hlm-icon size="sm" class="mr-2" name="lucideUserPlus" />
+      New customer
+    </button>
+    <button hlmBtn>
+      <hlm-icon size="sm" class="mr-2" name="lucideImport" />
+      Import customers
+    </button>
   </div>
-  <brn-table
-    hlm
-    stickyHeader
-    class="border-border mt-4 block min-h-[400px] overflow-auto rounded-md border"
-    [dataSource]="customers"
-    [displayedColumns]="_allDisplayedColumns()"
-    [trackBy]="_trackBy"
-  >
-    <brn-column-def name="name" class="w-[16%]">
-        <hlm-th *brnHeaderDef>Name</hlm-th>
-        <hlm-td *brnCellDef="let customer">
-          {{ customer.user.name }}
-        </hlm-td>
-    </brn-column-def>
-    <brn-column-def name="email" class="w-[16%]">
-      <hlm-th *brnHeaderDef>Email</hlm-th>
-      <hlm-td *brnCellDef="let customer">
-        {{ customer.user.email }} 
-      </hlm-td>
-    </brn-column-def>
-    <brn-column-def name="phone" class="w-[16%]">
-      <hlm-th *brnHeaderDef>Phone</hlm-th>
-      <hlm-td class="font-semibold" *brnCellDef="let customer">
-        {{ customer.user.phone }}
-      </hlm-td>
-    </brn-column-def>
-    <brn-column-def name="address" class="w-[16%]">
-      <hlm-th *brnHeaderDef>Address</hlm-th>
-      <hlm-td *brnCellDef="let customer">
-        {{ customer.address }}
-      </hlm-td>
-    </brn-column-def>
-    <brn-column-def name="actions" class="w-[20%]">
-      <hlm-th *brnHeaderDef [attr.colspan]="4">Actions</hlm-th>
-      <hlm-td *brnCellDef="let customer" class="cursor-pointer" [attr.colspan]="4">
-        <div class="flex gap-2">
-          <button
-            hlmBtn
-            variant="ghost"
-            title="View Customer"
-            size="icon"
-          >
-            <hlm-icon name="lucideEye" class="text-primary" />
-          </button>
-          <button
-            hlmBtn
-            variant="ghost"
-            title="Edit Customer"
-            size="icon"
-          >
-            <hlm-icon name="lucidePencil" class="text-primary" />
-          </button>
-          <button
-            hlmBtn
-            variant="ghost"
-            title="Delete Customer"
-            size="icon"
-          >
-            <hlm-icon name="lucideTrash2" class="text-primary" />
-          </button>
-          <button
-            hlmBtn
-            variant="ghost"
-            title="View transactions"
-            size="icon"
-          >
-            <hlm-icon name="lucideReceipt" class="text-primary" />
-          </button>
-        </div>
-      </hlm-td>
-    </brn-column-def>
-  </brn-table>
-  <nav hlmPagination class="mt-4">
-    <ul hlmPaginationContent class="w-fit gap-6">
-      <li hlmPaginationItem class="w-28">
-        <button
-          hlmPaginationLink
-          class="w-full px-4 flex items-center"
-          [disabled]="currentPage === 0"
-          (click)="
-            loadCustomers({ first: (currentPage - 1) * pageSize, rows: pageSize })
-          "
-        >
-          <hlm-icon name="lucideChevronLeft" class="h-fit" />
-          Previous
-        </button>
-      </li>
-      <div class="flex gap-2 items-center">
-        <li
-          hlmPaginationItem
-          *ngFor="let i of calculatePageNumbers(); trackBy: trackByPageIndex"
-          class="cursor-pointer"
-        >
-          <a
-            hlmPaginationLink
-            [class]="i === currentPage ? 'text-primary' : ''"
-            (click)="loadCustomers({ first: i * pageSize, rows: pageSize })"
-          >
-            {{ i + 1 }}</a
-          >
-        </li>
-        @if(showEllipsisBefore()){
-        <li hlmPaginationItem>
-          <hlm-pagination-ellipsis />
-        </li>
-        }
-      </div>
-      <li hlmPaginationItem class="w-28">
-        <button
-          hlmPaginationLink
-          class="w-full px-4 flex items-center"
-          [disabled]="(currentPage + 1) * pageSize >= totalCustomers"
-          (click)="
-            loadCustomers({ first: (currentPage + 1) * pageSize, rows: pageSize })
-          "
-        >
-          Next
-          <hlm-icon name="lucideChevronRight" class="h-fit" />
-        </button>
-      </li>
-    </ul>
-    <brn-select
-      class="inline-block"
-      placeholder="{{ _availablePageSizes[0] }}"
-      [(ngModel)]="pageSize"
-      (ngModelChange)="onPageSizeChange($event)"
+</div>
+<brn-table
+  hlm
+  stickyHeader
+  class="border-border mt-4 block min-h-[400px] overflow-auto rounded-md border"
+  [dataSource]="customers"
+  [displayedColumns]="_allDisplayedColumns()"
+  [trackBy]="_trackBy"
+>
+  <brn-column-def name="meterNo" class="w-[16%]">
+    <hlm-th *brnHeaderDef>Meter No</hlm-th>
+    <hlm-td *brnCellDef="let customer">
+      {{ customer.meterNo }}
+    </hlm-td>
+  </brn-column-def>
+  <brn-column-def name="name" class="w-[16%]">
+    <hlm-th *brnHeaderDef>Name</hlm-th>
+    <hlm-td *brnCellDef="let customer">
+      {{ customer.name }}
+    </hlm-td>
+  </brn-column-def>
+  <brn-column-def name="email" class="w-[16%] text-center">
+    <hlm-th *brnHeaderDef>Email</hlm-th>
+    <hlm-td truncate *brnCellDef="let customer">
+      {{ customer.email }}
+    </hlm-td>
+  </brn-column-def>
+  <brn-column-def name="phone" class="w-[16%]">
+    <hlm-th *brnHeaderDef>Phone</hlm-th>
+    <hlm-td *brnCellDef="let customer">
+      {{ customer.phone }}
+    </hlm-td>
+  </brn-column-def>
+  <brn-column-def name="address" class="w-[16%]">
+    <hlm-th *brnHeaderDef>Address</hlm-th>
+    <hlm-td *brnCellDef="let customer">
+      {{ customer.address }}
+    </hlm-td>
+  </brn-column-def>
+  <brn-column-def name="actions" class="w-[20%]">
+    <hlm-th *brnHeaderDef [attr.colspan]="4">Actions</hlm-th>
+    <hlm-td
+      *brnCellDef="let customer"
+      class="cursor-pointer"
+      [attr.colspan]="4"
     >
-      <hlm-select-trigger class="inline-flex mr-1 w-15 h-9">
-        <hlm-select-value />
-      </hlm-select-trigger>
-      <hlm-select-content class="cursor-pointer">
-        @for (size of _availablePageSizes; track size) {
-        <hlm-option [value]="size">
-          {{ size === 10000 ? "All" : size }}
-        </hlm-option>
-        }
-      </hlm-select-content>
-    </brn-select>
-  </nav>
-  
+      <div class="flex gap-2">
+        <button hlmBtn variant="ghost" title="View Customer" size="icon">
+          <hlm-icon name="lucideEye" class="text-primary" />
+        </button>
+        <button hlmBtn variant="ghost" title="Edit Customer" size="icon">
+          <hlm-icon name="lucidePencil" class="text-primary" />
+        </button>
+        <button hlmBtn variant="ghost" title="Delete Customer" size="icon">
+          <hlm-icon name="lucideTrash2" class="text-primary" />
+        </button>
+        <button hlmBtn variant="ghost" title="View transactions" size="icon">
+          <hlm-icon name="lucideReceipt" class="text-primary" />
+        </button>
+      </div>
+    </hlm-td>
+  </brn-column-def>
+</brn-table>
+<nav hlmPagination class="mt-4">
+  <ul hlmPaginationContent class="w-fit gap-6">
+    <li hlmPaginationItem class="w-28">
+      <button
+        hlmPaginationLink
+        class="w-full px-4 flex items-center"
+        [disabled]="currentPage === 0"
+        (click)="
+          loadCustomers({ first: (currentPage - 1) * pageSize, rows: pageSize })
+        "
+      >
+        <hlm-icon name="lucideChevronLeft" class="h-fit" />
+        Previous
+      </button>
+    </li>
+    <div class="flex gap-2 items-center">
+      <li
+        hlmPaginationItem
+        *ngFor="let i of calculatePageNumbers(); trackBy: trackByPageIndex"
+        class="cursor-pointer"
+      >
+        <a
+          hlmPaginationLink
+          [class]="i === currentPage ? 'text-primary' : ''"
+          (click)="loadCustomers({ first: i * pageSize, rows: pageSize })"
+        >
+          {{ i + 1 }}</a
+        >
+      </li>
+      @if(showEllipsisBefore()){
+      <li hlmPaginationItem>
+        <hlm-pagination-ellipsis />
+      </li>
+      }
+    </div>
+    <li hlmPaginationItem class="w-28">
+      <button
+        hlmPaginationLink
+        class="w-full px-4 flex items-center"
+        [disabled]="(currentPage + 1) * pageSize >= totalCustomers"
+        (click)="
+          loadCustomers({ first: (currentPage + 1) * pageSize, rows: pageSize })
+        "
+      >
+        Next
+        <hlm-icon name="lucideChevronRight" class="h-fit" />
+      </button>
+    </li>
+  </ul>
+  <brn-select
+    class="inline-block"
+    placeholder="{{ _availablePageSizes[0] }}"
+    [(ngModel)]="pageSize"
+    (ngModelChange)="onPageSizeChange($event)"
+  >
+    <hlm-select-trigger class="inline-flex mr-1 w-15 h-9">
+      <hlm-select-value />
+    </hlm-select-trigger>
+    <hlm-select-content class="cursor-pointer">
+      @for (size of _availablePageSizes; track size) {
+      <hlm-option [value]="size">
+        {{ size === 10000 ? "All" : size }}
+      </hlm-option>
+      }
+    </hlm-select-content>
+  </brn-select>
+</nav>
+
+<app-import-customers />

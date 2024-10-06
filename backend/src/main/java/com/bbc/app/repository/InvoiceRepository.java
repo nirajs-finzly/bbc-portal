@@ -1,6 +1,6 @@
 package com.bbc.app.repository;
 
-import com.bbc.app.dto.data.CustomerInvoiceData;
+import com.bbc.app.dto.data.InvoiceData;
 import com.bbc.app.model.Customer;
 import com.bbc.app.model.Invoice;
 import com.bbc.app.model.PaymentStatus;
@@ -17,8 +17,6 @@ import java.util.UUID;
 @Repository
 public interface InvoiceRepository extends JpaRepository<Invoice, UUID> {
 
-    Page<CustomerInvoiceData> findByCustomerMeterNo(String meterNo, Pageable pageable);
-
     @Query("SELECT COUNT(i) FROM Invoice i WHERE i.customer.meterNo = ?1")
     long countByCustomerMeterNo(String meterNo);
 
@@ -30,11 +28,13 @@ public interface InvoiceRepository extends JpaRepository<Invoice, UUID> {
 
     Optional<Invoice> findByCustomerAndBillDuration(Customer customer, String billDuration);
 
-    Page<CustomerInvoiceData> findByCustomerMeterNoAndBillDurationContaining(String meterNo, String billDuration, Pageable pageable);
+    @Query("SELECT new com.bbc.app.dto.data.InvoiceData(i.invoiceId, c.user.name, c.meterNo, c.user.name, i.unitConsumption, i.billDuration, i.billDueDate, i.currentAmountDue, i.totalAmountDue, i.paymentStatus, i.generatedAt, i.invoicePdf) FROM Invoice i JOIN i.customer c WHERE c.meterNo = ?1")
+    Page<InvoiceData> findByCustomerMeterNo(String meterNo, Pageable pageable);
 
-    // Method to find invoices by the customer's user name
-    Page<CustomerInvoiceData> findByCustomerUserNameContaining(String userName, Pageable pageable);
+    @Query("SELECT new com.bbc.app.dto.data.InvoiceData(i.invoiceId, c.user.name, c.meterNo, c.user.name, i.unitConsumption, i.billDuration, i.billDueDate, i.currentAmountDue, i.totalAmountDue, i.paymentStatus, i.generatedAt, i.invoicePdf) FROM Invoice i JOIN i.customer c WHERE c.user.name LIKE %?1%")
+    Page<InvoiceData> findByCustomerUserNameContaining(String userName, Pageable pageable);
 
-    // Method to count total invoices by customer user name
-    Long countByCustomerUserName(String userName);
+    @Query("SELECT new com.bbc.app.dto.data.InvoiceData(i.invoiceId, c.user.name, c.meterNo, c.user.name, i.unitConsumption, i.billDuration, i.billDueDate, i.currentAmountDue, i.totalAmountDue, i.paymentStatus, i.generatedAt, i.invoicePdf) FROM Invoice i JOIN i.customer c WHERE c.meterNo = ?1 AND i.billDuration LIKE %?2%")
+    Page<InvoiceData> findByCustomerMeterNoAndBillDurationContaining(String meterNo, String billDuration, Pageable pageable);
+
 }

@@ -17,6 +17,7 @@ import { InvoiceService } from '../../../../shared/services/invoice.service';
 import { Invoice } from '../../../../types/invoice';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { FormatIdPipe } from '../../../../shared/pipes/format-id.pipe';
 // import { PayCardComponent } from "../pay-card/pay-card.component";
 
 
@@ -35,6 +36,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
     FormsModule,
     BrnSelectModule,
     HlmSelectModule,
+    FormatIdPipe
   ],
   templateUrl: './invoices.component.html',
   styleUrl: './invoices.component.css',
@@ -107,7 +109,6 @@ export class InvoicesComponent {
           next: (response: any) => {
             this.invoices = response.invoices || [];
             this.totalInvoices = response.totalInvoices || 0;
-            this.sortInvoicesByGeneratedAt();
             this.loading = false;
           },
           error: (error: any) => {
@@ -126,15 +127,7 @@ export class InvoicesComponent {
     this.pageSize = event.rows!;
     this.getInvoices(this.currentPage, this.pageSize);
   }
-    
-
-  sortInvoicesByGeneratedAt(): void {
-    this.invoices.sort((a: Invoice, b: Invoice) => {
-      const dateA = new Date(a.generatedAt).getTime();
-      const dateB = new Date(b.generatedAt).getTime();
-      return dateB - dateA;
-    });
-  }
+  
   
   viewInvoicePdf(pdfData: string, invoiceId: string): void {
     if (!pdfData) {
@@ -206,7 +199,6 @@ export class InvoicesComponent {
           next: (response: any) => {
             this.invoices = response.invoices || [];
             this.totalInvoices = response.totalInvoices || 0;
-            this.sortInvoicesByGeneratedAt();
             this.loading = false;
           },
           error: (error: any) => {

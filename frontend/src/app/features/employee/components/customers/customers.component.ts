@@ -17,6 +17,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Customer } from '../../../../types/customer';
 import { CustomerService } from '../../../../shared/services/customer.service';
+import { ImportCustomersComponent } from '../../modals/import-customers/import-customers.component';
 
 @Component({
   selector: 'app-customers',
@@ -33,6 +34,7 @@ import { CustomerService } from '../../../../shared/services/customer.service';
     FormsModule,
     BrnSelectModule,
     HlmSelectModule,
+    ImportCustomersComponent
   ],
   templateUrl: './customers.component.html',
   styleUrl: './customers.component.css',
@@ -54,6 +56,7 @@ export class CustomersComponent {
   meterNoSubject: Subject<string> = new Subject<string>();
 
   protected readonly _brnColumnManager = useBrnColumnManager({
+    meterNo: { visible: true, label: 'Meter No' },
     name: { visible: true, label: 'Name' },
     email: { visible: true, label: 'Email' },
     phone: { visible: true, label: 'Phone' },
@@ -102,7 +105,6 @@ export class CustomersComponent {
           next: (response: any) => {
             this.customers = response.customers || [];
             this.totalCustomers = response.totalCustomers || 0;
-            this.sortCustomersByName();
             this.loading = false;
           },
           error: (error: any) => {
@@ -120,15 +122,6 @@ export class CustomersComponent {
     }
     this.pageSize = event.rows!;
     this.getCustomers(this.currentPage, this.pageSize);
-  }
-    
-
-  sortCustomersByName(): void {
-    this.customers.sort((a: Customer, b: Customer) => {
-      const dateA = new Date(a.user.name).getTime();
-      const dateB = new Date(b.user.name).getTime();
-      return dateB - dateA;
-    });
   }
 
   calculatePageNumbers(): number[] {
@@ -188,12 +181,11 @@ export class CustomersComponent {
     } else if (this.customers.length!==0) {
       this.loading = true;
       this.customerService
-        .getCustomerByMeterNo(meterNo)
+        .getCustomersByMeterNo(meterNo)
         .subscribe({
           next: (response: any) => {
             this.customers = response.customers || [];
             this.totalCustomers = response.totalCustomers || 0;
-            this.sortCustomersByName();
             this.loading = false;
           },
           error: (error: any) => {

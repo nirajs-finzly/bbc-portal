@@ -59,7 +59,7 @@ body {
   @apply overflow-hidden h-screen;
 }
 
-.cdk-header,
+.cdk-header-row,
 .cdk-row {
   @apply justify-around;
 }

@@ -1,8 +1,6 @@
 package com.bbc.app.service.impl;
 
-import com.bbc.app.dto.data.CustomerInvoiceData;
 import com.bbc.app.dto.data.InvoiceData;
-import com.bbc.app.dto.response.CustomerInvoicesResponse;
 import com.bbc.app.dto.response.InvoicesResponse;
 import com.bbc.app.dto.response.MessageResponse;
 import com.bbc.app.dto.response.SingleInvoiceResponse;
@@ -74,18 +72,18 @@ public class InvoiceServiceImpl implements InvoiceService {
 
 
     @Override
-    public ResponseEntity<CustomerInvoicesResponse> getInvoicesByMeterNo(String meterNo, int page, int size) {
+    public ResponseEntity<InvoicesResponse> getInvoicesByMeterNo(String meterNo, int page, int size) {
         // Add sorting by generatedAt in descending order
         PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "generatedAt"));
 
-        Page<CustomerInvoiceData> invoicesPage = invoiceRepository.findByCustomerMeterNo(meterNo, pageable);
+        Page<InvoiceData> invoicesPage = invoiceRepository.findByCustomerMeterNo(meterNo, pageable);
         Long totalInvoicesCount = invoiceRepository.countByCustomerMeterNo(meterNo);
 
         if (invoicesPage.isEmpty()) {
-            return ResponseEntity.ok(new CustomerInvoicesResponse("No invoices found!", List.of(), 0L, false));
+            return ResponseEntity.ok(new InvoicesResponse("No invoices found!", List.of(), 0L, false));
         }
 
-        CustomerInvoicesResponse response = new CustomerInvoicesResponse(
+        InvoicesResponse response = new InvoicesResponse(
                 "Invoices retrieved successfully!",
                 invoicesPage.getContent(),
                 totalInvoicesCount,
@@ -97,37 +95,48 @@ public class InvoiceServiceImpl implements InvoiceService {
 
 
     @Override
-    public ResponseEntity<CustomerInvoicesResponse> getInvoicesByCustomerName(String customerName, int page, int size) {
+    public ResponseEntity<InvoicesResponse> getInvoicesByCustomerName(String customerName, int page, int size) {
+        // Create a pageable object with sorting by "generatedAt" in descending order
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "generatedAt"));
 
         // Fetch paginated invoices by customer name
-        Page<CustomerInvoiceData> invoicesPage = invoiceRepository.findByCustomerUserNameContaining(customerName, pageable);
+        Page<InvoiceData> invoicesPage = invoiceRepository.findByCustomerUserNameContaining(customerName, pageable);
 
-        if (invoicesPage.isEmpty()) {
-            return ResponseEntity.ok(new CustomerInvoicesResponse("No invoices found for customer: " + customerName, List.of(), 0L, false));
+        // If no invoices are found, return a response with an empty list
+        if (!invoicesPage.hasContent()) {
+            return ResponseEntity.ok(new InvoicesResponse("No invoices found for customer: " + customerName, List.of(), 0L, false));
         }
 
-        CustomerInvoicesResponse response = new CustomerInvoicesResponse("Invoices retrieved successfully!", invoicesPage.getContent(), invoicesPage.getTotalElements(), true);
+        // Create the response object with retrieved invoices
+        InvoicesResponse response = new InvoicesResponse(
+                "Invoices retrieved successfully!",
+                invoicesPage.getContent(),
+                invoicesPage.getTotalElements(),
+                true
+        );
+
+        // Return the response entity with the InvoicesResponse object
         return ResponseEntity.ok(response);
     }
 
 
+
     @Override
-    public ResponseEntity<CustomerInvoicesResponse> getInvoicesByCustomerBillDuration(String meterNo, String billDuration, int page, int size) {
+    public ResponseEntity<InvoicesResponse> getInvoicesByCustomerBillDuration(String meterNo, String billDuration, int page, int size) {
         try {
             // Create pageable object for pagination
             PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "generatedAt"));
 
             // Fetch invoices that match the meter number and partial bill duration with pagination
-            Page<CustomerInvoiceData> invoicesPage = invoiceRepository.findByCustomerMeterNoAndBillDurationContaining(meterNo, billDuration, pageable);
+            Page<InvoiceData> invoicesPage = invoiceRepository.findByCustomerMeterNoAndBillDurationContaining(meterNo, billDuration, pageable);
 
             // Check if no invoices match the criteria
             if (invoicesPage.isEmpty()) {
-                return ResponseEntity.ok(new CustomerInvoicesResponse("No invoices found for the specified meter number and bill duration!", List.of(), 0L, false));
+                return ResponseEntity.ok(new InvoicesResponse("No invoices found for the specified meter number and bill duration!", List.of(), 0L, false));
             }
 
             // Create a response with the invoices and pagination details
-            CustomerInvoicesResponse response = new CustomerInvoicesResponse(
+            InvoicesResponse response = new InvoicesResponse(
                     "Invoices retrieved successfully!",
                     invoicesPage.getContent(),
                     invoicesPage.getTotalElements(),

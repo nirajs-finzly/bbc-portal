@@ -1,5 +1,6 @@
 export interface Invoice {
     invoiceId: string;
+    customerName?: string;
     unitConsumption: number;
     billDuration: string;
     billDueDate: string;

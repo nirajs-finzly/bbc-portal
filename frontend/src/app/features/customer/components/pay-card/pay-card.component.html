@@ -1,35 +1,35 @@
 @if(latestInvoice !== null){
-<section hlmCard>
-  <div hlmCardHeader class="pb-2">
-    <h3 hlmCardTitle class="text-destructive">Pay Invoice</h3>
-    <p hlmCardDescription>{{ latestInvoice.billDuration }}</p>
-  </div>
-  <div hlmCardContent class="flex items-center gap-8">
-    <div class="flex flex-col gap-2">
-        <p class="text-sm font-semibold">
-          Amount:
-          <span class="font-light text-destructive">{{
-            latestInvoice.totalAmountDue | currency : "INR"
-          }}</span>
-        </p>
-        <p class="text-sm font-semibold">
-          Due Date:
-          <span class="font-light">{{
-            latestInvoice.billDueDate | date : "longDate"
-          }}</span>
-        </p>
+  <section hlmCard>
+    <div hlmCardHeader class="pb-2">
+      <h3 hlmCardTitle class="text-destructive">Pay Invoice</h3>
+      <p hlmCardDescription>{{ latestInvoice.billDuration }}</p>
     </div>
-    <div class="h-full flex flex-col justify-between">
-        <button
-          hlmBtn
-          size="sm"
-          class="text-xs"
-          variant="destructive"
-          (click)="initiateInvoicePayment()"
-        >
-        <hlm-icon name="lucideCreditCard" size="sm" class="mr-2" />
-        Pay Now</button>
+    <div hlmCardContent class="flex items-center gap-8">
+      <div class="flex flex-col gap-2">
+          <p class="text-sm font-semibold">
+            Amount:
+            <span class="font-light text-destructive">{{
+              latestInvoice.totalAmountDue | currency : "INR"
+            }}</span>
+          </p>
+          <p class="text-sm font-semibold">
+            Due Date:
+            <span class="font-light">{{
+              latestInvoice.billDueDate | date : "longDate"
+            }}</span>
+          </p>
       </div>
-  </div>
-</section>
-}
+      <div class="h-full flex flex-col justify-between">
+          <button
+            hlmBtn
+            size="sm"
+            class="text-xs"
+            variant="destructive"
+            (click)="initiateInvoicePayment()"
+          >
+          <hlm-icon name="lucideCreditCard" size="sm" class="mr-2" />
+          Pay Now</button>
+        </div>
+    </div>
+  </section>
+  }

@@ -2,7 +2,6 @@ package com.bbc.app.service;
 
 import com.bbc.app.dto.response.CustomersResponse;
 import com.bbc.app.dto.response.MessageResponse;
-import com.bbc.app.dto.response.SingleCustomerResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,8 +14,7 @@ public interface CustomerService {
     // Retrieve all customers
     ResponseEntity<CustomersResponse> getAllCustomers(int page, int size);
 
-    // Retrieve a customer by meter number
-    ResponseEntity<SingleCustomerResponse> getCustomerByMeterno(String meterno);
+    ResponseEntity<CustomersResponse> getCustomersByMeterNo(String meterNo, int page, int size);
 
     // Create a new customer
     ResponseEntity<MessageResponse> createCustomer(String name, String email, String phone, String address);

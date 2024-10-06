@@ -1,7 +1,6 @@
 package com.bbc.app.controller;
 
 import com.bbc.app.dto.request.CreateInvoiceRequest;
-import com.bbc.app.dto.response.CustomerInvoicesResponse;
 import com.bbc.app.dto.response.InvoicesResponse;
 import com.bbc.app.dto.response.MessageResponse;
 import com.bbc.app.dto.response.SingleInvoiceResponse;
@@ -33,7 +32,7 @@ public class InvoiceController {
     }
 
     @GetMapping("/{meterNo}")
-    public ResponseEntity<CustomerInvoicesResponse> getInvoicesByCustomerMeterNo(
+    public ResponseEntity<InvoicesResponse> getInvoicesByCustomerMeterNo(
             @PathVariable @Pattern(regexp = "^(MTR)\\d{7}$", message = "Invalid meter number format") String meterNo,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size
@@ -42,7 +41,7 @@ public class InvoiceController {
     }
 
     @GetMapping("/customer/{customerName}")
-    public ResponseEntity<CustomerInvoicesResponse> getInvoicesByCustomerName(
+    public ResponseEntity<InvoicesResponse> getInvoicesByCustomerName(
             @PathVariable String customerName,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size
@@ -51,7 +50,7 @@ public class InvoiceController {
     }
 
     @GetMapping("/{meterNo}/{billDuration}")
-    public ResponseEntity<CustomerInvoicesResponse> getInvoicesCustomerByBillDuration(
+    public ResponseEntity<InvoicesResponse> getInvoicesCustomerByBillDuration(
             @PathVariable @Pattern(regexp = "^(MTR)\\d{7}$", message = "Invalid meter number format") String meterNo,
             @PathVariable @NotBlank(message = "Bill duration is required") String billDuration,
             @RequestParam(defaultValue = "0") int page,

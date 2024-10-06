@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CreateCustomerRequest, CustomersResponse, MessageResponse, SingleCustomerResponse, UpdateCustomerRequest } from '../../types/customer';
+import { CreateCustomerRequest, MessageResponse, SingleCustomerResponse, UpdateCustomerRequest } from '../../types/customer';
 
 @Injectable({
   providedIn: 'root',
@@ -13,9 +13,18 @@ export class CustomerService {
 
   // Get all customers with pagination
   getAllCustomers(page: number = 0, size: number = 5): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}?page=${page}&size=${size}`);
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.get<any>(`${this.apiUrl}`, {params});
   }
 
+  getCustomersByMeterNo(meterNo: string, page: number = 0, size: number = 5): Observable<SingleCustomerResponse> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.get<SingleCustomerResponse>(`${this.apiUrl}/${meterNo}`, {params});
+  }
   
   // Create a customer
   createCustomer(request: CreateCustomerRequest): Observable<MessageResponse> {
@@ -38,12 +47,5 @@ export class CustomerService {
     formData.append('file', file, file.name);
     
     return this.http.post<MessageResponse>(`${this.apiUrl}/upload`, formData);
-  }
-
-  // Get customers by meter no with pagination
-  getCustomerByMeterNo(meterNo: string): Observable<SingleCustomerResponse> {
-    return this.http.get<SingleCustomerResponse>(`${this.apiUrl}/${meterNo}`);
-  }
-
-  
+  }  
 }
