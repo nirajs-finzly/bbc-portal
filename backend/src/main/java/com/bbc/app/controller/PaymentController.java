@@ -58,7 +58,7 @@ public class PaymentController {
     }
 
     @PostMapping("/cash-payment")
-    public ResponseEntity<MessageResponse> initiatePayment(@RequestBody CashPaymentRequest request) {
+    public ResponseEntity<MessageResponse> markPaymentAsCash(@RequestBody CashPaymentRequest request) {
         return paymentService.markInvoiceAsPaid(request.getInvoiceId(), request.getPaymentMethod());
     }
 }

@@ -32,8 +32,21 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Customer, MessageResponse } from '../../../../types/customer';
 import { CustomerService } from '../../../../shared/services/customer.service';
 import { HotToastService } from '@ngxpert/hot-toast';
-import { BrnAlertDialogContentDirective, BrnAlertDialogTriggerDirective } from '@spartan-ng/ui-alertdialog-brain';
-import { HlmAlertDialogActionButtonDirective, HlmAlertDialogCancelButtonDirective, HlmAlertDialogComponent, HlmAlertDialogContentComponent, HlmAlertDialogDescriptionDirective, HlmAlertDialogFooterComponent, HlmAlertDialogHeaderComponent, HlmAlertDialogOverlayDirective, HlmAlertDialogTitleDirective } from '@spartan-ng/ui-alertdialog-helm';
+import {
+  BrnAlertDialogContentDirective,
+  BrnAlertDialogTriggerDirective,
+} from '@spartan-ng/ui-alertdialog-brain';
+import {
+  HlmAlertDialogActionButtonDirective,
+  HlmAlertDialogCancelButtonDirective,
+  HlmAlertDialogComponent,
+  HlmAlertDialogContentComponent,
+  HlmAlertDialogDescriptionDirective,
+  HlmAlertDialogFooterComponent,
+  HlmAlertDialogHeaderComponent,
+  HlmAlertDialogOverlayDirective,
+  HlmAlertDialogTitleDirective,
+} from '@spartan-ng/ui-alertdialog-helm';
 import { Transaction } from '../../../../types/transaction';
 import { PaymentService } from '../../../../shared/services/payment.service';
 
@@ -96,7 +109,7 @@ export class CustomersComponent {
 
   selectedFile: File | null = null;
 
-  transactions: Transaction[] = []; 
+  transactions: Transaction[] = [];
   showDialog: boolean = false;
 
   meterNoSubject: Subject<string> = new Subject<string>();
@@ -122,6 +135,28 @@ export class CustomersComponent {
 
   protected readonly _availablePageSizes = [5, 10, 20, 10000];
 
+
+  protected readonly _brnModalColumnManager = useBrnColumnManager({
+    transactionDate: { visible: true, label: 'Date' },
+    transactionId: { visible: true, label: 'Transaction ID' },
+    amount: { visible: true, label: 'Amount' },
+    paymentMethod: { visible: true, label: 'Payment Method' },
+    transactionStatus: { visible: true, label: 'Transaction Status' },
+  });
+
+  protected readonly _allModalDisplayedColumns = computed(() => [
+    ...this._brnModalColumnManager.displayedColumns(),
+  ]);
+
+  protected readonly _modalTrackBy: TrackByFunction<Transaction> = (
+    _: number,
+    i: Transaction
+  ) => i.transactionId;
+
+  Math1: any;
+  Math2: any;
+
+
   constructor(
     private customerService: CustomerService,
     private paymentService: PaymentService,
@@ -129,9 +164,8 @@ export class CustomersComponent {
   ) {}
 
   ngOnInit(): void {
-  
     this.loadCustomers({ first: 0, rows: this.pageSize });
-  
+
     // Listen to debounced bill duration changes
     this.meterNoSubject
       .pipe(
@@ -142,24 +176,21 @@ export class CustomersComponent {
         this.fetchCustomersByMeterNo(meterNo);
       });
   }
-  
 
   // Fetch invoices with server-side pagination
   getCustomers(page: number, size: number): void {
-      this.loading = true;
-      this.customerService
-        .getAllCustomers( page, size)
-        .subscribe({
-          next: (response: any) => {
-            this.customers = response.customers || [];
-            this.totalCustomers = response.totalCustomers || 0;
-            this.loading = false;
-          },
-          error: (error: any) => {
-            console.error('Failed to fetch customers:', error);
-            this.loading = false;
-          },
-        });
+    this.loading = true;
+    this.customerService.getAllCustomers(page, size).subscribe({
+      next: (response: any) => {
+        this.customers = response.customers || [];
+        this.totalCustomers = response.totalCustomers || 0;
+        this.loading = false;
+      },
+      error: (error: any) => {
+        console.error('Failed to fetch customers:', error);
+        this.loading = false;
+      },
+    });
   }
 
   loadCustomers(event: any): void {
@@ -184,25 +215,23 @@ export class CustomersComponent {
   onMeterNoChange(value: string): void {
     this.meterNoSubject.next(value);
   }
-  
+
   fetchCustomersByMeterNo(meterNo: string): void {
     if (!meterNo) {
-      this.getCustomers(0, this.pageSize); 
-    } else if (this.customers.length!==0) {
+      this.getCustomers(0, this.pageSize);
+    } else if (this.customers.length !== 0) {
       this.loading = true;
-      this.customerService
-        .getCustomersByMeterNo(meterNo)
-        .subscribe({
-          next: (response: any) => {
-            this.customers = response.customers || [];
-            this.totalCustomers = response.totalCustomers || 0;
-            this.loading = false;
-          },
-          error: (error: any) => {
-            console.error('Failed to fetch customers:', error);
-            this.loading = false;
-          },
-        });
+      this.customerService.getCustomersByMeterNo(meterNo).subscribe({
+        next: (response: any) => {
+          this.customers = response.customers || [];
+          this.totalCustomers = response.totalCustomers || 0;
+          this.loading = false;
+        },
+        error: (error: any) => {
+          console.error('Failed to fetch customers:', error);
+          this.loading = false;
+        },
+      });
     } else {
       console.error('No customers found');
     }
@@ -214,8 +243,14 @@ export class CustomersComponent {
     });
   }
 
-   // Method to update customer
-  updateCustomer(meterNo: string, name: string, phone: string, address: string, ctx: any): void {
+  // Method to update customer
+  updateCustomer(
+    meterNo: string,
+    name: string,
+    phone: string,
+    address: string,
+    ctx: any
+  ): void {
     // Validate input values
     if (!name) {
       this.toast.error('Please enter the customer name');
@@ -229,14 +264,14 @@ export class CustomersComponent {
       this.toast.error('Please enter the customer address');
       return;
     }
-  
+
     // Create the request payload
     const request = {
       name: name,
       phone: phone,
       address: address,
     };
-  
+
     // Call the service to update customer
     this.customerService.updateCustomer(meterNo, request).subscribe(
       (response: MessageResponse) => {
@@ -249,19 +284,19 @@ export class CustomersComponent {
       }
     );
   }
-  
 
   // Method to view transactions when user clicks the button
   viewTransactions(meterNo: string): void {
-    this.paymentService.getAllTransactionsByMeterNo(meterNo).subscribe(
-      (response) => {
+    this.paymentService.getAllTransactionsByMeterNo(meterNo).subscribe({
+      next: (response) => {
         this.transactions = response.transactions; // Assuming the API returns a list of transactions
+        console.log(response)
         this.showDialog = true; // Show the dialog when data is available
       },
-      (error) => {
+      error: (error) => {
         console.error('Failed to load transactions', error);
-      }
-    );
+      },
+    });
   }
 
   // Method to track transactions by transactionId
@@ -273,11 +308,15 @@ export class CustomersComponent {
   closeDialog(): void {
     this.showDialog = false;
   }
-  
-  
 
   // Method to create a new customer
-  createCustomer(name: string, email: string, phone: string, address: string, ctx: any): void {
+  createCustomer(
+    name: string,
+    email: string,
+    phone: string,
+    address: string,
+    ctx: any
+  ): void {
     // Validate input values
     if (!name) {
       this.toast.error('Please enter the customer name');
@@ -339,8 +378,8 @@ export class CustomersComponent {
     this.customerService.deleteCustomer(meterNo).subscribe(
       (response) => {
         this.toast.success('Customer deleted successfully');
-        ctx.close(); 
-        this.loadCustomers({ first: 0, rows: this.pageSize }); 
+        ctx.close();
+        this.loadCustomers({ first: 0, rows: this.pageSize });
       },
       (error) => {
         this.toast.error('Failed to delete customer');
@@ -348,13 +387,11 @@ export class CustomersComponent {
     );
   }
 
-  
-
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
-  
+
       if (input?.files?.length) {
         this.selectedFile = input.files[0];
       }
@@ -367,7 +404,6 @@ export class CustomersComponent {
       }
     }
   }
-  
 
   // File import handler
   importFile(fileInput: HTMLInputElement, ctx: any): void {
@@ -392,6 +428,4 @@ export class CustomersComponent {
       }
     );
   }
-  
 }
-

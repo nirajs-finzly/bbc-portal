@@ -21,45 +21,62 @@
           </p>
         </hlm-dialog-header>
         <div class="py-4">
-          <label hlmLabel>Name
-            <input 
-              class="w-80" 
-              hlmInput 
-              type="text" 
+          <label hlmLabel
+            >Name
+            <input
+              class="w-80"
+              hlmInput
+              type="text"
               placeholder="Enter customer name"
               #name
             />
           </label>
-          <label hlmLabel>Email
-            <input 
-              class="w-80" 
-              hlmInput 
-              type="email" 
+          <label hlmLabel
+            >Email
+            <input
+              class="w-80"
+              hlmInput
+              type="email"
               placeholder="Enter customer email"
               #email
             />
           </label>
-          <label hlmLabel>Phone
-            <input 
-              class="w-80" 
-              hlmInput 
-              type="text" 
+          <label hlmLabel
+            >Phone
+            <input
+              class="w-80"
+              hlmInput
+              type="text"
               placeholder="Enter customer phone number"
               #phone
             />
           </label>
-          <label hlmLabel>Address
-            <input 
-              class="w-80" 
-              hlmInput 
-              type="text" 
+          <label hlmLabel
+            >Address
+            <input
+              class="w-80"
+              hlmInput
+              type="text"
               placeholder="Enter customer address"
               #address
             />
           </label>
         </div>
         <hlm-dialog-footer>
-          <button hlmBtn class="w-full" (click)="createCustomer(name.value, email.value, phone.value, address.value, ctx)" type="submit">
+          <button
+            hlmBtn
+            class="w-full"
+            (click)="
+              createCustomer(
+                name.value,
+                email.value,
+                phone.value,
+                address.value,
+                ctx
+              )
+            "
+            type="submit"
+          >
             <hlm-icon size="sm" class="mr-2" name="lucideUserPlus" />Create
           </button>
         </hlm-dialog-footer>
@@ -89,7 +106,12 @@
           />
         </div>
         <hlm-dialog-footer>
-          <button hlmBtn class="w-full" (click)="importFile(fileInput, ctx)" type="submit">
+          <button
+            hlmBtn
+            class="w-full"
+            (click)="importFile(fileInput, ctx)"
+            type="submit"
+          >
             <hlm-icon size="sm" class="mr-2" name="lucideImport" />Import
           </button>
         </hlm-dialog-footer>
@@ -153,26 +175,29 @@
             hlmBtn
             (click)="viewCustomer(customer.meterNo)"
           >
-            <hlm-icon name="lucideEye" class="text-primary w-[1.3rem] h-[1.3rem]" />
+            <hlm-icon
+              name="lucideEye"
+              class="text-primary w-[1.3rem] h-[1.3rem]"
+            />
           </button>
           <hlm-alert-dialog-content *brnAlertDialogContent="let ctx">
             <hlm-alert-dialog-header>
               <h3 hlmAlertDialogTitle>Customer Information</h3>
             </hlm-alert-dialog-header>
-              <!-- Customer Data Section -->
-              <div *ngIf="customer; else loading">
-                <p><strong>Meter No:</strong> {{ customer.meterNo }}</p>
-                <p><strong>Name:</strong> {{ customer.name }}</p>
-                <p><strong>Email:</strong> {{ customer.email }}</p>
-                <p><strong>Phone:</strong> {{ customer.phone }}</p>
-                <p><strong>Address:</strong> {{ customer.address }}</p>
-                <!-- Add more customer fields as needed -->
-              </div>
-              
-              <!-- Loading Placeholder -->
-              <ng-template #loading>
-                <p>Loading customer data...</p>
-              </ng-template>
+            <!-- Customer Data Section -->
+            <div *ngIf="customer; else loading">
+              <p><strong>Meter No:</strong> {{ customer.meterNo }}</p>
+              <p><strong>Name:</strong> {{ customer.name }}</p>
+              <p><strong>Email:</strong> {{ customer.email }}</p>
+              <p><strong>Phone:</strong> {{ customer.phone }}</p>
+              <p><strong>Address:</strong> {{ customer.address }}</p>
+              <!-- Add more customer fields as needed -->
+            </div>
+
+            <!-- Loading Placeholder -->
+            <ng-template #loading>
+              <p>Loading customer data...</p>
+            </ng-template>
             <hlm-alert-dialog-footer class="mt-4">
               <button hlmAlertDialogCancel (click)="ctx.close()">close</button>
             </hlm-alert-dialog-footer>
@@ -188,7 +213,10 @@
             size="icon"
             hlmBtn
           >
-            <hlm-icon name="lucidePencil" class="text-primary w-[1.3rem] h-[1.3rem]" />
+            <hlm-icon
+              name="lucidePencil"
+              class="text-primary w-[1.3rem] h-[1.3rem]"
+            />
           </button>
           <hlm-dialog-content *brnDialogContent="let ctx">
             <hlm-dialog-header>
@@ -200,36 +228,52 @@
               </p>
             </hlm-dialog-header>
             <div class="py-4">
-              <label hlmLabel>Name
-                <input 
-                  class="w-80" 
-                  hlmInput 
-                  type="text" 
+              <label hlmLabel
+                >Name
+                <input
+                  class="w-80"
+                  hlmInput
+                  type="text"
                   placeholder="Enter customer name"
                   #name
                 />
               </label>
-              <label hlmLabel>Phone
-                <input 
-                  class="w-80" 
-                  hlmInput 
-                  type="text" 
+              <label hlmLabel
+                >Phone
+                <input
+                  class="w-80"
+                  hlmInput
+                  type="text"
                   placeholder="Enter customer phone number"
                   #phone
                 />
               </label>
-              <label hlmLabel>Address
-                <input 
-                  class="w-80" 
-                  hlmInput 
-                  type="text" 
+              <label hlmLabel
+                >Address
+                <input
+                  class="w-80"
+                  hlmInput
+                  type="text"
                   placeholder="Enter customer address"
                   #address
                 />
               </label>
             </div>
             <hlm-dialog-footer>
-              <button hlmBtn class="w-full" (click)="updateCustomer(customer.meterNo, name.value, phone.value, address.value, ctx)" type="submit">
+              <button
+                hlmBtn
+                class="w-full"
+                (click)="
+                  updateCustomer(
+                    customer.meterNo,
+                    name.value,
+                    phone.value,
+                    address.value,
+                    ctx
+                  )
+                "
+                type="submit"
+              >
                 <hlm-icon size="sm" class="mr-2" name="lucidePencil" />Update
               </button>
             </hlm-dialog-footer>
@@ -245,41 +289,120 @@
             size="icon"
             hlmBtn
           >
-            <hlm-icon name="lucideTrash2" class="text-primary w-[1.3rem] h-[1.3rem]" />
+            <hlm-icon
+              name="lucideTrash2"
+              class="text-primary w-[1.3rem] h-[1.3rem]"
+            />
           </button>
           <hlm-alert-dialog-content *brnAlertDialogContent="let ctx">
             <hlm-alert-dialog-header>
               <h3 hlmAlertDialogTitle>Are you absolutely sure?</h3>
               <p hlmAlertDialogDescription>
-                This action cannot be undone. This will permanently delete customer's
-                account and remove data from servers.
+                This action cannot be undone. This will permanently delete
+                customer's account and remove data from servers.
               </p>
             </hlm-alert-dialog-header>
             <hlm-alert-dialog-footer class="mt-4">
               <button hlmAlertDialogCancel (click)="ctx.close()">Cancel</button>
-              <button hlmAlertDialogAction class="!bg-destructive" (click)="deleteCustomer(customer.meterNo, ctx)">
-                <hlm-icon name="lucideTrash2" class="w-[1.3rem] h-[1.3rem] mr-2" />
+              <button
+                hlmAlertDialogAction
+                class="!bg-destructive"
+                (click)="deleteCustomer(customer.meterNo, ctx)"
+              >
+                <hlm-icon
+                  name="lucideTrash2"
+                  class="w-[1.3rem] h-[1.3rem] mr-2"
+                />
                 Delete Customer
               </button>
             </hlm-alert-dialog-footer>
           </hlm-alert-dialog-content>
         </hlm-alert-dialog>
         <!-- view transaction -->
-        <button 
-          hlmBtn 
-          variant="ghost" 
-          title="View transactions" 
-          size="icon"
+        <hlm-dialog>
+          <button
+            id="viewTransactions"
+            variant="ghost"
+            brnAlertDialogTrigger
+            title="View Transactions"
+            size="icon"
+            hlmBtn
+            (click)="viewTransactions(customer.meterNo)"
           >
-          <hlm-icon name="lucideReceipt" class="text-primary w-[1.3rem] h-[1.3rem]" />
-        </button>
-        
+            <hlm-icon
+              name="lucideReceipt"
+              class="text-primary w-[1.3rem] h-[1.3rem]"
+            />
+          </button>
+          <hlm-dialog-content *brnDialogContent="let ctx" class="w-[80%] overflow-hidden">
+            <hlm-dialog-header>
+              <h3 brnDialogTitle hlm class="text-xl font-semibold">
+                Customer Transactions
+              </h3>
+              <p brnDialogDescription hlm class="text-muted-foreground">
+                {{ customer.name }}
+              </p>
+            </hlm-dialog-header>
+            <div class="py-4">
+              <brn-table
+                hlm
+                stickyHeader
+                class="border-border mt-4 block min-h-[400px] rounded-md border"
+                [dataSource]="transactions"
+                [displayedColumns]="_allModalDisplayedColumns()"
+                [trackBy]="_modalTrackBy"
+              >
+                <brn-column-def name="transactionDate" class="w-[16%]">
+                  <hlm-th *brnHeaderDef>Payment Date</hlm-th>
+                  <hlm-td truncate *brnCellDef="let customer">
+                    {{ customer.transactionDate }}
+                  </hlm-td>
+                </brn-column-def>
+                <brn-column-def name="transactionId" class="w-[16%]">
+                  <hlm-th *brnHeaderDef>Transaction ID</hlm-th>
+                  <hlm-td truncate *brnCellDef="let customer">
+                    {{ customer.transactionId }}
+                  </hlm-td>
+                </brn-column-def>
+                <brn-column-def name="amount" class="w-[16%] text-center">
+                  <hlm-th *brnHeaderDef>Amount</hlm-th>
+                  <hlm-td truncate *brnCellDef="let customer">
+                    {{ customer.amount }}
+                  </hlm-td>
+                </brn-column-def>
+                <brn-column-def name="paymentMethod" class="w-[16%]">
+                  <hlm-th *brnHeaderDef>Payment Method</hlm-th>
+                  <hlm-td truncate *brnCellDef="let customer">
+                    {{ customer.paymentMethod }}
+                  </hlm-td>
+                </brn-column-def>
+                <brn-column-def name="transactionStatus" class="w-[16%]">
+                  <hlm-th *brnHeaderDef>Transaction Status</hlm-th>
+                  <hlm-td truncate *brnCellDef="let customer">
+                    {{ customer.transactionStatus }}
+                  </hlm-td>
+                </brn-column-def>
+                <div
+                  class="flex items-center justify-center p-20 text-muted-foreground"
+                  brnNoDataRow
+                >
+                  No data available
+                </div>
+              </brn-table>
+            </div>
+          </hlm-dialog-content>
+        </hlm-dialog>
       </div>
     </hlm-td>
   </brn-column-def>
+  <div
+    class="flex items-center justify-center p-20 text-muted-foreground"
+    brnNoDataRow
+  >
+    No data available
+  </div>
 </brn-table>
 <nav hlmPagination class="mt-4 flex justify-end">
-  
   <brn-select
     class="inline-block h-full"
     placeholder="{{ _availablePageSizes[0] }}"
