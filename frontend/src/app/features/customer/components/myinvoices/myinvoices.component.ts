@@ -98,19 +98,16 @@ export class MyinvoicesComponent {
   
     this.loadInvoices({ first: 0, rows: this.pageSize });
   
-    // Listen to debounced bill duration changes
     this.billDurationSubject
       .pipe(
-        debounceTime(300), // wait 300ms after the last event before emitting last event
-        distinctUntilChanged() // only emit when the current value is different than the last
+        debounceTime(300), 
+        distinctUntilChanged()
       )
       .subscribe((duration) => {
         this.fetchInvoicesByBillDuration(duration);
       });
   }
   
-
-  // Fetch invoices with server-side pagination
   getInvoices(page: number, size: number): void {
     if (this.user && this.user.meterNo) {
       this.loading = true;

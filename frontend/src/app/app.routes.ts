@@ -8,13 +8,12 @@ import { CustomersComponent } from './features/employee/components/customers/cus
 import { EmployeeDashboardComponent } from './features/employee/components/employee-dashboard/employee-dashboard.component';
 import { InvoicesComponent } from './features/employee/components/invoices/invoices.component';
 import { GatewayLayoutComponent } from './features/payment-gateway/components/gateway-layout/gateway-layout.component';
+import { PaymentFailureComponent } from './features/payment-gateway/components/payment-failure/payment-failure.component';
+import { PaymentSuccessComponent } from './features/payment-gateway/components/payment-success/payment-success.component';
 import { AuthGuard } from './guards/auth.guard';
+import { PaymentGuard } from './guards/payment.guard';
 import { RedirectGuard } from './guards/redirect.guard';
 import { DashboardLayoutComponent } from './shared/layouts/dashboard-layout/dashboard-layout.component';
-import { CheckoutComponent } from './features/payment-gateway/components/checkout/checkout.component';
-import { PaymentSuccessComponent } from './features/payment-gateway/components/payment-success/payment-success.component';
-import { PaymentFailureComponent } from './features/payment-gateway/components/payment-failure/payment-failure.component';
-import { PaymentGuard } from './guards/payment.guard';
 
 export const routes: Routes = [
   {
