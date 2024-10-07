@@ -293,10 +293,10 @@ public class PaymentServiceImpl implements PaymentService {
                 try {
                     byte[] invoicePdf = pdfService.createInvoicePdf(unpaidInvoice, null);
                     unpaidInvoice.setInvoicePdf(invoicePdf);
-                    invoiceRepository.save(unpaidInvoice);
                 } catch (IOException e) {
                     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new PaymentResponse("Error generating invoice PDF!", null, null, false));
                 }
+                    invoiceRepository.save(unpaidInvoice);
             }
 
             return ResponseEntity.ok(new PaymentResponse("Payment successful!", null, "/pay/success", true));

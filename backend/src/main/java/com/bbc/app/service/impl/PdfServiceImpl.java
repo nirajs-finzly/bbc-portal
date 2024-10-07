@@ -36,9 +36,6 @@ public class PdfServiceImpl implements PdfService {
             // Set the XHTML content and base URL for relative resources
             renderer.setDocumentFromString(htmlContent, new ClassPathResource("/templates/").getURL().toString());
 
-            ClassPathResource fontResource = new ClassPathResource("/templates/fonts/mulish.ttf");
-            String fontPath = fontResource.getURL().toExternalForm();
-
             // Layout and create the PDF
             renderer.layout();
             renderer.createPDF(byteArrayOutputStream);
