@@ -28,6 +28,7 @@ export class EmployeeDashboardComponent {
 
   barChart: any;
   doughnutChart: any;
+Object: any;
 
   constructor(
     private invoiceService: InvoiceService,
@@ -94,10 +95,22 @@ export class EmployeeDashboardComponent {
   createBarChart() {
     const labels = Object.keys(this.averageConsumption);
     const dataValues = Object.values(this.averageConsumption);
-
+  
+    const barChartElement = document.getElementById('barChart');
+    if (!barChartElement) {
+      console.error('Element with id "barChart" not found');
+      return;
+    }
+  
+    // Check if there's no data
+    if (labels.length === 0 || dataValues.every(value => value === 0)) {
+      barChartElement.innerHTML = 'No Data Available';
+      return;
+    }
+  
     this.barChart = new Chart('barChart', {
       type: 'bar',
-
+  
       data: {
         labels: labels,
         datasets: [
@@ -114,19 +127,31 @@ export class EmployeeDashboardComponent {
       },
     });
   }
-
+  
   createDoughnutChart() {
     const labels = Object.keys(this.invoiceStatusData);
     const dataValues = Object.values(this.invoiceStatusData);
-
+  
+    const doughnutChartElement = document.getElementById('doughnutChart');
+    if (!doughnutChartElement) {
+      console.error('Element with id "doughnutChart" not found');
+      return;
+    }
+  
+    // Check if there's no data
+    if (labels.length === 0 || dataValues.every(value => value === 0)) {
+      doughnutChartElement.innerHTML = 'No Data Available';
+      return;
+    }
+  
     this.doughnutChart = new Chart('doughnutChart', {
       type: 'doughnut',
-
+  
       data: {
         labels: labels,
         datasets: [
           {
-            label: 'Average Consumption',
+            label: 'Invoice Status',
             data: dataValues,
             backgroundColor: [
               'rgb(255, 99, 132)',
@@ -142,4 +167,5 @@ export class EmployeeDashboardComponent {
       },
     });
   }
-}
+}  
+  

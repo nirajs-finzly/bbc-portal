@@ -334,7 +334,7 @@
               class="text-primary w-[1.3rem] h-[1.3rem]"
             />
           </button>
-          <hlm-dialog-content *brnDialogContent="let ctx" class="w-[80%] overflow-hidden">
+          <hlm-dialog-content *brnDialogContent="let ctx" class="w-[80%]">
             <hlm-dialog-header>
               <h3 brnDialogTitle hlm class="text-xl font-semibold">
                 Customer Transactions
@@ -354,20 +354,20 @@
               >
                 <brn-column-def name="transactionDate" class="w-[16%]">
                   <hlm-th *brnHeaderDef>Payment Date</hlm-th>
-                  <hlm-td truncate *brnCellDef="let customer">
-                    {{ customer.transactionDate }}
+                  <hlm-td *brnCellDef="let customer" class="text-ellipsis">
+                    {{ customer.transactionDate | date: 'MMM dd, yy' }}
                   </hlm-td>
                 </brn-column-def>
                 <brn-column-def name="amount" class="w-[16%] text-center">
                   <hlm-th *brnHeaderDef>Amount</hlm-th>
-                  <hlm-td truncate *brnCellDef="let customer">
-                    {{ customer.amount }}
+                  <hlm-td  *brnCellDef="let customer" class="text-ellipsis">
+                    {{ customer.amount | currency: 'INR' }}
                   </hlm-td>
                 </brn-column-def>
                 <brn-column-def name="paymentMethod" class="w-[16%]">
                   <hlm-th *brnHeaderDef>Payment Method</hlm-th>
-                  <hlm-td truncate *brnCellDef="let customer">
-                    {{ customer.paymentMethod }}
+                  <hlm-td *brnCellDef="let customer" class="text-ellipsis">
+                    {{ customer.paymentMethod | titlecase }}
                   </hlm-td>
                 </brn-column-def>
                 <div

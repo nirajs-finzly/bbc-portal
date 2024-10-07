@@ -7,7 +7,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @Component
 public class DatabaseSeeder implements CommandLineRunner {
@@ -87,7 +86,7 @@ public class DatabaseSeeder implements CommandLineRunner {
 
             User user4 = new User();
             user4.setName("Sakshi Dhumal");
-            user4.setEmail("sakshi@gmail.com");
+            user4.setEmail("sushmitabennisur6640@gmail.com");
             user4.setPhone("1234567890");
             user4.setRole(UserRole.CUSTOMER);
             userRepository.save(user4);
@@ -96,15 +95,6 @@ public class DatabaseSeeder implements CommandLineRunner {
             customer2.setUser(user4);
             customer2.setAddress("Bhor");
             customerRepository.save(customer2);
-
-            Invoice invoice = new Invoice();
-            invoice.setCustomer(customer);
-            invoice.setUnitConsumption(BigDecimal.valueOf(30));
-            invoice.setBillDuration("September 2024");
-            invoice.setBillDueDate(LocalDate.parse("2024-10-10"));
-            invoice.setCurrentAmountDue(BigDecimal.valueOf(1000.00));
-            invoice.setTotalAmountDue(BigDecimal.valueOf(1000.00));
-            invoiceRepository.save(invoice);
 
             // Seed a credit card
             CreditCard creditCard = new CreditCard();
@@ -124,7 +114,7 @@ public class DatabaseSeeder implements CommandLineRunner {
 
             // Seed net banking
             NetBanking netBanking = new NetBanking();
-            netBanking.setBankName("BOI");
+            netBanking.setBankName("Bank of India");
             netBanking.setAccountNumber("123456789012");
             netBanking.setIfscCode("BKID1234567");
             netBanking.setBalance(BigDecimal.valueOf(10000.00));

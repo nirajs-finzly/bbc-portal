@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/bbcportal
-    username: root
-    password: root
+    url: jdbc:mysql://avnadmin:AVNS_OWDnJa33BuFhShhe1YN@mysql-9d0aa36-bbcportaldb.d.aivencloud.com:10436/defaultdb?ssl-mode=REQUIRED
+    username: avnadmin
+    password: AVNS_OWDnJa33BuFhShhe1YN
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
