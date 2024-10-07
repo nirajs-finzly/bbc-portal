@@ -250,18 +250,18 @@ export class CustomersComponent {
     ctx: any
   ): void {
     // Validate input values
-    if (!name) {
-      this.toast.error('Please enter the customer name');
-      return;
-    }
-    if (!phone || !this.validatePhone(phone)) {
-      this.toast.error('Please enter a valid phone number');
-      return;
-    }
-    if (!address) {
-      this.toast.error('Please enter the customer address');
-      return;
-    }
+  if (!this.validateName(name)) {
+    this.toast.error('Please enter a valid customer name (only alphabets and spaces, 3-50 characters long)');
+    return;
+  }
+  if (!phone || !this.validatePhone(phone)) {
+    this.toast.error('Please enter a valid 10-digit phone number');
+    return;
+  }
+  if (!this.validateAddress(address)) {
+    this.toast.error('Please enter a valid address (10-100 characters long)');
+    return;
+  }
 
     // Create the request payload
     const request = {
@@ -316,22 +316,23 @@ export class CustomersComponent {
     ctx: any
   ): void {
     // Validate input values
-    if (!name) {
-      this.toast.error('Please enter the customer name');
-      return;
-    }
-    if (!email || !this.validateEmail(email)) {
-      this.toast.error('Please enter a valid email address');
-      return;
-    }
-    if (!phone || !this.validatePhone(phone)) {
-      this.toast.error('Please enter the phone number');
-      return;
-    }
-    if (!address) {
-      this.toast.error('Please enter the customer address');
-      return;
-    }
+  if (!this.validateName(name)) {
+    this.toast.error('Please enter a valid customer name (only alphabets and spaces, 3-50 characters long)');
+    return;
+  }
+  if (!email || !this.validateEmail(email)) {
+    this.toast.error('Please enter a valid email address');
+    return;
+  }
+  if (!phone || !this.validatePhone(phone)) {
+    this.toast.error('Please enter a valid 10-digit phone number');
+    return;
+  }
+  if (!this.validateAddress(address)) {
+    this.toast.error('Please enter a valid address (10-100 characters long)');
+    return;
+  }
+
 
     // Create the request payload
     const request = {
@@ -354,16 +355,31 @@ export class CustomersComponent {
     );
   }
 
+  // Name validation method
+  private validateName(name: string): boolean {
+    const trimmedName = name.trim();
+    const namePattern = /^[a-zA-Z\s]{3,50}$/;
+    return trimmedName.length >= 3 && trimmedName.length <= 50 && namePattern.test(trimmedName);
+  }
+
+  // Address validation method
+  private validateAddress(address: string): boolean {
+    const trimmedAddress = address.trim();
+    return trimmedAddress.length >= 10 && trimmedAddress.length <= 100;
+  }
+
   // Email validation method
   private validateEmail(email: string): boolean {
+    const trimmedEmail = email.trim();
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    return emailPattern.test(email);
+    return emailPattern.test(trimmedEmail);
   }
 
   // Phone number validation method
   private validatePhone(phone: string): boolean {
-    const phonePattern = /^[0-9]{10}$/;
-    return phonePattern.test(phone);
+    const trimmedPhone = phone.trim();
+  const phonePattern = /^[0-9]{10}$/;
+  return phonePattern.test(trimmedPhone);
   }
 
   // Delete customer method
@@ -416,14 +432,19 @@ export class CustomersComponent {
 
   uploadFile(file: File, ctx: any) {
     this.customerService.bulkUploadCustomer(file).subscribe(
-      (response: MessageResponse) => {
+      {
+        next: (response: MessageResponse) => {
         this.toast.success(response.message);
+        console.log(response);
         ctx.close();
         this.loadCustomers({ first: 0, rows: this.pageSize });
       },
-      (error) => {
-        this.toast.error('File upload failed!');
+      error: (error) => {
+        this.toast.error(error);
       }
+
+      }
+      
     );
   }
 }

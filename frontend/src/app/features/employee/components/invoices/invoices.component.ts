@@ -159,22 +159,22 @@ export class InvoicesComponent {
   
   createInvoice(meterNo: string, unitsConsumed: string, billDuration: string, billDueDate: string, ctx: any): void {
     // Validate input values
-    if (!meterNo) {
-      this.toast.error('Please enter the meter number');
-      return;
-    }
-    if (!unitsConsumed || isNaN(Number(unitsConsumed))) {
-      this.toast.error('Please enter a valid units consumed');
-      return;
-    }
-    if (!billDuration) {
-      this.toast.error('Please enter the bill duration');
-      return;
-    }
-    if (!billDueDate) {
-      this.toast.error('Please enter the bill due date');
-      return;
-    }
+  if (!this.validateMeterNo(meterNo)) {
+    this.toast.error('Please enter a valid meter number (starts with "MTR" followed by 7 digits)');
+    return;
+  }
+  if (!this.validateUnitsConsumed(unitsConsumed)) {
+    this.toast.error('Please enter valid units consumed (a number)');
+    return;
+  }
+  if (!this.validateBillDuration(billDuration)) {
+    this.toast.error('Please enter the bill duration in the format "Month Year" (e.g., January 2024)');
+    return;
+  }
+  if (!this.validateBillDueDate(billDueDate)) {
+    this.toast.error('Please enter the future bill due date');
+    return;
+  }
 
     // Create the request payload
     const request = {
@@ -192,10 +192,34 @@ export class InvoicesComponent {
         this.loadInvoices({ first: 0, rows: this.pageSize });
       },
       (error) => {
-        this.toast.error('Failed to create the invoice');
+        this.toast.error('Customer not found for this meter number');
       }
     );
   }
+
+    // Meter number validation method
+    private validateMeterNo(meterNo: string): boolean {
+      const trimmedMeterNo = meterNo.trim();
+      const meterNoPattern = /^MTR\d{7}$/;
+      return trimmedMeterNo.length > 0 && meterNoPattern.test(trimmedMeterNo);
+    }
+
+    // Units consumed validation method
+    private validateUnitsConsumed(unitsConsumed: string): boolean {
+      const trimmedUnits = unitsConsumed.trim();
+      return trimmedUnits.length > 0 && !isNaN(Number(trimmedUnits));
+    }
+
+    // Bill duration validation method in Angular
+    private validateBillDuration(billDuration: string): boolean {
+      const trimmedBillDuration = billDuration.trim();
+      // Regex pattern to match "Month Year" format (e.g., "January 2024")
+      const billDurationPattern = /^(January|February|March|April|May|June|July|August|September|October|November|December) \d{4}$/;
+      return billDurationPattern.test(trimmedBillDuration);
+    }
+
+
+    
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -223,14 +247,14 @@ export class InvoicesComponent {
       this.toast.error('Please select a file');
       return;
     }
-    if (!billDuration) {
-      this.toast.error('Please enter bill duration');
+    if (!this.validateBillDuration(billDuration)) {
+      this.toast.error('Please enter the bill duration in the format "Month Year" (e.g., January 2024)');
       return;
     }
-    if (!billDueDate) {
-      this.toast.error('Please enter bill due date');
+    if (!this.validateBillDueDate(billDueDate)) {
+      this.toast.error('Please enter a future bill due date');
       return;
-    }
+    }    
 
     this.uploadFile(file, billDuration, billDueDate, ctx);
   }
@@ -238,14 +262,23 @@ export class InvoicesComponent {
   uploadFile(file: File, billDuration: string, billDueDate: string, ctx: any) {
     this.invoiceService.bulkUploadInvoice(file,billDuration,billDueDate).subscribe(
       (response: MessageResponse) => {
-        this.toast.success('File uploaded successfully!.');
+        this.toast.success(response.message);
         ctx.close();
         this.loadInvoices({ first: 0, rows: this.pageSize });
       },
       (error) => {
-        this.toast.error('File upload failed!');
+        this.toast.error(error);
       }
     );
+  }
+
+  // Bill due date validation method
+  private validateBillDueDate(billDueDate: string): boolean {
+    const currentDate = new Date();
+    const dueDate = new Date(billDueDate);
+
+    // Check if billDueDate is a valid date and in the future
+    return dueDate > currentDate;
   }
 
   viewInvoicePdf(pdfData: string, invoiceId: string): void {

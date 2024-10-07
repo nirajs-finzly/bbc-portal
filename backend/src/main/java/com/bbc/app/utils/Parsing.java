@@ -49,8 +49,11 @@ public class Parsing {
 
                 // Validate email ( email validation)
                 if (email == null ||email.isEmpty()|| !email.matches("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}")) {
-                    invalidRecords.incrementAndGet();
-                    continue; // Skip this record and continue with the next one
+                    Optional<User> customer = userRepository.findByEmail(email);
+                    if(customer.isPresent()){
+                        invalidRecords.incrementAndGet();
+                        continue; // Skip this record and continue with the next one
+                    }
                 }
 
                 // Validate phone number
