@@ -350,13 +350,12 @@ export class CheckoutComponent {
             this.setIsLoading(false);
             this.nextStep();
           } else {
-            this.router.navigateByUrl('/payment-failure/' + response.message);
-            console.error('Payment failed:', response.message);
+            this.toast.error(response.message);
             this.setIsLoading(false);
           }
         },
         error: (error: any) => {
-          this.router.navigateByUrl('/payment-failure/' + error.error.message);
+          this.toast.error(error.error.message);
           console.error('Payment request failed:', error);
           this.setIsLoading(false);
         },
@@ -423,7 +422,7 @@ export class CheckoutComponent {
     if (this.otpForm.valid) {
       otp = this.otpForm.get('otp')?.value;
 
-      const amount = this.finalBillAmount.toFixed(2).toString(); // Format amount to 2 decimal places
+      const amount = this.finalBillAmount.toFixed(2).toString();
 
       this.paymentService
         .confirmPayment(
@@ -440,26 +439,31 @@ export class CheckoutComponent {
               this.setIsLoading(false);
               this.router.navigateByUrl('/payment-success');
             } else {
-              console.error('Payment confirmation failed:', response.message);
               this.setIsLoading(false);
+              this.toast.error(response.message);
               this.router.navigateByUrl('/payment-failure/' + response.message);
             }
           },
           error: (error: any) => {
-            console.error(
-              'Payment confirmation request failed:',
-              error.error.message
-            );
-            this.setIsLoading(false);
-            this.router.navigateByUrl(
-              '/payment-failure/' + error.error.message
-            );
+            if(error.error.message === "Invalid OTP!"){
+                this.toast.error(error.error.message);
+                this.setIsLoading(false);
+            }else{
+
+              console.error(
+                'Payment confirmation request failed:',
+                error.error.message
+              );
+              this.setIsLoading(false);
+              this.router.navigateByUrl(
+                '/payment-failure/' + error.error.message
+              );
+            }
           },
         });
     } else {
-      console.error('Invalid OTP!');
+      this.toast.error('Invalid OTP!');
       this.setIsLoading(false);
-      this.router.navigateByUrl('/payment-failure/invalid-otp');
       return;
     }
   }

@@ -8,4 +8,6 @@ public interface NetBankingRepository extends JpaRepository<NetBanking, UUID> {
     boolean existsByAccountNumberAndIfscCode(String accountNumber, String ifscCode);
 
     NetBanking findTopByOrderByNetBankingIdDesc();
+
+    NetBanking findByAccountNumberAndIfscCode(String accountNumber, String ifscCode);
 }
