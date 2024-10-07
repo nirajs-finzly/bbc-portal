@@ -1,16 +1,93 @@
-<div class="flex items-center gap-8">
-  <div id="logo" class="flex items-center gap-2">
-    <img src="assets/img/logo.png" alt="" width="35" />
-    <span class="text-lg font-bold text-primary"
-      >Bharat Bijili Corporation</span
+<div class="w-full h-[64px] flex justify-between items-center px-6 py-2">
+  <div class="flex items-center gap-8">
+    <div
+      id="logo"
+      class="flex items-center gap-2 cursor-pointer"
+      routerLink="/"
     >
+      <img src="assets/img/logo.png" alt="" width="35" />
+      <span class="text-lg font-bold text-primary"
+        >Bharat Bijili Corporation</span
+      >
+    </div>
+    <hlm-menu-bar class="w-fit border-none gap-2 max-md:hidden">
+      @for(item of items; track item.label){
+      <button
+        hlmBtn
+        routerLink="{{ item.link }}"
+        class="px-3 py-2 w-36 justify-center cursor-pointer text-muted-foreground hover:text-white"
+        routerLinkActive="bg-primary text-primary-foreground"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        {{ item.label }}
+      </button>
+      }
+    </hlm-menu-bar>
   </div>
+  <div class="flex items-center gap-4">
+    <div
+      hlmBtn
+      [brnMenuTriggerFor]="menu"
+      class="rounded-full w-fit h-fit px-1 py-[3.5px]"
+    >
+      @if(user?.role === 'EMPLOYEE'){
+      <img src="assets/img/employee-avatar.png" alt="" width="35" />
+      } @else {
+      <img src="assets/img/customer-avatar.png" alt="" width="35" />
+      }
+    </div>
+    <ng-template #menu>
+      <hlm-menu class="w-80">
+        <hlm-menu-label>My Account</hlm-menu-label>
+        <hlm-menu-separator />
+        <hlm-menu-group>
+          <div
+            class="flex items-center gap-2 p-2 my-2 rounded-sm cursor-pointer hover:bg-accent"
+          >
+            @if(user?.role === 'EMPLOYEE'){
+            <img src="assets/img/employee-avatar.png" alt="" width="35" />
+            } @else {
+            <img src="assets/img/customer-avatar.png" alt="" width="35" />
+            }
+            <div class="flex flex-col">
+              <span class="ml-2 text-sm font-bold text-primary"
+                >{{ user?.name + " "
+                }}<span class="font-thin"
+                  >({{ user?.role | titlecase }})</span
+                ></span
+              >
+              <span class="ml-2 text-sm text-muted-foreground">{{
+                user?.email
+              }}</span>
+              <span class="ml-2 text-sm text-muted-foreground">{{
+                user?.meterNo
+              }}</span>
+            </div>
+          </div>
+          <button
+            hlmMenuItem
+            class="cursor-pointer text-muted-foreground items-center"
+            (click)="logoutUser()"
+          >
+            <hlm-icon
+              name="lucideLogOut"
+              class="mr-2 text-muted-foreground w-[1.2rem] h-[1.2rem]"
+              hlmMenuIcon
+            />
+            <span>Logout</span>
+          </button>
+        </hlm-menu-group>
+      </hlm-menu>
+    </ng-template>
+  </div>
+</div>
+<div class="w-full h-[64px] flex justify-center items-center px-6 py-2 md:hidden">
   <hlm-menu-bar class="w-fit border-none gap-2">
     @for(item of items; track item.label){
     <button
       hlmBtn
       routerLink="{{ item.link }}"
-      class="px-3 py-2 w-36 justify-center cursor-pointer text-muted-foreground hover:text-white"
+      class=" text-muted-foreground hover:text-white"
       routerLinkActive="bg-primary text-primary-foreground"
       [routerLinkActiveOptions]="{ exact: true }"
     >
@@ -19,53 +96,3 @@
     }
   </hlm-menu-bar>
 </div>
-<div
-  hlmBtn
-  [brnMenuTriggerFor]="menu"
-  class="rounded-full w-fit h-fit px-1 py-[3.5px]"
->
-  @if(user?.role === 'EMPLOYEE'){
-    <img src="assets/img/employee-avatar.png" alt="" width="35" />
-  } @else {
-    <img src="assets/img/customer-avatar.png" alt="" width="35" />
-  }
-</div>
-<ng-template #menu>
-  <hlm-menu class="w-80">
-    <hlm-menu-label>My Account</hlm-menu-label>
-    <hlm-menu-separator />
-    <hlm-menu-group>
-      <div class="flex items-center gap-2 p-2 my-2 rounded-sm cursor-pointer hover:bg-accent">
-        @if(user?.role === 'EMPLOYEE'){
-          <img src="assets/img/employee-avatar.png" alt="" width="35" />
-        } @else {
-          <img src="assets/img/customer-avatar.png" alt="" width="35" />
-        }
-        <div class="flex flex-col">
-          <span class="ml-2 text-sm font-bold text-primary"
-            >{{ user?.name + " "
-            }}<span class="font-thin">({{ user?.role | titlecase }})</span></span
-          >
-          <span class="ml-2 text-sm text-muted-foreground">{{
-            user?.email
-          }}</span>
-          <span class="ml-2 text-sm text-muted-foreground">{{
-            user?.meterNo
-          }}</span>
-        </div>
-      </div>
-      <button
-        hlmMenuItem
-        class="cursor-pointer text-muted-foreground items-center"
-        (click)="logoutUser()"
-      >
-        <hlm-icon
-          name="lucideLogOut"
-          class="mr-2 text-muted-foreground w-[1.2rem] h-[1.2rem]"
-          hlmMenuIcon
-        />
-        <span>Logout</span>
-      </button>
-    </hlm-menu-group>
-  </hlm-menu>
-</ng-template>

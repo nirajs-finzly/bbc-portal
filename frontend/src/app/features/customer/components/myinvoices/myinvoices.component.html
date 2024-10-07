@@ -1,8 +1,9 @@
 <app-pay-card />
 <div>
+<div>
   <h1 class="text-2xl font-bold mb-4">My Invoices</h1>
 </div>
-<div class="flex flex-col justify-between gap-4 sm:flex-row">
+<div class="flex flex-col sm:flex-row justify-between gap-4 max-md:w-full">
   <input
     hlmInput
     class="w-full md:w-80 bg-background"
@@ -14,49 +15,49 @@
 <brn-table
   hlm
   stickyHeader
-  class="border-border mt-4 block min-h-[400px] overflow-auto rounded-md border"
+  class="border-border mt-4 block h-[335px] overflow-auto rounded-md border"
   [dataSource]="invoices"
   [displayedColumns]="_allDisplayedColumns()"
   [trackBy]="_trackBy"
 >
-  <brn-column-def name="invoiceId" class="w-[15%]">
+  <brn-column-def name="invoiceId" class="w-32 md:w-[15%]">
     <hlm-th *brnHeaderDef>Invoice ID</hlm-th>
     <hlm-td truncate *brnCellDef="let invoice">
       {{ invoice.invoiceId }}
     </hlm-td>
   </brn-column-def>
-  <brn-column-def name="unitConsumption" class="w-[15%]">
+  <brn-column-def name="unitConsumption" class="w-32 md:w-[15%]">
     <hlm-th *brnHeaderDef>Unit Consumption</hlm-th>
     <hlm-td *brnCellDef="let invoice">
       {{ invoice.unitConsumption }} Kw
     </hlm-td>
   </brn-column-def>
-  <brn-column-def name="billDuration" class="w-[15%]">
+  <brn-column-def name="billDuration" class="w-32 md:w-[15%]">
     <hlm-th *brnHeaderDef>Bill Duration</hlm-th>
     <hlm-td class="font-semibold" *brnCellDef="let invoice">
       {{ invoice.billDuration }}
     </hlm-td>
   </brn-column-def>
-  <brn-column-def name="billDueDate" class="w-[15%]">
+  <brn-column-def name="billDueDate" class="w-32 md:w-[15%]">
     <hlm-th *brnHeaderDef>Bill Due Date</hlm-th>
     <hlm-td *brnCellDef="let invoice">
-      {{ invoice.billDueDate | date : "MMM d, y" }}
+      {{ invoice.billDueDate | date : 'MMM d, y' }}
     </hlm-td>
   </brn-column-def>
-  <brn-column-def name="amountDue" class="w-[15%]">
+  <brn-column-def name="amountDue" class="w-32 md:w-[15%]">
     <hlm-th *brnHeaderDef>Amount Due</hlm-th>
     <hlm-td *brnCellDef="let invoice">
-      {{ invoice.totalAmountDue | currency : "INR" }}
+      {{ invoice.totalAmountDue | currency : 'INR' }}
     </hlm-td>
   </brn-column-def>
-  <brn-column-def name="status" class="w-[15%]">
+  <brn-column-def name="status" class="w-32 md:w-[15%]">
     <hlm-th *brnHeaderDef>Status</hlm-th>
     <hlm-td *brnCellDef="let invoice">
       <span
-        class="py-2 px-4 text-white cursor-default rounded-full"
+        class="py-1 px-3 text-white cursor-default rounded-full text-xs md:text-sm"
         [class]="{
           'bg-primary': invoice.paymentStatus === 'PAID',
-          'bg-destructive': invoice.paymentStatus === 'UNPAID',
+          'bg-destructive': invoice.paymentStatus === 'UNPAID'
         }"
         >{{ invoice.paymentStatus | titlecase }}</span
       >
@@ -96,12 +97,12 @@
     <hlm-select-content class="cursor-pointer h-full">
       @for (size of _availablePageSizes; track size) {
       <hlm-option [value]="size">
-        {{ size === 10000 ? "All" : size }}
+        {{ size === 10000 ? 'All' : size }}
       </hlm-option>
       }
     </hlm-select-content>
   </brn-select>
-  <ul hlmPaginationContent class="w-fit gap-2">
+  <ul hlmPaginationContent class="flex w-fit gap-2">
     <li hlmPaginationItem class="w-20">
       <button
         hlmPaginationLink
@@ -134,3 +135,4 @@
     </li>
   </ul>
 </nav>
+</div>

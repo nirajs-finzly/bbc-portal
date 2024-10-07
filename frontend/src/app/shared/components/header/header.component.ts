@@ -38,7 +38,7 @@ import { TitleCasePipe } from '../../pipes/titlecase.pipe';
   styleUrl: './header.component.css',
   host: {
     class:
-      'w-full h-[64px] flex justify-between items-center px-6 py-2 shadow-md sticky top-0',
+      'w-full h-[64px] flex-col justify-between items-center shadow-md sticky top-0',
   },
 })
 export class HeaderComponent {

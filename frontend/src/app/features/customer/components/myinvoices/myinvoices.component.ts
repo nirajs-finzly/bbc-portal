@@ -42,7 +42,7 @@ import { PayCardComponent } from "../pay-card/pay-card.component";
   templateUrl: './myinvoices.component.html',
   styleUrl: './myinvoices.component.css',
   host: {
-    class: 'flex flex-col gap-2',
+    class: '',
   },
 })
 export class MyinvoicesComponent {

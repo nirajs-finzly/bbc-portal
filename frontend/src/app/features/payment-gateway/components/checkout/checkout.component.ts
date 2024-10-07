@@ -48,7 +48,7 @@ import { HotToastService } from '@ngxpert/hot-toast';
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.css',
   host: {
-    class: 'w-[65%]',
+    class: 'md:w-[65%]',
   },
 })
 export class CheckoutComponent {

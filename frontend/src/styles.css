@@ -69,7 +69,7 @@ body {
 }
 
 brn-table {
-  @apply bg-background;
+  @apply bg-background
 }
 
 hlm-th,
@@ -82,7 +82,7 @@ hlm-td {
 }
 
 *::-webkit-scrollbar {
-  @apply w-[5px] rounded-full;
+  @apply w-[5px] h-[5px] rounded-full;
 }
 
 *::-webkit-scrollbar-track {
