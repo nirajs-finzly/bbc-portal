@@ -164,7 +164,7 @@ public class CustomerServiceImpl implements CustomerService {
             }
         }
 
-        String message = String.format("Data upload complete. Successfully uploaded: %d, Failed: %d", validRecords, invalidRecords.get());
+        String message = String.format("Successfully uploaded: %d, Failed: %d", validRecords, invalidRecords.get());
         return ResponseEntity.ok(new MessageResponse(message, true));
 
     }
