@@ -417,7 +417,7 @@ export class CustomersComponent {
   uploadFile(file: File, ctx: any) {
     this.customerService.bulkUploadCustomer(file).subscribe(
       (response: MessageResponse) => {
-        this.toast.success('File uploaded successfully!.');
+        this.toast.success(response.message);
         ctx.close();
         this.loadCustomers({ first: 0, rows: this.pageSize });
       },
