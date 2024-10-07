@@ -60,6 +60,8 @@ export class AuthService {
                 })
               )
               .subscribe();
+          } else {
+            this.toast.error(response.message);
           }
         })
       );

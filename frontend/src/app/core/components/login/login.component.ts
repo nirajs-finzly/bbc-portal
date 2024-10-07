@@ -110,7 +110,7 @@ export class LoginComponent {
         this.startCountdown();
       },
       error: (err: any) => {
-        this.toast.error('Invalid ID!');
+        this.toast.error("Something went wrong!");
         this.setIsLoading(false);
       },
     });
@@ -132,7 +132,7 @@ export class LoginComponent {
         this.setIsLoading(false);
       },
       error: (err: any) => {
-        this.toast.error('Failed to login!');
+        this.toast.error(err.error.message);
         this.setIsLoading(false);
       },
     });
