@@ -168,7 +168,16 @@ export class InvoicesComponent {
     return;
   }
   if (!this.validateBillDuration(billDuration)) {
-    this.toast.error('Please enter the bill duration in the format "Month Year" (e.g., January 2024)');
+    const trimmedBillDuration = billDuration.trim();
+    // Regex pattern to match "Month Year" format (e.g., "January 2024")
+    const billDurationPattern = /^(January|February|March|April|May|June|July|August|September|October|November|December) \d{4}$/;
+    
+    if (!billDurationPattern.test(trimmedBillDuration)) {
+      this.toast.error('Please enter the bill duration in the format "Month Year" (e.g., January 2024)');
+    } else {
+      this.toast.error('Please enter a valid bill duration in the past (before the current month and year)');
+    }
+    
     return;
   }
   if (!this.validateBillDueDate(billDueDate)) {
@@ -210,13 +219,38 @@ export class InvoicesComponent {
       return trimmedUnits.length > 0 && !isNaN(Number(trimmedUnits));
     }
 
-    // Bill duration validation method in Angular
     private validateBillDuration(billDuration: string): boolean {
       const trimmedBillDuration = billDuration.trim();
       // Regex pattern to match "Month Year" format (e.g., "January 2024")
       const billDurationPattern = /^(January|February|March|April|May|June|July|August|September|October|November|December) \d{4}$/;
-      return billDurationPattern.test(trimmedBillDuration);
+      
+      // Check if the billDuration matches the pattern
+      if (!billDurationPattern.test(trimmedBillDuration)) {
+        return false;
+      }
+    
+      // Extract month and year from billDuration
+      const [month, year] = trimmedBillDuration.split(' ');
+      const monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ];
+      const billMonth = monthNames.indexOf(month);
+      const billYear = parseInt(year, 10);
+    
+      // Get current month and year
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth(); // 0-indexed, January is 0
+      const currentYear = currentDate.getFullYear();
+    
+      // Validate that bill year is less than current year, or if the same year, check that bill month is less than current month
+      if (billYear > currentYear || (billYear === currentYear && billMonth >= currentMonth)) {
+        return false;
+      }
+    
+      return true;
     }
+    
 
 
     
@@ -248,7 +282,16 @@ export class InvoicesComponent {
       return;
     }
     if (!this.validateBillDuration(billDuration)) {
-      this.toast.error('Please enter the bill duration in the format "Month Year" (e.g., January 2024)');
+      const trimmedBillDuration = billDuration.trim();
+      // Regex pattern to match "Month Year" format (e.g., "January 2024")
+      const billDurationPattern = /^(January|February|March|April|May|June|July|August|September|October|November|December) \d{4}$/;
+      
+      if (!billDurationPattern.test(trimmedBillDuration)) {
+        this.toast.error('Please enter the bill duration in the format "Month Year" (e.g., January 2024)');
+      } else {
+        this.toast.error('Please enter a valid bill duration in the past (before the current month and year)');
+      }
+      
       return;
     }
     if (!this.validateBillDueDate(billDueDate)) {
