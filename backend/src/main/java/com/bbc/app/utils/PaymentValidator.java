@@ -51,9 +51,17 @@ public class PaymentValidator {
             return false;
         }
 
-        // Check if card exists in the database
-        return debitCardRepository.existsByCardNumber(cardNumber);
+        // Fetch the card from the database
+        DebitCard debitCard = debitCardRepository.findByCardNumber(cardNumber);
+
+        // Check if card exists and if expiry date and CVV match
+        if (debitCard != null) {
+            return debitCard.getExpiryDate().equals(expiryDate) && debitCard.getCvv().equals(cvv);
+        }
+
+        return false;
     }
+
 
     // Credit card validation (expects "cardNumber|expiryDate|cvv")
     private boolean validateCreditCard(String paymentDetails) {
@@ -68,9 +76,17 @@ public class PaymentValidator {
             return false;
         }
 
-        // Check if card exists in the database
-        return creditCardRepository.existsByCardNumber(cardNumber);
+        // Fetch the card from the database
+        CreditCard creditCard = creditCardRepository.findByCardNumber(cardNumber);
+
+        // Check if card exists and if expiry date and CVV match
+        if (creditCard != null) {
+            return creditCard.getExpiryDate().equals(expiryDate) && creditCard.getCvv().equals(cvv);
+        }
+
+        return false;
     }
+
 
     // Net banking validation (expects "accountNumber|ifscCode")
     private boolean validateNetBanking(String paymentDetails) {
@@ -84,12 +100,18 @@ public class PaymentValidator {
             return false;
         }
 
-        System.out.println(isValidAccountNumber(accountNumber));
-        System.out.println(isValidIfscCode(ifscCode));
+        // Fetch the net banking record from the database
+        NetBanking netBanking = netBankingRepository.findByAccountNumberAndIfscCode(accountNumber, ifscCode);
 
-        // Check if account number and IFSC code exist in the database
-        return netBankingRepository.existsByAccountNumberAndIfscCode(accountNumber, ifscCode);
+        // Check if the net banking account exists and verify details (add other checks as needed)
+        if (netBanking != null) {
+            // Here you can add further validations, like verifying account holder name, etc.
+            return true;  // Return true if everything matches
+        }
+
+        return false;  // Return false if account does not exist or details don't match
     }
+
 
     // UPI validation (expects "upiId")
     private boolean validateUPI(String upiId) {

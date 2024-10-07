@@ -8,4 +8,6 @@ public interface DebitCardRepository extends JpaRepository<DebitCard, UUID> {
     boolean existsByCardNumber(String cardNumber);
 
     DebitCard findTopByOrderByCardIdDesc();
+
+    DebitCard findByCardNumber(String cardNumber);
 }

@@ -177,7 +177,7 @@ public class PaymentServiceImpl implements PaymentService {
                 otpService.sendOtp(customer.getCustomerId());
                 return ResponseEntity.ok(new MessageResponse("OTP sent to email address.", true));
             } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Invalid payment details." + paymentDetails, false));
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Invalid payment details!", false));
             }
         }
 
