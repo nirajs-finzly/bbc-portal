@@ -129,17 +129,28 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         // Calculate total unit consumption for each year across all customers
         invoices.forEach(invoice -> {
-            // Extract the year from billDuration (assuming it's in the format 'MMMM yyyy', e.g., 'April 2025')
             String billDuration = invoice.getBillDuration();
-            String year = billDuration.split(" ")[1]; // Get the year part
+            if (billDuration != null && !billDuration.trim().isEmpty()) {
+                try {
+                    // Extract the year from billDuration (assuming it's in the format 'MMMM yyyy', e.g., 'April 2025')
+                    String[] parts = billDuration.split(" ");
+                    if (parts.length == 2) {
+                        String year = parts[1]; // Get the year part
 
-            BigDecimal unitConsumption = invoice.getUnitConsumption();
+                        BigDecimal unitConsumption = invoice.getUnitConsumption();
+                        if (unitConsumption != null) {
+                            // Accumulate unit consumption for each year
+                            consumptionDataByYear.merge(year, unitConsumption, BigDecimal::add);
 
-            // Accumulate unit consumption for each year
-            consumptionDataByYear.merge(year, unitConsumption, BigDecimal::add);
-
-            // Track how many customers have invoices for this year
-            customerCountsByYear.merge(year, 1, Integer::sum);
+                            // Track how many customers have invoices for this year
+                            customerCountsByYear.merge(year, 1, Integer::sum);
+                        }
+                    }
+                } catch (Exception e) {
+                    // Log any errors during parsing of billDuration or unitConsumption
+                    System.err.println("Error processing invoice: " + e.getMessage());
+                }
+            }
         });
 
         // Calculate average consumption per year by dividing the total by the number of customers with invoices
