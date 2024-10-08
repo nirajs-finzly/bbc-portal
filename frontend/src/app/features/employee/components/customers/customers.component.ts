@@ -27,7 +27,7 @@ import {
 } from '@spartan-ng/ui-dialog-helm';
 import { HlmTableImports } from '@spartan-ng/ui-table-helm';
 import { TitleCasePipe } from '../../../../shared/pipes/titlecase.pipe';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Customer, MessageResponse } from '../../../../types/customer';
 import { CustomerService } from '../../../../shared/services/customer.service';
@@ -245,6 +245,7 @@ export class CustomersComponent {
   updateCustomer(
     meterNo: string,
     name: string,
+    email: string,
     phone: string,
     address: string,
     ctx: any
@@ -252,6 +253,10 @@ export class CustomersComponent {
     // Validate input values
   if (!this.validateName(name)) {
     this.toast.error('Please enter a valid customer name (only alphabets and spaces, 3-50 characters long)');
+    return;
+  }
+  if (!this.validateEmail(email)) {
+    this.toast.error('Please enter a valid email address');
     return;
   }
   if (!phone || !this.validatePhone(phone)) {
@@ -266,6 +271,7 @@ export class CustomersComponent {
     // Create the request payload
     const request = {
       name: name,
+      email: email,
       phone: phone,
       address: address,
     };
@@ -383,23 +389,39 @@ export class CustomersComponent {
   }
 
   // Delete customer method
-  deleteCustomer(meterNo: string, ctx: any): void {
-    if (!meterNo) {
-      this.toast.error('Meter number is required');
-      return;
-    }
-
-    this.customerService.deleteCustomer(meterNo).subscribe(
-      (response) => {
-        this.toast.success('Customer deleted successfully');
-        ctx.close();
-        this.loadCustomers({ first: 0, rows: this.pageSize });
-      },
-      (error) => {
-        this.toast.error('Failed to delete customer');
-      }
-    );
+deleteCustomer(meterNo: string, ctx: any): void {
+  if (!meterNo) {
+    this.toast.error('Meter number is required');
+    return;
   }
+
+  // First, check if there are any unpaid invoices for this customer
+  this.customerService.hasUnpaidInvoices(meterNo).subscribe(
+    (hasUnpaid: boolean) => {
+      if (hasUnpaid) {
+        // If unpaid invoices exist, show an error message and stop the process
+        this.toast.error('Cannot delete customer. Unpaid invoices are pending.');
+        return;
+      }
+
+      // If no unpaid invoices, proceed with customer deletion
+      this.customerService.deleteCustomer(meterNo).subscribe(
+        (response) => {
+          this.toast.success(response.message);
+          ctx.close();
+          this.loadCustomers({ first: 0, rows: this.pageSize });
+        },
+        (error) => {
+          this.toast.error('Failed to delete customer');
+        }
+      );
+    },
+    (error) => {
+      this.toast.error('Failed to check unpaid invoices');
+    }
+  );
+}
+
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;

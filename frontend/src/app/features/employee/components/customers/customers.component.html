@@ -221,11 +221,24 @@
           <hlm-dialog-content *brnDialogContent="let ctx">
             <hlm-dialog-header>
               <h3 brnDialogTitle hlm class="text-xl font-semibold">
-                Edit customer data
+                <h3 hlmAlertDialogTitle>Customer Information</h3>
               </h3>
               <p brnDialogDescription hlm class="text-muted-foreground">
-                Please enter customer data to update
-              </p>
+                <div *ngIf="customer; else loading">
+                  <p><strong>Meter No:</strong> {{ customer.meterNo }}</p>
+                  <p><strong>Name:</strong> {{ customer.name }}</p>
+                  <p><strong>Email:</strong> {{ customer.email }}</p>
+                  <p><strong>Phone:</strong> {{ customer.phone }}</p>
+                  <p><strong>Address:</strong> {{ customer.address }}</p>
+                  <!-- Add more customer fields as needed -->
+                </div>
+                <ng-template #loading>
+                  <p>Loading customer data...</p>
+                </ng-template>
+                <div>
+                <h4> Please enter customer data to update </h4>
+                </div>
+              
             </hlm-dialog-header>
             <div class="py-4">
               <label hlmLabel
@@ -236,6 +249,16 @@
                   type="text"
                   placeholder="Enter customer name"
                   #name
+                />
+              </label>
+              <label hlmLabel
+                >Email
+                <input
+                  class="w-80"
+                  hlmInput
+                  type="email"
+                  placeholder="Enter customer email"
+                  #email
                 />
               </label>
               <label hlmLabel
@@ -267,6 +290,7 @@
                   updateCustomer(
                     customer.meterNo,
                     name.value,
+                    email.value,
                     phone.value,
                     address.value,
                     ctx

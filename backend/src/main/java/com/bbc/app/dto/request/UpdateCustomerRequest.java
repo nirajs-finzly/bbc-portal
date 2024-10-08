@@ -7,13 +7,17 @@ public class UpdateCustomerRequest {
     private String name;
 
     @NotBlank(message = "email is required!")
+    private String email;
+
+    @NotBlank(message = "phone is required!")
     private String phone;
 
     @NotBlank(message = "address is required!")
     private String address;
 
-    public UpdateCustomerRequest(String name, String phone, String address) {
+    public UpdateCustomerRequest(String name, String email, String phone, String address) {
         this.name = name;
+        this.email= email;
         this.phone = phone;
         this.address = address;
     }
@@ -25,6 +29,10 @@ public class UpdateCustomerRequest {
     public void setName(@NotBlank(message = "name is required!") String name) {
         this.name = name;
     }
+
+    public @NotBlank(message = "email is required!") String getEmail() { return email; }
+
+    public void setEmail(@NotBlank(message = "email is required!") String email) { this.email = email; }
 
     public @NotBlank(message = "email is required!") String getPhone() {
         return phone;

@@ -4,10 +4,9 @@ import com.bbc.app.dto.data.CustomerData;
 import com.bbc.app.dto.response.CustomersResponse;
 import com.bbc.app.dto.response.MessageResponse;
 import com.bbc.app.dto.response.StatisticsResponse;
-import com.bbc.app.model.Customer;
-import com.bbc.app.model.User;
-import com.bbc.app.model.UserRole;
+import com.bbc.app.model.*;
 import com.bbc.app.repository.CustomerRepository;
+import com.bbc.app.repository.InvoiceRepository;
 import com.bbc.app.repository.UserRepository;
 import com.bbc.app.service.CustomerService;
 import com.bbc.app.utils.Parsing;
@@ -34,6 +33,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private InvoiceRepository invoiceRepository;
 
     @Autowired
     private Parsing parsing;
@@ -112,7 +114,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public ResponseEntity<MessageResponse> updateCustomer(String meterno, String name, String phone, String address) {
+    public ResponseEntity<MessageResponse> updateCustomer(String meterno, String name, String email, String phone, String address) {
         Optional<Customer> existingCustomer = customerRepository.findByMeterNo(meterno);
 
         if (existingCustomer.isEmpty()) {
@@ -122,6 +124,7 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = existingCustomer.get();
 
         customer.getUser().setName(name);
+        customer.getUser().setEmail(email);
         customer.getUser().setPhone(phone);
         customer.setAddress(address);
         customerRepository.save(customer);
@@ -139,6 +142,11 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.deleteById(meterNo);
         userRepository.deleteById(customer.get().getUser().getId());
         return ResponseEntity.ok(new MessageResponse("Customer deleted successfully.", true));
+    }
+
+    public boolean hasUnpaidInvoices(String meterNo) {
+        List<Invoice> unpaidInvoices = invoiceRepository.findByCustomerMeterNoAndPaymentStatus(meterNo, PaymentStatus.UNPAID);
+        return !unpaidInvoices.isEmpty();
     }
 
     @Override

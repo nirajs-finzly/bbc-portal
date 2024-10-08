@@ -43,6 +43,11 @@ export class CustomerService {
     return this.http.put<MessageResponse>(`${this.apiUrl}/${meterNo}`, request);
   }
 
+  hasUnpaidInvoices(meterNo: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.apiUrl}/has-unpaid-invoices/${meterNo}`);
+  }
+  
+
   // Delete a customer by meter number
   deleteCustomer(meterNo: string): Observable<MessageResponse> {
     return this.http.delete<MessageResponse>(`${this.apiUrl}/${meterNo}`);

@@ -15,6 +15,7 @@ export interface CreateCustomerRequest {
 
 export interface UpdateCustomerRequest {
     name: string;
+    email: string,
     phone: string;
     address: string;
 }

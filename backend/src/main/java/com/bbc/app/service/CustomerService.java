@@ -23,10 +23,13 @@ public interface CustomerService {
     ResponseEntity<MessageResponse> createCustomer(String name, String email, String phone, String address);
 
     // Update an existing customer
-    ResponseEntity<MessageResponse> updateCustomer(String meterno, String name, String phone, String address);
+    ResponseEntity<MessageResponse> updateCustomer(String meterno, String name, String email, String phone, String address);
 
     // Delete a customer
     ResponseEntity<MessageResponse> deleteCustomer(String meterno);
+
+    //check if user has any unpaid invoices pending
+    public boolean hasUnpaidInvoices(String meterNo);
 
     // Bulk upload customers
     ResponseEntity<MessageResponse> bulkUploadCustomer(MultipartFile dataFile) throws IOException;
