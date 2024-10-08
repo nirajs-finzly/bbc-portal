@@ -11,6 +11,7 @@ import com.bbc.app.model.Invoice;
 import com.bbc.app.model.PaymentStatus;
 import com.bbc.app.repository.CustomerRepository;
 import com.bbc.app.repository.InvoiceRepository;
+import com.bbc.app.service.EmailService;
 import com.bbc.app.service.InvoiceService;
 import com.bbc.app.service.PdfService;
 import com.bbc.app.utils.InvoiceParsing;
@@ -42,6 +43,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Autowired
     private PdfService pdfService;
+
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     private InvoiceParsing invoiceParsing;

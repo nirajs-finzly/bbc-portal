@@ -11,6 +11,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,20 +25,24 @@ public class InvoiceController {
     @Autowired
     private InvoiceService invoiceService;
 
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     @GetMapping("/statistics/all-invoices-count")
     public ResponseEntity<StatisticsResponse> getAllInvoicesCount() {
         return invoiceService.getTotalInvoicesCount();
     }
 
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     @GetMapping("/statistics/all-unpaid-invoices-count")
     public ResponseEntity<StatisticsResponse> getAllUnpaidInvoicesCount() {
         return invoiceService.getAllUnpaidInvoicesCount();
     }
 
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     @GetMapping("/statistics/average-unit-consumption")
     public ResponseEntity<StatisticsResponse> getAverageUnitConsumptionOfAllCustomer() {
         return invoiceService.getUnitConsumptionDataForAllCustomers();
     }
+
 
     @GetMapping("/statistics/invoices-status-data")
     public ResponseEntity<StatisticsResponse> getInvoiceStatusData() {
@@ -49,27 +54,32 @@ public class InvoiceController {
         return invoiceService.getTotalInvoicesCountForCustomer(meterNo);
     }
 
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     @GetMapping("/statistics/customer-unpaid-invoices-count/{meterNo}")
     public ResponseEntity<StatisticsResponse> getCustomerUnpaidInvoicesCount(@PathVariable String meterNo) {
         return invoiceService.getUnpaidInvoicesCountForCustomer(meterNo);
     }
 
+    @PreAuthorize("hasAuthority('CUSTOMER')")
     @GetMapping("/statistics/last-payment-amount/{meterNo}")
     public ResponseEntity<StatisticsResponse> getLastPaymentAmount(@PathVariable String meterNo) {
         return invoiceService.getLastPaymentAmountForCustomer(meterNo);
     }
 
+    @PreAuthorize("hasAuthority('CUSTOMER')")
     @GetMapping("/statistics/average-unit-consumption/{meterNo}")
     public ResponseEntity<StatisticsResponse> getAverageUnitConsumptionOfCustomer(@PathVariable String meterNo) {
         return invoiceService.getAverageUnitConsumptionByMeterNo(meterNo);
     }
 
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     @GetMapping("")
     public ResponseEntity<InvoicesResponse> getAllInvoices(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
         return invoiceService.getAllInvoices(page, size);
     }
+
 
     @GetMapping("/{meterNo}")
     public ResponseEntity<InvoicesResponse> getInvoicesByCustomerMeterNo(
@@ -80,6 +90,7 @@ public class InvoiceController {
         return invoiceService.getInvoicesByMeterNo(meterNo, page, size);
     }
 
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     @GetMapping("/customer/{customerName}")
     public ResponseEntity<InvoicesResponse> getInvoicesByCustomerName(
             @PathVariable String customerName,
@@ -88,6 +99,7 @@ public class InvoiceController {
     ) {
         return invoiceService.getInvoicesByCustomerName(customerName, page, size);
     }
+
 
     @GetMapping("/{meterNo}/{billDuration}")
     public ResponseEntity<InvoicesResponse> getInvoicesCustomerByBillDuration(
@@ -99,16 +111,19 @@ public class InvoiceController {
         return invoiceService.getInvoicesByCustomerBillDuration(meterNo, billDuration, page, size);
     }
 
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     @PostMapping("")
     public ResponseEntity<MessageResponse> createInvoice(@Valid @RequestBody CreateInvoiceRequest request) {
         return invoiceService.createInvoice(request.getMeterNo(), request.getUnitsConsumed(), request.getBillDuration(), request.getBillDueDate());
     }
 
+    @PreAuthorize("hasAuthority('CUSTOMER')")
     @GetMapping("/{meterNo}/latest")
     public ResponseEntity<SingleInvoiceResponse> getLatestUnpaidInvoice(@PathVariable @Pattern(regexp = "^(MTR)\\d{7}$", message = "Invalid meter number format") String meterNo) {
         return invoiceService.getLatestInvoiceByMeterNo(meterNo);
     }
 
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     @PostMapping("/upload")
     public ResponseEntity<MessageResponse> bulkUploadInvoice(
             @RequestParam("file") MultipartFile dataFile,

@@ -1,6 +1,8 @@
 package com.bbc.app.service.impl;
 
+import com.bbc.app.model.Customer;
 import com.bbc.app.model.Invoice;
+import com.bbc.app.service.EmailService;
 import com.bbc.app.service.PdfService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -18,6 +20,9 @@ public class PdfServiceImpl implements PdfService {
 
     @Autowired
     private TemplateEngine templateEngine;
+
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public byte[] createInvoicePdf(Invoice invoice, List<Invoice> unpaidInvoices) throws IOException {
@@ -39,6 +44,14 @@ public class PdfServiceImpl implements PdfService {
             // Layout and create the PDF
             renderer.layout();
             renderer.createPDF(byteArrayOutputStream);
+
+            // Generate PDF byte array
+            byte[] invoicePdf = byteArrayOutputStream.toByteArray();
+
+            // Fetch customer email and send the invoice email
+            Customer customer = invoice.getCustomer();
+            String customerEmail = customer.getUser().getEmail();
+            emailService.sendInvoiceEmail(customerEmail, invoice, invoicePdf);
 
             // Return the generated PDF as a byte array
             return byteArrayOutputStream.toByteArray();
