@@ -215,8 +215,9 @@ export class InvoicesComponent {
 
     // Units consumed validation method
     private validateUnitsConsumed(unitsConsumed: string): boolean {
-      const trimmedUnits = unitsConsumed.trim();
-      return trimmedUnits.length > 0 && !isNaN(Number(trimmedUnits));
+        const trimmedUnits = unitsConsumed.trim();
+        const units = Number(trimmedUnits);
+        return trimmedUnits.length > 0 && !isNaN(units) && units > 0;
     }
 
     private validateBillDuration(billDuration: string): boolean {

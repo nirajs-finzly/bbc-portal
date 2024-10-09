@@ -64,8 +64,7 @@ public class EmailServiceImpl implements EmailService {
             mailSender.send(message);
 
         } catch (MessagingException e) {
-            // Handle exceptions related to email sending
-            e.printStackTrace();
+            throw new SomethingWrongException("Something went wrong while sending the email!");
         }
     }
 
